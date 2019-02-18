@@ -132,6 +132,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#uvodni-primeri-i-napomene"><i class="fa fa-check"></i><b>1.1</b> Uvodni primeri i napomene</a></li>
 <li class="chapter" data-level="1.2" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#razni-primeri-grafika"><i class="fa fa-check"></i><b>1.2</b> Razni primeri grafika</a><ul>
 <li class="chapter" data-level="1.2.1" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#scatterplotovi"><i class="fa fa-check"></i><b>1.2.1</b> Scatterplotovi</a></li>
+<li class="chapter" data-level="1.2.2" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#linijski-grafici"><i class="fa fa-check"></i><b>1.2.2</b> Linijski grafici</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -265,8 +266,39 @@ Podrazumevano je da <code>geom_smooth</code> koristi metodu “loess” kao apro
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">color =</span> class, <span class="dt">shape =</span> drv), <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</code></pre>
 <p><img src="_main_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<p>Dobili smo najbolju pravu kroz podatke. Kao bonus imamo i traku poverenja!</p>
+<p>Dobili smo najbolju pravu kroz podatke. Kao bonus imamo i traku poverenja.</p>
+<p>Da se vratimo početnom grafiku, sada znate da protumačite kod…</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>Često je korisno kod ovakvih podataka koji imaju nagli rast pa onda skoro konstantan nivo promeniti skalu da gledamo logaritam od x ose, čime se trend pretvori u linearniji. To možemo lako da uradimo tako što dodamo i komponentu skaliranja x ose sa <code>scale_x_continuous</code>:</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Sada se malo lakše vide neki podaci i više nisu u gužvi.</p>
+</div>
+<div id="linijski-grafici" class="section level3">
+<h3><span class="header-section-number">1.2.2</span> Linijski grafici</h3>
+<p>Za crtanje vremenski uredjenih podataka, poput vremenskih serija, standardni grafici su linijski. To je prosto linija koja prikazuje kretanje neke promenljive kroz vreme.</p>
+<p>Za primer koristićemo skup podataka <code>economics</code> iz paketa <code>ggplot2</code>.
+Nacrtaćemo kretanje promenljive “psavert” kroz vreme</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(economics, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> psavert)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>()</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+Možemo i ovde dodati ocenu trenda</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(economics, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> psavert)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_smooth</span>()</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<div id="napredniji-primer" class="section level4 unnumbered">
+<h4>Napredniji primer</h4>
+<p>Možemo i promeniti podeoke na x osi da budu meseci pored godina, kao i da budu prikazan tekst za svaku petu goinu na x osi sa funkcijom <code>scale_x_date</code> (“%b” u formatu oznacava mesec a “%Y” godinu, <a href="https://www.statmethods.net/input/dates.html">ovde</a> vidite sve formate za datume). Nazive osa menjamo funkcijom <code>labs</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(economics, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> psavert)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">&quot;darkgreen&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">date_breaks =</span> <span class="st">&quot;5 years&quot;</span>, <span class="dt">date_labels =</span> <span class="st">&quot;%b %Y&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Mesec&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Stopa stednje&quot;</span>)</code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
 
+</div>
 </div>
 </div>
 </div>
