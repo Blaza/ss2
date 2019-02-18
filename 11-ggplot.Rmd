@@ -177,15 +177,15 @@ ggplot(data = gapminder2007) +
                            size = pop))
 ```
 
-Često je korisno kod ovakvih podataka koji imaju nagli rast pa onda skoro konstantan nivo promeniti skalu da gledamo logaritam od x ose, čime se trend pretvori u linearniji. To možemo lako da uradimo tako što dodamo i komponentu skaliranja x ose sa `scale_x_continuous`:
-
+Često je korisno kod ovakvih podataka koji imaju nagli rast pa onda skoro konstantan nivo promeniti skalu da gledamo logaritam od x ose, čime se trend pretvori u linearniji. To možemo lako da uradimo tako što dodamo i komponentu skaliranja x ose sa `scale_x_continuous`. Promenićemo i naslov ya x osu sa funkcijom `xlab`.
 ```{r, echo=FALSE}
 ggplot(data = gapminder2007) + 
   geom_point(mapping = aes(x = gdpPercap,
                            y = lifeExp,
                            color = continent,
                            size = pop)) +
-  scale_x_continuous(trans = "log")
+  scale_x_continuous(trans = "log") + 
+  xlab("log(gdpPercap)")
 ```
 
 Sada se malo lakše vide neki podaci i više nisu u gužvi.
