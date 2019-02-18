@@ -163,4 +163,60 @@ ggplot(data = mpg, aes(x = displ, y = hwy)) +
   geom_smooth(method = "lm")
 ```
 
-Dobili smo najbolju pravu kroz podatke. Kao bonus imamo i traku poverenja!
+Dobili smo najbolju pravu kroz podatke. Kao bonus imamo i traku poverenja.
+
+Da se vratimo početnom grafiku, sada znate da protumačite kod...
+
+```{r, echo=FALSE}
+gapminder2007 <- gapminder[gapminder$year == 2007, ]
+
+ggplot(data = gapminder2007) + 
+  geom_point(mapping = aes(x = gdpPercap,
+                           y = lifeExp,
+                           color = continent,
+                           size = pop))
+```
+
+Često je korisno kod ovakvih podataka koji imaju nagli rast pa onda skoro konstantan nivo promeniti skalu da gledamo logaritam od x ose, čime se trend pretvori u linearniji. To možemo lako da uradimo tako što dodamo i komponentu skaliranja x ose sa `scale_x_continuous`:
+
+```{r, echo=FALSE}
+ggplot(data = gapminder2007) + 
+  geom_point(mapping = aes(x = gdpPercap,
+                           y = lifeExp,
+                           color = continent,
+                           size = pop)) +
+  scale_x_continuous(trans = "log")
+```
+
+Sada se malo lakše vide neki podaci i više nisu u gužvi.
+
+### Linijski grafici
+
+Za crtanje vremenski uredjenih podataka, poput vremenskih serija, standardni grafici su linijski. To je prosto linija koja prikazuje kretanje neke promenljive kroz vreme.
+
+Za primer koristićemo skup podataka `economics` iz paketa `ggplot2`.
+Nacrtaćemo kretanje promenljive "psavert" kroz vreme
+
+```{r}
+ggplot(economics, aes(x = date, y = psavert)) +
+  geom_line()
+```
+ Možemo i ovde dodati ocenu trenda
+ 
+```{r}
+ggplot(economics, aes(x = date, y = psavert)) +
+  geom_line() + 
+  geom_smooth()
+```
+
+#### Napredniji primer {-}
+
+Možemo i promeniti podeoke na x osi da budu meseci pored godina, kao i da budu prikazan tekst za svaku petu goinu na x osi sa funkcijom `scale_x_date` ("%b" u formatu oznacava mesec a "%Y" godinu, [ovde](https://www.statmethods.net/input/dates.html) vidite sve formate za datume). Nazive osa menjamo funkcijom `labs`.
+
+```{r}
+ggplot(economics, aes(x = date, y = psavert)) +
+  geom_line(color = "darkgreen") +
+  geom_smooth() + 
+  scale_x_date(date_breaks = "5 years", date_labels = "%b %Y") +
+  labs(x = "Mesec", y = "Stopa stednje")
+```
