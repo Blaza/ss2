@@ -268,9 +268,23 @@ Podrazumevano je da <code>geom_smooth</code> koristi metodu “loess” kao apro
 <p><img src="_main_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>Dobili smo najbolju pravu kroz podatke. Kao bonus imamo i traku poverenja.</p>
 <p>Da se vratimo početnom grafiku, sada znate da protumačite kod…</p>
+<pre class="sourceCode r"><code class="sourceCode r">gapminder2007 &lt;-<span class="st"> </span>gapminder[gapminder<span class="op">$</span>year <span class="op">==</span><span class="st"> </span><span class="dv">2007</span>, ]
+
+<span class="kw">ggplot</span>(<span class="dt">data =</span> gapminder2007) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap,
+                           <span class="dt">y =</span> lifeExp,
+                           <span class="dt">color =</span> continent,
+                           <span class="dt">size =</span> pop))</code></pre>
 <p><img src="_main_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
-<p>Često je korisno kod ovakvih podataka koji imaju nagli rast pa onda skoro konstantan nivo promeniti skalu da gledamo logaritam od x ose, čime se trend pretvori u linearniji. To možemo lako da uradimo tako što dodamo i komponentu skaliranja x ose sa <code>scale_x_continuous</code>. Promenićemo i naslov za x osu sa funkcijom <code>xlab</code>.
-<img src="_main_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Često je korisno kod ovakvih podataka koji imaju nagli rast pa onda skoro konstantan nivo promeniti skalu da gledamo logaritam od x ose, čime se trend pretvori u linearniji. To možemo lako da uradimo tako što dodamo i komponentu skaliranja x ose sa <code>scale_x_continuous</code>. Promenićemo i naslov za x osu sa funkcijom <code>xlab</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="dt">data =</span> gapminder2007) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">x =</span> gdpPercap,
+                           <span class="dt">y =</span> lifeExp,
+                           <span class="dt">color =</span> continent,
+                           <span class="dt">size =</span> pop)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">trans =</span> <span class="st">&quot;log&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;log(gdpPercap)&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p>Sada se malo lakše vide neki podaci i više nisu u gužvi.</p>
 </div>
 <div id="linijski-grafici" class="section level3">
