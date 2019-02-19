@@ -1,7 +1,7 @@
 # Grafički prikaz podataka
 
 Prvo ćemo se zabavljati grafičkim prikazima podataka i crtanjem raznih grafika,
-koristeći paket `ggplot2` koji je jedan od najupotrebljinijih paketa u R-u.
+koristeći paket `ggplot2` koji je jedan od najupotrebljenijih paketa u R-u.
 Velika prednost ovog paketa je što sa vrlo malo koda možemo da pravimo dosta
 bogate grafike. S druge strane, ima malo čudniju sintaksu od klasičnih grafika u
 R-u, pa zahteva malo učenja. Medjutim ta sintaksa je prilično smislena i
@@ -27,7 +27,7 @@ ggplot(data = gapminder2007) +
                            size = pop))
 ```
 
-Kod koji generiše ovaj grafik je sledeči. Primetite da samo zadnja linija crta
+Kod koji generiše ovaj grafik je sledeči. Primetite da samo zadnja naredba crta
 grafik, pre toga je prosto smanjivanje količine podataka.
 
 ```{r, eval=FALSE}
