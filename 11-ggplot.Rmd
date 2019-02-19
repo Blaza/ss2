@@ -167,7 +167,7 @@ Dobili smo najbolju pravu kroz podatke. Kao bonus imamo i traku poverenja.
 
 Da se vratimo početnom grafiku, sada znate da protumačite kod...
 
-```{r, echo=FALSE}
+```{r}
 gapminder2007 <- gapminder[gapminder$year == 2007, ]
 
 ggplot(data = gapminder2007) + 
@@ -178,7 +178,7 @@ ggplot(data = gapminder2007) +
 ```
 
 Često je korisno kod ovakvih podataka koji imaju nagli rast pa onda skoro konstantan nivo promeniti skalu da gledamo logaritam od x ose, čime se trend pretvori u linearniji. To možemo lako da uradimo tako što dodamo i komponentu skaliranja x ose sa `scale_x_continuous`. Promenićemo i naslov za x osu sa funkcijom `xlab`.
-```{r, echo=FALSE}
+```{r}
 ggplot(data = gapminder2007) + 
   geom_point(mapping = aes(x = gdpPercap,
                            y = lifeExp,
