@@ -133,6 +133,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.2" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#razni-primeri-grafika"><i class="fa fa-check"></i><b>1.2</b> Razni primeri grafika</a><ul>
 <li class="chapter" data-level="1.2.1" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#scatterplotovi"><i class="fa fa-check"></i><b>1.2.1</b> Scatterplotovi</a></li>
 <li class="chapter" data-level="1.2.2" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#linijski-grafici"><i class="fa fa-check"></i><b>1.2.2</b> Linijski grafici</a></li>
+<li class="chapter" data-level="1.2.3" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#histogrami"><i class="fa fa-check"></i><b>1.2.3</b> Histogrami</a></li>
+<li class="chapter" data-level="1.2.4" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#crtanje-vise-grafika-odjednom"><i class="fa fa-check"></i><b>1.2.4</b> Crtanje više grafika odjednom</a></li>
+<li class="chapter" data-level="1.2.5" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#boks-plotovi"><i class="fa fa-check"></i><b>1.2.5</b> Boks plotovi</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -155,7 +158,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Statistički softver 2</h1>
 <p class="author"><em>Blagoje Ivanović</em></p>
-<p class="date"><em>Poslednja izmena: 19 February, 2019</em></p>
+<p class="date"><em>Poslednja izmena: 25 February, 2019</em></p>
 </div>
 <div id="predgovor" class="section level1 unnumbered">
 <h1>Predgovor</h1>
@@ -214,6 +217,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

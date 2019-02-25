@@ -133,6 +133,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.2" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#razni-primeri-grafika"><i class="fa fa-check"></i><b>1.2</b> Razni primeri grafika</a><ul>
 <li class="chapter" data-level="1.2.1" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#scatterplotovi"><i class="fa fa-check"></i><b>1.2.1</b> Scatterplotovi</a></li>
 <li class="chapter" data-level="1.2.2" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#linijski-grafici"><i class="fa fa-check"></i><b>1.2.2</b> Linijski grafici</a></li>
+<li class="chapter" data-level="1.2.3" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#histogrami"><i class="fa fa-check"></i><b>1.2.3</b> Histogrami</a></li>
+<li class="chapter" data-level="1.2.4" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#crtanje-vise-grafika-odjednom"><i class="fa fa-check"></i><b>1.2.4</b> Crtanje više grafika odjednom</a></li>
+<li class="chapter" data-level="1.2.5" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#boks-plotovi"><i class="fa fa-check"></i><b>1.2.5</b> Boks plotovi</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -311,8 +314,78 @@ Možemo i ovde dodati ocenu trenda</p>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Mesec&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Stopa stednje&quot;</span>)</code></pre>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="_main_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
-
 </div>
+</div>
+<div id="histogrami" class="section level3">
+<h3><span class="header-section-number">1.2.3</span> Histogrami</h3>
+<p>Gruba ocena raspodele uzorka se može vizuelizovati histogramima, gde brojimo koliko elemenata uzorka upada u odgovarajuće kategorije. U R-u ugradjena funkcija <code>hist</code> crta histograme, dok se u <code>ggplot2</code> za to koristi geometrijski objekat <code>geom_histogram</code>.</p>
+<p>Pripremimo prvo podatke koje ćemo da koristimo za primer. Koristićemo podatke o temperaturi iz baze <code>weather</code> iz paketa <code>nycflights13</code>, pri čemu ćemo uzeti podatke samo za 26.02.2013. Takodje ćemo pretvoriti temperaturu iz farenhajta u celzijuse.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nycflights13)
+<span class="co"># dodajemo kolonu u kojoj je temperatura po celzijusovoj skali</span>
+weather<span class="op">$</span>celsius &lt;-<span class="st"> </span>(weather<span class="op">$</span>temp <span class="op">-</span><span class="st"> </span><span class="dv">32</span>) <span class="op">*</span><span class="st"> </span><span class="dv">5</span> <span class="op">/</span><span class="st"> </span><span class="dv">9</span>
+
+weather_today &lt;-<span class="st"> </span>weather[weather<span class="op">$</span>month <span class="op">==</span><span class="st"> </span><span class="dv">2</span> <span class="op">&amp;</span><span class="st"> </span>weather<span class="op">$</span>day <span class="op">==</span><span class="st"> </span><span class="dv">26</span>, ]</code></pre>
+<p>Sada da nacrtamo histogram</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+
+<span class="kw">ggplot</span>(weather_today, <span class="kw">aes</span>(<span class="dt">x =</span> celsius)) <span class="op">+</span><span class="st"> </span><span class="co"># dovoljna nam je samo x osa za histogram</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>()</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<p>Obaveštava nas da je podrazumevano da se koristi 30 kategorija, pa je histogram dosta loš. Možemo promeniti broj kategorija ili širinu kategorija. Promenimo broj kategorija na 10.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(weather_today, <span class="kw">aes</span>(<span class="dt">x =</span> celsius)) <span class="op">+</span><span class="st"> </span><span class="co"># dovoljna nam je samo x osa za histogram</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>Sada nemamo problem sa brojem kategorija, ali histogram nije jasno vidljiv. Zato ćemo da uradimo najbitniji deo vizuelizacije - da ga obojimo. Stavićemo granice izmedju kolona bele boje i obojićemo kolone u plavo (sve moguće boje vidite pozivanjem <code>colors()</code>).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(weather_today, <span class="kw">aes</span>(<span class="dt">x =</span> celsius)) <span class="op">+</span><span class="st"> </span><span class="co"># dovoljna nam je samo x osa za histogram</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">10</span>, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>Ovo je već mnogo lepše.Uporedimo sa histogramom iz R-a.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(weather_today<span class="op">$</span>celsius)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>U R-u je podrazumevano da broj kategorija uzme kao <span class="math inline">\(\lceil \log_2n + 1\rceil\)</span>, što se dobija pozivom <code>nclass.Sturges</code> funkcije. Odaberimo i mi broj kategorija po Sturges-ovoj formuli.</p>
+<pre class="sourceCode r"><code class="sourceCode r">bin_count &lt;-<span class="st"> </span><span class="kw">nclass.Sturges</span>(weather_today<span class="op">$</span>celsius)
+<span class="kw">ggplot</span>(weather_today, <span class="kw">aes</span>(<span class="dt">x =</span> celsius)) <span class="op">+</span><span class="st"> </span><span class="co"># dovoljna nam je samo x osa za histogram</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> bin_count, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>Sada su histogrami slični ali opet nisu isti. To je zato što intervali u našem histogramu ne počinju od nule nego su malo pomereni ulevo, dok su u R-u u rasponu od 0 do 7. Gledanjem izvornog koda funkcije <code>hist</code> (pokretanjem <code>hist.default</code> u konzoli), vidimo da sledećim kodom R odredjuje granice intervala za kategorije <code>pretty(range(x), n = breaks, min.n = 1)</code>. To ćemo i mi sada iskoristiti.</p>
+<pre class="sourceCode r"><code class="sourceCode r">bin_count &lt;-<span class="st"> </span><span class="kw">nclass.Sturges</span>(weather_today<span class="op">$</span>celsius)
+R_breaks &lt;-<span class="st"> </span><span class="kw">pretty</span>(<span class="kw">range</span>(weather_today<span class="op">$</span>celsius), <span class="dt">n =</span> bin_count, <span class="dt">min.n =</span> <span class="dv">1</span>)
+<span class="kw">ggplot</span>(weather_today, <span class="kw">aes</span>(<span class="dt">x =</span> celsius)) <span class="op">+</span><span class="st"> </span><span class="co"># dovoljna nam je samo x osa za histogram</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">breaks =</span> R_breaks, <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p>Sada imamo isti histogram kao ugradjen u R! Cilj ovolike priče je da se vidi da je histogram vrlo osetljiv na odabir broja kategorija i tačne lokacije kategorija. Zato <code>ggplot2</code> insistira na tome da se ručno podese sve željene vrednosti kod histograma i ne daje nikakve smislene podrazumevane vrednosti, da bi se korisnik ohrabrio da napravio histogram koji mu najlepše izgleda i koji najbolje oslikava priču koju želi da prenese podacima.</p>
+</div>
+<div id="crtanje-vise-grafika-odjednom" class="section level3">
+<h3><span class="header-section-number">1.2.4</span> Crtanje više grafika odjednom</h3>
+<p>Pre prelaska na boks plotove, pogledajmo ukratko kako možemo da pravimo više grafika odjednom, koji su rasporedjeni u mrežu. Za to koristimo funkciju <code>facet_wrap</code>. Nacrtaćemo histograme za različite mesece.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(weather, <span class="kw">aes</span>(<span class="dt">x =</span> celsius)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">color =</span> <span class="st">&quot;white&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;steelblue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>month)</code></pre>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_bin).</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>Odavde možemo da vidimo kako se razlikuju raspodele temperature po mesecima. Kao što je očekivano, raspodele u zimskim mesecima su pomerene ulevo u odnosu na letnje.</p>
+</div>
+<div id="boks-plotovi" class="section level3">
+<h3><span class="header-section-number">1.2.5</span> Boks plotovi</h3>
+<p>U nekim slučajevima bolji način za poredjenje raspodela nam mogu omogućiti boks plotovi. Boks plot predstavlja grafički prikaz 5 sumarnih statistika - minimum, 1. kvartil, medijanu, 3. kvartil i maksimum. Te vrednosti dobijamo i pokretanjem funkcije <code>summary</code> na uzorku.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(weather_today<span class="op">$</span>celsius)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00    2.20    3.60    3.61    5.15    6.70</code></pre>
+<p>Boks plot se generiše funkcijom <code>geom_boxplot</code>. kada crtamo boks plot za jedan uzorak, dovoljno je dati samo y osu.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(weather_today, <span class="kw">aes</span>(<span class="dt">y =</span> celsius)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>()</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-30-1.png" width="672" />
+Boks plot se tumači ovako: Linija u sredini pravougaonika predstavlja medijanu. Gornja i donja ivica pravougaonika predstavljaju, redom, 3. i 1. kvartil. Linije koje idu izvan pravougaonika oslikavaju opseg uzorka, tj. idu od minimuma do maksimuma. Tačnije, obično se ne crtaju potpuno od minimuma do maksimuma, već su dužine <span class="math inline">\(1.5 \cdot IQR\)</span> (interkvartilno rastojanje - visina pravougaonika).</p>
+<p>Vrlo korisno svojstvo funkcije <code>geom_boxplot</code> je što može da koristi i x osu, koja <strong>mora</strong> biti kategorička, tj. faktor. Pogledajmo rezultat ako dodamo mesec, pretvoren u kategoričku promenljivu, kao x osu.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(weather, <span class="kw">aes</span>(<span class="dt">y =</span> celsius, <span class="dt">x =</span> <span class="kw">factor</span>(month))) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>()</code></pre>
+<pre><code>## Warning: Removed 1 rows containing non-finite values (stat_boxplot).</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-31-1.png" width="672" />
+Dobili smo boks plotove za pojedinačne mesece! Sada možemo da uporedimo raspodele. Opet se vidi razlika u raspodeli temperature u letnjim mesecima. Jasnije se vidi i kako se temperatura menja kroz godinu. Tačke koje se vide van linija su neka vrsta autlajera, one iskaču van <span class="math inline">\(1.5 \cdot IQR\)</span> od ivica pravougaonika.</p>
+<p>Lepši opis strukture boks plotova može se naći npr. na <a href="https://towardsdatascience.com/understanding-boxplots-5e2df7bcbd51" class="uri">https://towardsdatascience.com/understanding-boxplots-5e2df7bcbd51</a></p>
+
 </div>
 </div>
 </div>
@@ -367,6 +440,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
