@@ -220,3 +220,108 @@ ggplot(economics, aes(x = date, y = psavert)) +
   scale_x_date(date_breaks = "5 years", date_labels = "%b %Y") +
   labs(x = "Mesec", y = "Stopa stednje")
 ```
+
+
+### Histogrami
+
+Gruba ocena raspodele uzorka se može vizuelizovati histogramima, gde brojimo koliko elemenata uzorka upada u odgovarajuće kategorije. U R-u ugradjena funkcija `hist` crta histograme, dok se u `ggplot2` za to koristi geometrijski objekat `geom_histogram`.
+
+Pripremimo prvo podatke koje ćemo da koristimo za primer. Koristićemo podatke o temperaturi iz baze `weather` iz paketa `nycflights13`, pri čemu ćemo uzeti podatke samo za 26.02.2013. Takodje ćemo pretvoriti temperaturu iz farenhajta u celzijuse.
+
+```{r}
+library(nycflights13)
+# dodajemo kolonu u kojoj je temperatura po celzijusovoj skali
+weather$celsius <- (weather$temp - 32) * 5 / 9
+
+weather_today <- weather[weather$month == 2 & weather$day == 26, ]
+```
+
+Sada da nacrtamo histogram
+
+```{r}
+library(ggplot2)
+
+ggplot(weather_today, aes(x = celsius)) + # dovoljna nam je samo x osa za histogram
+  geom_histogram()
+```
+
+Obaveštava nas da je podrazumevano da se koristi 30 kategorija, pa je histogram dosta loš. Možemo promeniti broj kategorija ili širinu kategorija. Promenimo broj kategorija na 10.
+
+```{r}
+ggplot(weather_today, aes(x = celsius)) + # dovoljna nam je samo x osa za histogram
+  geom_histogram(bins = 10)
+```
+
+Sada nemamo problem sa brojem kategorija, ali histogram nije jasno vidljiv. Zato ćemo da uradimo najbitniji deo vizuelizacije - da ga obojimo. Stavićemo granice izmedju kolona bele boje i obojićemo kolone u plavo (sve moguće boje vidite pozivanjem `colors()`).
+
+```{r}
+ggplot(weather_today, aes(x = celsius)) + # dovoljna nam je samo x osa za histogram
+  geom_histogram(bins = 10, color = "white", fill = "steelblue")
+```
+
+Ovo je već mnogo lepše.Uporedimo sa histogramom iz R-a.
+
+```{r}
+hist(weather_today$celsius)
+```
+
+U R-u je podrazumevano da broj kategorija uzme kao $\lceil \log_2n + 1\rceil$, što se dobija pozivom `nclass.Sturges` funkcije. Odaberimo i mi broj kategorija po Sturges-ovoj formuli.
+
+```{r}
+bin_count <- nclass.Sturges(weather_today$celsius)
+ggplot(weather_today, aes(x = celsius)) + # dovoljna nam je samo x osa za histogram
+  geom_histogram(bins = bin_count, color = "white", fill = "steelblue")
+```
+
+Sada su histogrami slični ali opet nisu isti. To je zato što intervali u našem histogramu ne počinju od nule nego su malo pomereni ulevo, dok su u R-u u rasponu od 0 do 7. Gledanjem izvornog koda funkcije `hist` (pokretanjem `hist.default` u konzoli), vidimo da sledećim kodom R odredjuje granice intervala za kategorije `pretty(range(x), n = breaks, min.n = 1)`. To ćemo i mi sada iskoristiti.
+
+```{r}
+bin_count <- nclass.Sturges(weather_today$celsius)
+R_breaks <- pretty(range(weather_today$celsius), n = bin_count, min.n = 1)
+ggplot(weather_today, aes(x = celsius)) + # dovoljna nam je samo x osa za histogram
+  geom_histogram(breaks = R_breaks, color = "white", fill = "steelblue")
+```
+
+Sada imamo isti histogram kao ugradjen u R! Cilj ovolike priče je da se vidi da je histogram vrlo osetljiv na odabir broja kategorija i tačne lokacije kategorija. Zato `ggplot2` insistira na tome da se ručno podese sve željene vrednosti kod histograma i ne daje nikakve smislene podrazumevane vrednosti, da bi se korisnik ohrabrio da napravio histogram koji mu najlepše izgleda i koji najbolje oslikava priču koju želi da prenese podacima.
+
+### Crtanje više grafika odjednom
+
+Pre prelaska na boks plotove, pogledajmo ukratko kako možemo da pravimo više grafika odjednom, koji su rasporedjeni u mrežu. Za to koristimo funkciju `facet_wrap`. Nacrtaćemo histograme za različite mesece.
+
+```{r}
+ggplot(weather, aes(x = celsius)) +
+  geom_histogram(color = "white", fill = "steelblue") +
+  facet_wrap(~ month)
+```
+
+Odavde možemo da vidimo kako se razlikuju raspodele temperature po mesecima. Kao što je očekivano, raspodele u zimskim mesecima su pomerene ulevo u odnosu na letnje.
+
+### Boks plotovi
+
+U nekim slučajevima bolji način za poredjenje raspodela nam mogu omogućiti boks plotovi. Boks plot predstavlja grafički prikaz 5 sumarnih statistika - minimum, 1. kvartil, medijanu, 3. kvartil i maksimum. Te vrednosti dobijamo i pokretanjem funkcije `summary` na uzorku.
+
+```{r}
+summary(weather_today$celsius)
+```
+
+Boks plot se generiše funkcijom `geom_boxplot`. kada crtamo boks plot za jedan uzorak, dovoljno je dati samo y osu.
+```{r}
+ggplot(weather_today, aes(y = celsius)) +
+  geom_boxplot()
+```
+Boks plot se tumači ovako: Linija u sredini pravougaonika predstavlja medijanu. Gornja i donja ivica pravougaonika predstavljaju, redom, 3. i 1. kvartil. Linije koje idu izvan pravougaonika oslikavaju opseg uzorka, tj. idu od minimuma do maksimuma. Tačnije, obično se ne crtaju potpuno od minimuma do maksimuma, već su dužine $1.5 \cdot IQR$ (interkvartilno rastojanje - visina pravougaonika).
+
+Vrlo korisno svojstvo funkcije `geom_boxplot` je što može da koristi i x osu, koja **mora** biti kategorička, tj. faktor. Pogledajmo rezultat ako dodamo mesec, pretvoren u kategoričku promenljivu, kao x osu.
+
+```{r}
+ggplot(weather, aes(y = celsius, x = factor(month))) +
+  geom_boxplot()
+```
+Dobili smo boks plotove za pojedinačne mesece! Sada možemo da uporedimo raspodele. Opet se vidi razlika u raspodeli temperature u letnjim mesecima. Jasnije se vidi i kako se temperatura menja kroz godinu. Tačke koje se vide van linija su neka vrsta autlajera, one iskaču van $1.5 \cdot IQR$ od ivica pravougaonika.
+
+Lepši opis strukture boks plotova može se naći npr. na https://towardsdatascience.com/understanding-boxplots-5e2df7bcbd51
+
+
+
+
+
