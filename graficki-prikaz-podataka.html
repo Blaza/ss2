@@ -136,6 +136,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.2.3" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#histogrami"><i class="fa fa-check"></i><b>1.2.3</b> Histogrami</a></li>
 <li class="chapter" data-level="1.2.4" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#crtanje-vise-grafika-odjednom"><i class="fa fa-check"></i><b>1.2.4</b> Crtanje više grafika odjednom</a></li>
 <li class="chapter" data-level="1.2.5" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#boks-plotovi"><i class="fa fa-check"></i><b>1.2.5</b> Boks plotovi</a></li>
+<li class="chapter" data-level="1.2.6" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#bar-plotovi"><i class="fa fa-check"></i><b>1.2.6</b> Bar plotovi</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -385,6 +386,47 @@ Boks plot se tumači ovako: Linija u sredini pravougaonika predstavlja medijanu.
 <p><img src="_main_files/figure-html/unnamed-chunk-31-1.png" width="672" />
 Dobili smo boks plotove za pojedinačne mesece! Sada možemo da uporedimo raspodele. Opet se vidi razlika u raspodeli temperature u letnjim mesecima. Jasnije se vidi i kako se temperatura menja kroz godinu. Tačke koje se vide van linija su neka vrsta autlajera, one iskaču van <span class="math inline">\(1.5 \cdot IQR\)</span> od ivica pravougaonika.</p>
 <p>Lepši opis strukture boks plotova može se naći npr. na <a href="https://towardsdatascience.com/understanding-boxplots-5e2df7bcbd51" class="uri">https://towardsdatascience.com/understanding-boxplots-5e2df7bcbd51</a></p>
+</div>
+<div id="bar-plotovi" class="section level3">
+<h3><span class="header-section-number">1.2.6</span> Bar plotovi</h3>
+<p>Bar plotovi nam služe za grafički prikaz kategoričkih promenljivih. Na njima se prikazuje koliko postoji podataka u bazi iz odgovarajuće kategorije. Razlikuju se od histograma po tome što ne svrstavaju podatke po kategorijama u zavisnosti od toga kom intervalu pripadaju njihove numeričke vrednosti, već prosto broje članove kategorija. Takodje, zbog prirode podataka, ne postoji uredjenje, pa nisu sa leve strane grafika “manje” vrednosti nego sa desne.</p>
+<p>U <code>ggplot2</code> bar plotove crtamo sa funkcijom <code>geom_bar</code>. Takodje je dovoljno dati samo x osu. Probrojmo iz baze <code>mpg</code> broj podataka po klasi.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(<span class="dt">x =</span> class)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>()</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p>Ovo je sivo i mora se obojiti</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(<span class="dt">x =</span> class)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">fill =</span> <span class="st">&quot;forestgreen&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p>Nekad nećemo da prebrojimo elemente neke kategorije, već imamo u podacima za odredjenu kategoričku promenljivu dodeljenu neku vrednost. Na primer, u podacima <code>gapminder</code> imamo države i njihove populacije, pa možemo da nacrtamo populaciju po državama. To radimo funkcijom <code>geom_col</code> kojoj pored x ose dodamo i y osu sa odgovarajućim vrednostima.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gapminder)
+
+<span class="co"># napravimo kratak spisak drzava koj cemo gledati</span>
+countries &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Bosnia and Herzegovina&quot;</span>, <span class="st">&quot;Croatia&quot;</span>, <span class="st">&quot;Montenegro&quot;</span>, <span class="st">&quot;Serbia&quot;</span>, <span class="st">&quot;Slovenia&quot;</span>)
+gapminder2007 &lt;-<span class="st"> </span>gapminder[gapminder<span class="op">$</span>year <span class="op">==</span><span class="st"> </span><span class="dv">2007</span>, ]
+gapminder_small &lt;-<span class="st"> </span>gapminder2007[gapminder2007<span class="op">$</span>country <span class="op">%in%</span><span class="st"> </span>countries, ]
+
+<span class="kw">ggplot</span>(gapminder_small, <span class="kw">aes</span>(<span class="dt">x =</span> country, <span class="dt">y =</span> pop)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">fill =</span> <span class="st">&quot;forestgreen&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p>Bar plotovi mogu biti i naslagani, da prikazuju više vrednosti za istu kategoriju odjednom. Lakše se vidi na primeru. Nacrtaćemo bar plot gde se vidi populacija za 1997., 2002. i 2007. godinu.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gapminder)
+gapminder567 &lt;-<span class="st"> </span>gapminder[(gapminder<span class="op">$</span>year <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1997</span>, <span class="dv">2002</span>, <span class="dv">2007</span>)) <span class="op">&amp;</span>
+<span class="st">                            </span>(gapminder<span class="op">$</span>country <span class="op">%in%</span><span class="st"> </span>countries), ]
+
+<span class="kw">ggplot</span>(gapminder567, <span class="kw">aes</span>(<span class="dt">x =</span> country, <span class="dt">y =</span> pop)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">fill =</span> <span class="kw">factor</span>(year)))</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p>Ovi grafici nisu laki za čitanje jer je teško uporediti veličine pravougaonika raznih boja. Korisnija alternativa se dobije kada se doda argument <code>position = &quot;dodge&quot;</code></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(gapminder567, <span class="kw">aes</span>(<span class="dt">x =</span> country, <span class="dt">y =</span> pop)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">fill =</span> <span class="kw">factor</span>(year)), <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<p>Sada vidimo za sve godine kretanje populacije u državama i lakše je za poredjenje.</p>
+<p>Sve navedeno za <code>geom_col</code> može se odraditi za <code>geom_bar</code> ako se radi prebrojavanje odgovarajućih kategorija. Na primer, možemo prikazati broj letova iz paketa <code>nycflights13</code> po kompanijama u zavisnosti od polazišta.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(flights, <span class="kw">aes</span>(<span class="dt">x =</span> carrier, <span class="dt">fill =</span> origin)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p>Ovime smo prešli sve osnovne grafike.</p>
 
 </div>
 </div>
