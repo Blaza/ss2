@@ -323,5 +323,63 @@ Lepši opis strukture boks plotova može se naći npr. na https://towardsdatasci
 
 
 
+### Bar plotovi
 
+Bar plotovi nam služe za grafički prikaz kategoričkih promenljivih. Na njima se prikazuje koliko postoji podataka u bazi iz odgovarajuće kategorije. Razlikuju se od histograma po tome što ne svrstavaju podatke po kategorijama u zavisnosti od toga kom intervalu pripadaju njihove numeričke vrednosti, već prosto broje članove kategorija. Takodje, zbog prirode podataka, ne postoji uredjenje, pa nisu sa leve strane grafika "manje" vrednosti nego sa desne.
 
+U `ggplot2` bar plotove crtamo sa funkcijom `geom_bar`. Takodje je dovoljno dati samo x osu. Probrojmo iz baze `mpg` broj podataka po klasi.
+
+```{r}
+ggplot(mpg, aes(x = class)) +
+  geom_bar()
+```
+
+Ovo je sivo i mora se obojiti
+
+```{r}
+ggplot(mpg, aes(x = class)) +
+  geom_bar(fill = "forestgreen", color = "black")
+```
+
+Nekad nećemo da prebrojimo elemente neke kategorije, već imamo u podacima za odredjenu kategoričku promenljivu dodeljenu neku vrednost. Na primer, u podacima `gapminder` imamo države i njihove populacije, pa možemo da nacrtamo populaciju po državama. To radimo funkcijom `geom_col` kojoj pored x ose dodamo i y osu sa odgovarajućim vrednostima.
+
+```{r}
+library(gapminder)
+
+# napravimo kratak spisak drzava koj cemo gledati
+countries <- c("Bosnia and Herzegovina", "Croatia", "Montenegro", "Serbia", "Slovenia")
+gapminder2007 <- gapminder[gapminder$year == 2007, ]
+gapminder_small <- gapminder2007[gapminder2007$country %in% countries, ]
+
+ggplot(gapminder_small, aes(x = country, y = pop)) +
+  geom_col(fill = "forestgreen", color = "black")
+```
+
+Bar plotovi mogu biti i naslagani, da prikazuju više vrednosti za istu kategoriju odjednom. Lakše se vidi na primeru. Nacrtaćemo bar plot gde se vidi populacija za 1997., 2002. i 2007. godinu.
+
+```{r}
+library(gapminder)
+gapminder567 <- gapminder[(gapminder$year %in% c(1997, 2002, 2007)) &
+                            (gapminder$country %in% countries), ]
+
+ggplot(gapminder567, aes(x = country, y = pop)) +
+  geom_col(color = "black", mapping = aes(fill = factor(year)))
+```
+
+Ovi grafici nisu laki za čitanje jer je teško uporediti veličine pravougaonika raznih boja. Korisnija alternativa se dobije kada se doda argument `position = "dodge"`
+
+```{r}
+ggplot(gapminder567, aes(x = country, y = pop)) +
+  geom_col(color = "black", mapping = aes(fill = factor(year)), position = "dodge")
+```
+
+Sada vidimo za sve godine kretanje populacije u državama i lakše je za poredjenje.
+
+Sve navedeno za `geom_col` može se odraditi za `geom_bar` ako se radi prebrojavanje odgovarajućih kategorija. Na primer, možemo prikazati broj letova iz paketa `nycflights13` po kompanijama u zavisnosti od polazišta.
+
+```{r}
+ggplot(flights, aes(x = carrier, fill = origin)) +
+  geom_bar(position = "dodge")
+```
+
+Ovime smo prešli sve osnovne grafike.
