@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Rad sa podacima | Statistički softver 2</title>
+  <meta name="description" content="2 Rad sa podacima | Statistički softver 2" />
+  <meta name="generator" content="bookdown  and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Rad sa podacima | Statistički softver 2" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Rad sa podacima | Statistički softver 2" />
+  
+  
+  
+
+<meta name="author" content="Blagoje Ivanović" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="graficki-prikaz-podataka.html">
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Predgovor</a></li>
+<li class="chapter" data-level="1" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html"><i class="fa fa-check"></i><b>1</b> Grafički prikaz podataka</a><ul>
+<li class="chapter" data-level="1.1" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#uvodni-primeri-i-napomene"><i class="fa fa-check"></i><b>1.1</b> Uvodni primeri i napomene</a></li>
+<li class="chapter" data-level="1.2" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#razni-primeri-grafika"><i class="fa fa-check"></i><b>1.2</b> Razni primeri grafika</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#scatterplotovi"><i class="fa fa-check"></i><b>1.2.1</b> Scatterplotovi</a></li>
+<li class="chapter" data-level="1.2.2" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#linijski-grafici"><i class="fa fa-check"></i><b>1.2.2</b> Linijski grafici</a></li>
+<li class="chapter" data-level="1.2.3" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#histogrami"><i class="fa fa-check"></i><b>1.2.3</b> Histogrami</a></li>
+<li class="chapter" data-level="1.2.4" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#crtanje-vise-grafika-odjednom"><i class="fa fa-check"></i><b>1.2.4</b> Crtanje više grafika odjednom</a></li>
+<li class="chapter" data-level="1.2.5" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#boks-plotovi"><i class="fa fa-check"></i><b>1.2.5</b> Boks plotovi</a></li>
+<li class="chapter" data-level="1.2.6" data-path="graficki-prikaz-podataka.html"><a href="graficki-prikaz-podataka.html#bar-plotovi"><i class="fa fa-check"></i><b>1.2.6</b> Bar plotovi</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="rad-sa-podacima.html"><a href="rad-sa-podacima.html"><i class="fa fa-check"></i><b>2</b> Rad sa podacima</a><ul>
+<li class="chapter" data-level="2.1" data-path="rad-sa-podacima.html"><a href="rad-sa-podacima.html#dataframe"><i class="fa fa-check"></i><b>2.1</b> Dataframe</a></li>
+<li class="chapter" data-level="2.2" data-path="rad-sa-podacima.html"><a href="rad-sa-podacima.html#obrada-podataka---dplyr-paket"><i class="fa fa-check"></i><b>2.2</b> Obrada podataka - <code>dplyr</code> paket</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="rad-sa-podacima.html"><a href="rad-sa-podacima.html#istrazivanje-podataka-svetske-zdravstvene-organizacije"><i class="fa fa-check"></i><b>2.2.1</b> Istraživanje podataka Svetske zdravstvene organizacije</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistički softver 2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="rad-sa-podacima" class="section level1">
+<h1><span class="header-section-number">2</span> Rad sa podacima</h1>
+<p>U ovom poglavlju ćemo se upoznati sa osnovnim metodama rada sa podacima, prvenstveno kroz paket <code>dplyr</code>, koji je jedan od najkorišćenijih paketa u R-u. Pre upoznavanja sa tim paketom, osnvrnućemo se na osnovnu strukturu podataka u R-u, dataframe, koja se koristi za rad sa tabelarnim podacima.</p>
+<div id="dataframe" class="section level2">
+<h2><span class="header-section-number">2.1</span> Dataframe</h2>
+<p>Dataframe je najčešći način čuvanja podataka u R-u i vrlo je pogodan za rad i analizu. Služi za prikaz tabelarnih podataka, pa liči na matricu, s tim što je dataframe u snovi lista koja sadrži vektore jednakih dužina (kolone), pri čemu ti vektori ne moraju biti istog tipa. Dakle možemo imati jednu kolonu koju čine brojevi, a drugu tekstualni podaci.</p>
+<p>Dataframe se pravi na sledeći način:</p>
+<pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">kolona1 =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="dt">kolona2 =</span> <span class="kw">c</span>(<span class="st">&quot;prvi&quot;</span>, <span class="st">&quot;drugi&quot;</span>, <span class="st">&quot;treci&quot;</span>))
+df</code></pre>
+<pre><code>##   kolona1 kolona2
+## 1       1    prvi
+## 2       2   drugi
+## 3       3   treci</code></pre>
+<p>Ovako smo dobili dataframe sa dve kolone, od kojih je jedna numeri;ka a druga tekstualna.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    3 obs. of  2 variables:
+##  $ kolona1: num  1 2 3
+##  $ kolona2: Factor w/ 3 levels &quot;drugi&quot;,&quot;prvi&quot;,..: 2 1 3</code></pre>
+<p>R podrazumevano pretvara tekstualne podatke u faktore, to možemo preduprediti ako dodamo argument <code>stringsAsFactors = FALSE</code></p>
+<pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">kolona1 =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="dt">kolona2 =</span> <span class="kw">c</span>(<span class="st">&quot;prvi&quot;</span>, <span class="st">&quot;drugi&quot;</span>, <span class="st">&quot;treci&quot;</span>), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+<span class="kw">str</span>(df)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    3 obs. of  2 variables:
+##  $ kolona1: num  1 2 3
+##  $ kolona2: chr  &quot;prvi&quot; &quot;drugi&quot; &quot;treci&quot;</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">df</code></pre>
+<pre><code>##   kolona1 kolona2
+## 1       1    prvi
+## 2       2   drugi
+## 3       3   treci</code></pre>
+<p>Dva dataframe-a (koji imaju isi broj kolona) se mogu spojiti da dobijemo više kolona korišćenjem funkcije <code>cbind</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">df1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">kolona1 =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="dt">kolona2 =</span> <span class="kw">c</span>(<span class="st">&quot;prvi&quot;</span>, <span class="st">&quot;drugi&quot;</span>, <span class="st">&quot;treci&quot;</span>), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+df2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">kolona3 =</span> <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>), <span class="dt">kolona4 =</span> <span class="kw">c</span>(<span class="st">&quot;prvi1&quot;</span>, <span class="st">&quot;drugi1&quot;</span>, <span class="st">&quot;treci1&quot;</span>), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+df3 &lt;-<span class="st"> </span><span class="kw">cbind</span>(df1, df2)
+df3</code></pre>
+<pre><code>##   kolona1 kolona2 kolona3 kolona4
+## 1       1    prvi       4   prvi1
+## 2       2   drugi       5  drugi1
+## 3       3   treci       6  treci1</code></pre>
+<p>Takodje, mogu se nadovezati po vrstama (ako imaju ista imena kolona) funkcijom <code>rbind</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">df1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">kolona1 =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="dt">kolona2 =</span> <span class="kw">c</span>(<span class="st">&quot;prvi&quot;</span>, <span class="st">&quot;drugi&quot;</span>, <span class="st">&quot;treci&quot;</span>), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+df2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">kolona1 =</span> <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">5</span>,<span class="dv">6</span>), <span class="dt">kolona2 =</span> <span class="kw">c</span>(<span class="st">&quot;prvi1&quot;</span>, <span class="st">&quot;drugi1&quot;</span>, <span class="st">&quot;treci1&quot;</span>), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+df4 &lt;-<span class="st"> </span><span class="kw">rbind</span>(df1, df2)
+df4</code></pre>
+<pre><code>##   kolona1 kolona2
+## 1       1    prvi
+## 2       2   drugi
+## 3       3   treci
+## 4       4   prvi1
+## 5       5  drugi1
+## 6       6  treci1</code></pre>
+<p>Vrednostima kolona možemo pristupati pomoću operatora <code>$</code>, kao u listama, a istim možemo i dodati nove kolone.</p>
+<pre class="sourceCode r"><code class="sourceCode r">df<span class="op">$</span>kolona1</code></pre>
+<pre><code>## [1] 1 2 3</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">df<span class="op">$</span>kolona5 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">9</span>)
+df</code></pre>
+<pre><code>##   kolona1 kolona2 kolona5
+## 1       1    prvi       7
+## 2       2   drugi       8
+## 3       3   treci       9</code></pre>
+<p>Medjutim, možda elegantniji način filtriranja i odabira podskupova dataframe-a je korišćenjem uglatih zagrada. Koristimo notaciju <code>df[redovi, kolone]</code>, gde prvim argumentom odredjujemo koje redove želimo da uzmemo, a drugim koje kolone. Prazno mesto za neki od argumenata znači “uzmi sve”.</p>
+<pre class="sourceCode r"><code class="sourceCode r">df[,] <span class="co"># sve</span></code></pre>
+<pre><code>##   kolona1 kolona2 kolona5
+## 1       1    prvi       7
+## 2       2   drugi       8
+## 3       3   treci       9</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">df[<span class="dv">1</span>,] <span class="co"># prva vrsta</span></code></pre>
+<pre><code>##   kolona1 kolona2 kolona5
+## 1       1    prvi       7</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">df[,<span class="dv">1</span>] <span class="co"># prva kolona</span></code></pre>
+<pre><code>## [1] 1 2 3</code></pre>
+<p>Redovi mogu biti ili vektori brojeva koji označavaju indekse redova koje da uzmemo, ili vektori TRUE/FALSE vrednosti iste dužine kao broj vrsta u dataframe-u, pri čemu se tada biraju redovi na pozicijama gde je u vektoru vrednost TRUE.</p>
+<pre class="sourceCode r"><code class="sourceCode r">df4[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>), ] <span class="co"># sve kolone, redovi 1,3,4</span></code></pre>
+<pre><code>##   kolona1 kolona2
+## 1       1    prvi
+## 3       3   treci
+## 4       4   prvi1</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">df4[df4<span class="op">$</span>kolona1 <span class="op">&gt;</span><span class="st"> </span><span class="dv">3</span>, ] <span class="co"># sve kolone, one vrste kod kojih je kolona1 veca od 3</span></code></pre>
+<pre><code>##   kolona1 kolona2
+## 4       4   prvi1
+## 5       5  drugi1
+## 6       6  treci1</code></pre>
+<p>Kolone mogu biti ili vektori brojeva koji označavaju koje kolone da uzmemo prema indeksu, ili vektori stringova, koji označavaju imena kolona koje da uzmemo.</p>
+<pre class="sourceCode r"><code class="sourceCode r">df3[, <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)] <span class="co"># sve vrste, 1 i 3 kolona</span></code></pre>
+<pre><code>##   kolona1 kolona3
+## 1       1       4
+## 2       2       5
+## 3       3       6</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">df3[, <span class="kw">c</span>(<span class="st">&quot;kolona1&quot;</span>, <span class="st">&quot;kolona3&quot;</span>)] <span class="co"># isto</span></code></pre>
+<pre><code>##   kolona1 kolona3
+## 1       1       4
+## 2       2       5
+## 3       3       6</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">df3[<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), <span class="kw">c</span>(<span class="st">&quot;kolona1&quot;</span>, <span class="st">&quot;kolona3&quot;</span>)] <span class="co"># prvi i treci red, prva i treca kolona</span></code></pre>
+<pre><code>##   kolona1 kolona3
+## 1       1       4
+## 3       3       6</code></pre>
+<p>Korisna stvar je da ako koristimo vektore brojeva za indeksiranje, ukoliko stavimo znak <code>-</code> ispred, to znači da izuzimamo te redove/kolone.</p>
+<pre class="sourceCode r"><code class="sourceCode r">df[, <span class="dv">-1</span>] <span class="co"># sve bez prve kolone</span></code></pre>
+<pre><code>##   kolona2 kolona5
+## 1    prvi       7
+## 2   drugi       8
+## 3   treci       9</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">df[<span class="op">-</span><span class="dv">2</span>, ] <span class="co"># sve bez druge vrste</span></code></pre>
+<pre><code>##   kolona1 kolona2 kolona5
+## 1       1    prvi       7
+## 3       3   treci       9</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">df[<span class="op">-</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="kw">c</span>(<span class="st">&quot;kolona2&quot;</span>, <span class="st">&quot;kolona5&quot;</span>)] <span class="co"># druga i peta kolona, bez prve i druge vrste</span></code></pre>
+<pre><code>##   kolona2 kolona5
+## 3   treci       9</code></pre>
+<p>Konačno, za osnovne informacije o tabeli postoje funkcije <code>colnames</code>, <code>rownames</code>, <code>ncol</code> i <code>nrow</code>, za koje možete pretpostaviti šta rade.</p>
+</div>
+<div id="obrada-podataka---dplyr-paket" class="section level2">
+<h2><span class="header-section-number">2.2</span> Obrada podataka - <code>dplyr</code> paket</h2>
+<p>Prethodno navedeni način rada sa tabelarnim podacima učitanim kao dataframe može postati prilično nezgrapan kod komplikovanijih zahteva, pa je stoga smišljen mnogo elegantniji pristup pomoću paketa <code>dplyr</code>. Uvodni tutorijal za paket možete naći i na <a href="https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html" class="uri">https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html</a>.</p>
+<p>Zansnovan je na korišćenju nekoliko osnovnih radnji koje se primenjuju na podacima, koje su implementirane funkcijama:</p>
+<ul>
+<li><code>select</code> - biranje kolona iz tabele</li>
+<li><code>filter</code> - filtriranje vrsta tabele</li>
+<li><code>arrange</code> - sortiranje vrsta na osnovu nekih kolona</li>
+<li><code>mutate</code> - pravljenje novih kolona korišćenjem postojećih</li>
+<li><code>summarise</code> - računanje neke sumarne statistike (grupisanih) podataka</li>
+</ul>
+<p>Postoji i mnogo više funkcija u ovom paketu, koje su često slične navedenim i koje ćemo kad za to bude potrebe pokazati.</p>
+<p>Uz ovaj paket se upotrebljava malo čunija sintaksa, zasnovana na korišćenju operatora kompozicije <code>%&gt;%</code>. Najlakše ćemo pokazati primerom šta on radi.</p>
+<p>Uzmimo pomoću paketa <code>dplyr</code> kolonu 1 iz našeg dataframe-a.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(kolona1)</code></pre>
+<pre><code>##   kolona1
+## 1       1
+## 2       2
+## 3       3</code></pre>
+<p>Ovo je ekvivalentno pozivu</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">select</span>(df, kolona1)</code></pre>
+<pre><code>##   kolona1
+## 1       1
+## 2       2
+## 3       3</code></pre>
+<p>Operator <code>%&gt;%</code> radi tako što prosledjuje levi operand kao prvi argument funkcije date sa desne strane operatora, pa ostale argumente prosledjuje kao dodatne. Suštinski, kod <code>x %&gt;% f(y)</code> postaje <code>f(x, y)</code>. Ako želimo da specifikujemo gde hoćemo da stavimo levu stranu operatora, koristimo <code>.</code>. Na primer, gornji kod je ekvivalentan</p>
+<pre class="sourceCode r"><code class="sourceCode r">df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(., kolona1)</code></pre>
+<pre><code>##   kolona1
+## 1       1
+## 2       2
+## 3       3</code></pre>
+<p>Vremenom će postati ovakva sintaksa prirodna. Vrlo je elegantna jer omogućava jednostavno nadovezivanje. Na sledeći način iz <code>df</code> izaberemo prve dve kolone i filtriramo da uzmemo vrste gde je prva kolona veća od 1.</p>
+<pre class="sourceCode r"><code class="sourceCode r">df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(kolona1, kolona2) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(kolona1 <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>)</code></pre>
+<pre><code>##   kolona1 kolona2
+## 1       2   drugi
+## 2       3   treci</code></pre>
+<p>Ovime smo videli već primere korišćenja dve funkcije u <code>dplyr</code> paketu - <code>select</code> i <code>filter</code>.</p>
+<div id="istrazivanje-podataka-svetske-zdravstvene-organizacije" class="section level3">
+<h3><span class="header-section-number">2.2.1</span> Istraživanje podataka Svetske zdravstvene organizacije</h3>
+<p>Prikažimo mogućnosti paketa <code>dplyr</code> kroz istraživanje podataka o životnom veku u državama, poteklih od Svetske zdravstvene organizacije. Podaci koje ćemo posmatrati su dostupni na <a href="https://www.kaggle.com/kumarajarshi/life-expectancy-who" class="uri">https://www.kaggle.com/kumarajarshi/life-expectancy-who</a>.</p>
+<p>Kada preuzmemo podatke, učitavamo ih funkcijom <code>read.csv</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">who_data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Life Expectancy Data.csv&quot;</span>)
+who_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">15</span>) <span class="co"># stampamo 15 slucajno izabranih</span></code></pre>
+<pre><code>##                               Country Year     Status Life.expectancy
+## 1  Venezuela (Bolivarian Republic of) 2015 Developing            74.1
+## 2                             Belarus 2003 Developing            67.7
+## 3                            Pakistan 2002 Developing            63.2
+## 4                             Morocco 2002 Developing            69.5
+## 5                             Eritrea 2003 Developing            58.8
+## 6                             Denmark 2002  Developed            77.0
+## 7                              Greece 2012 Developing            84.0
+## 8                          Montenegro 2009 Developing            75.0
+## 9                             Lebanon 2008 Developing            74.5
+## 10                              Ghana 2008 Developing            63.0
+## 11                            Ukraine 2002 Developing            67.6
+## 12                           Slovenia 2011  Developed            79.8
+## 13                             Sweden 2007  Developed            89.0
+## 14                          Sri Lanka 2013 Developing            74.6
+## 15                            Somalia 2001 Developing            57.0
+##    Adult.Mortality infant.deaths Alcohol percentage.expenditure
+## 1              157             9      NA               0.000000
+## 2              253             1   11.17              23.835786
+## 3              187           371    0.01              22.393876
+## 4               15            25    0.46              66.729339
+## 5              343             7    0.56               6.913998
+## 6               14             0   11.34            4801.546125
+## 7               76             0    8.20            2528.992935
+## 8              117             0    6.45             489.681870
+## 9               98             1    1.67              69.139249
+## 10             275            41    1.78             161.010643
+## 11             256             6    4.89             115.738974
+## 12              84             0   10.61            3343.026219
+## 13              63             0    6.90            7593.391622
+## 14             142             3    2.56              41.620536
+## 15             352            46    0.01               0.000000
+##    Hepatitis.B Measles  BMI under.five.deaths Polio Total.expenditure
+## 1           87       0 62.1                10    87                NA
+## 2           56      21 55.8                 1    53              6.59
+## 3           NA    3903 17.4               474    71              2.76
+## 4           92    6000 46.5                29    94              5.31
+## 5           91     376 13.3                10    95              3.50
+## 6           NA      32 53.3                 0    98              9.33
+## 7           98       3 64.9                 0    99              9.24
+## 8           87       0 58.5                 0    91              6.70
+## 9           81      24 62.5                 1    75              8.70
+## 10          93      82 24.2                61    92              4.85
+## 11          48    7587 55.4                 7    99              6.25
+## 12          NA      22 57.6                 0    96              9.80
+## 13          NA       1 56.1                 0    98              8.92
+## 14          99    2107 21.9                 3    99              3.68
+## 15          NA    3571 18.2                75    33                NA
+##    Diphtheria HIV.AIDS        GDP Population thinness..1.19.years
+## 1          87      0.1         NA         NA                  1.6
+## 2           5      0.1  1819.5256    9796749                  2.5
+## 3          68      0.1   499.8633  144654143                 21.8
+## 4          94      0.1  1413.7572   29512368                  6.6
+## 5          93      1.9   232.7945    3738265                  9.7
+## 6          98      0.1 33228.6929    5375931                  1.2
+## 7          99      0.1 22242.6819     114511                  0.8
+## 8          92      0.1  6698.7944     618294                  2.0
+## 9          81      0.1   712.7758     411147                  4.7
+## 10         93      2.2  1224.4155    2329864                  7.5
+## 11         99      0.9   879.4755      48225                  2.9
+## 12         96      0.1 24985.2483     252843                  1.6
+## 13         98      0.1 53324.3794     914892                  1.3
+## 14         99      0.1   361.2894       2585                 15.2
+## 15         33      0.8         NA         NA                  7.9
+##    thinness.5.9.years Income.composition.of.resources Schooling
+## 1                 1.5                           0.769      14.3
+## 2                 2.6                           0.695      13.9
+## 3                22.2                           0.457       5.5
+## 4                 6.5                           0.540       8.8
+## 5                 9.7                           0.000       4.7
+## 6                 1.0                           0.875      16.6
+## 7                 0.7                           0.858      16.8
+## 8                 2.1                           0.785      14.6
+## 9                 4.7                           0.740      13.1
+## 10                7.4                           0.530       9.8
+## 11                3.0                           0.683      13.9
+## 12                1.6                           0.876      17.0
+## 13                1.3                           0.895      15.8
+## 14               15.1                           0.757      13.8
+## 15                7.7                              NA        NA</code></pre>
+<p>Paket <code>dplyr</code> koristi malo bogatiju strukturu umesto dataframe-a za tabelarne podatke, a to je tibble. Podatke pretvaramo u taj format na sledeći način:</p>
+<pre class="sourceCode r"><code class="sourceCode r">who_data &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(who_data)
+who_data</code></pre>
+<pre><code>## # A tibble: 2,938 x 22
+##    Country  Year Status Life.expectancy Adult.Mortality infant.deaths
+##    &lt;fct&gt;   &lt;int&gt; &lt;fct&gt;            &lt;dbl&gt;           &lt;int&gt;         &lt;int&gt;
+##  1 Afghan…  2015 Devel…            65               263            62
+##  2 Afghan…  2014 Devel…            59.9             271            64
+##  3 Afghan…  2013 Devel…            59.9             268            66
+##  4 Afghan…  2012 Devel…            59.5             272            69
+##  5 Afghan…  2011 Devel…            59.2             275            71
+##  6 Afghan…  2010 Devel…            58.8             279            74
+##  7 Afghan…  2009 Devel…            58.6             281            77
+##  8 Afghan…  2008 Devel…            58.1             287            80
+##  9 Afghan…  2007 Devel…            57.5             295            82
+## 10 Afghan…  2006 Devel…            57.3             295            84
+## # … with 2,928 more rows, and 16 more variables: Alcohol &lt;dbl&gt;,
+## #   percentage.expenditure &lt;dbl&gt;, Hepatitis.B &lt;int&gt;, Measles &lt;int&gt;,
+## #   BMI &lt;dbl&gt;, under.five.deaths &lt;int&gt;, Polio &lt;int&gt;,
+## #   Total.expenditure &lt;dbl&gt;, Diphtheria &lt;int&gt;, HIV.AIDS &lt;dbl&gt;, GDP &lt;dbl&gt;,
+## #   Population &lt;dbl&gt;, thinness..1.19.years &lt;dbl&gt;,
+## #   thinness.5.9.years &lt;dbl&gt;, Income.composition.of.resources &lt;dbl&gt;,
+## #   Schooling &lt;dbl&gt;</code></pre>
+<p>Vidimo blage razlike u prikazu.</p>
+<p>Korisno je pogledati podatke funkcijom <code>glimpse</code> (iz <code>dplyr</code>), gde vidimo tip promenljivih i prvih nekoliko podataka iz odgovarajuće kolone.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glimpse</span>(who_data)</code></pre>
+<pre><code>## Observations: 2,938
+## Variables: 22
+## $ Country                         &lt;fct&gt; Afghanistan, Afghanistan, Afghan…
+## $ Year                            &lt;int&gt; 2015, 2014, 2013, 2012, 2011, 20…
+## $ Status                          &lt;fct&gt; Developing, Developing, Developi…
+## $ Life.expectancy                 &lt;dbl&gt; 65.0, 59.9, 59.9, 59.5, 59.2, 58…
+## $ Adult.Mortality                 &lt;int&gt; 263, 271, 268, 272, 275, 279, 28…
+## $ infant.deaths                   &lt;int&gt; 62, 64, 66, 69, 71, 74, 77, 80, …
+## $ Alcohol                         &lt;dbl&gt; 0.01, 0.01, 0.01, 0.01, 0.01, 0.…
+## $ percentage.expenditure          &lt;dbl&gt; 71.279624, 73.523582, 73.219243,…
+## $ Hepatitis.B                     &lt;int&gt; 65, 62, 64, 67, 68, 66, 63, 64, …
+## $ Measles                         &lt;int&gt; 1154, 492, 430, 2787, 3013, 1989…
+## $ BMI                             &lt;dbl&gt; 19.1, 18.6, 18.1, 17.6, 17.2, 16…
+## $ under.five.deaths               &lt;int&gt; 83, 86, 89, 93, 97, 102, 106, 11…
+## $ Polio                           &lt;int&gt; 6, 58, 62, 67, 68, 66, 63, 64, 6…
+## $ Total.expenditure               &lt;dbl&gt; 8.16, 8.18, 8.13, 8.52, 7.87, 9.…
+## $ Diphtheria                      &lt;int&gt; 65, 62, 64, 67, 68, 66, 63, 64, …
+## $ HIV.AIDS                        &lt;dbl&gt; 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.…
+## $ GDP                             &lt;dbl&gt; 584.25921, 612.69651, 631.74498,…
+## $ Population                      &lt;dbl&gt; 33736494, 327582, 31731688, 3696…
+## $ thinness..1.19.years            &lt;dbl&gt; 17.2, 17.5, 17.7, 17.9, 18.2, 18…
+## $ thinness.5.9.years              &lt;dbl&gt; 17.3, 17.5, 17.7, 18.0, 18.2, 18…
+## $ Income.composition.of.resources &lt;dbl&gt; 0.479, 0.476, 0.470, 0.463, 0.45…
+## $ Schooling                       &lt;dbl&gt; 10.1, 10.0, 9.9, 9.8, 9.5, 9.2, …</code></pre>
+<p>Sumarne podatke po kolonama vidimo ugradjenom funkcijom <code>summary</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(who_data)</code></pre>
+<pre><code>##                 Country          Year             Status    
+##  Afghanistan        :  16   Min.   :2000   Developed : 512  
+##  Albania            :  16   1st Qu.:2004   Developing:2426  
+##  Algeria            :  16   Median :2008                    
+##  Angola             :  16   Mean   :2008                    
+##  Antigua and Barbuda:  16   3rd Qu.:2012                    
+##  Argentina          :  16   Max.   :2015                    
+##  (Other)            :2842                                   
+##  Life.expectancy Adult.Mortality infant.deaths       Alcohol       
+##  Min.   :36.30   Min.   :  1.0   Min.   :   0.0   Min.   : 0.0100  
+##  1st Qu.:63.10   1st Qu.: 74.0   1st Qu.:   0.0   1st Qu.: 0.8775  
+##  Median :72.10   Median :144.0   Median :   3.0   Median : 3.7550  
+##  Mean   :69.22   Mean   :164.8   Mean   :  30.3   Mean   : 4.6029  
+##  3rd Qu.:75.70   3rd Qu.:228.0   3rd Qu.:  22.0   3rd Qu.: 7.7025  
+##  Max.   :89.00   Max.   :723.0   Max.   :1800.0   Max.   :17.8700  
+##  NA&#39;s   :10      NA&#39;s   :10                       NA&#39;s   :194      
+##  percentage.expenditure  Hepatitis.B       Measles              BMI       
+##  Min.   :    0.000      Min.   : 1.00   Min.   :     0.0   Min.   : 1.00  
+##  1st Qu.:    4.685      1st Qu.:77.00   1st Qu.:     0.0   1st Qu.:19.30  
+##  Median :   64.913      Median :92.00   Median :    17.0   Median :43.50  
+##  Mean   :  738.251      Mean   :80.94   Mean   :  2419.6   Mean   :38.32  
+##  3rd Qu.:  441.534      3rd Qu.:97.00   3rd Qu.:   360.2   3rd Qu.:56.20  
+##  Max.   :19479.912      Max.   :99.00   Max.   :212183.0   Max.   :87.30  
+##                         NA&#39;s   :553                        NA&#39;s   :34     
+##  under.five.deaths     Polio       Total.expenditure   Diphtheria   
+##  Min.   :   0.00   Min.   : 3.00   Min.   : 0.370    Min.   : 2.00  
+##  1st Qu.:   0.00   1st Qu.:78.00   1st Qu.: 4.260    1st Qu.:78.00  
+##  Median :   4.00   Median :93.00   Median : 5.755    Median :93.00  
+##  Mean   :  42.04   Mean   :82.55   Mean   : 5.938    Mean   :82.32  
+##  3rd Qu.:  28.00   3rd Qu.:97.00   3rd Qu.: 7.492    3rd Qu.:97.00  
+##  Max.   :2500.00   Max.   :99.00   Max.   :17.600    Max.   :99.00  
+##                    NA&#39;s   :19      NA&#39;s   :226       NA&#39;s   :19     
+##     HIV.AIDS           GDP              Population       
+##  Min.   : 0.100   Min.   :     1.68   Min.   :3.400e+01  
+##  1st Qu.: 0.100   1st Qu.:   463.94   1st Qu.:1.958e+05  
+##  Median : 0.100   Median :  1766.95   Median :1.387e+06  
+##  Mean   : 1.742   Mean   :  7483.16   Mean   :1.275e+07  
+##  3rd Qu.: 0.800   3rd Qu.:  5910.81   3rd Qu.:7.420e+06  
+##  Max.   :50.600   Max.   :119172.74   Max.   :1.294e+09  
+##                   NA&#39;s   :448         NA&#39;s   :652        
+##  thinness..1.19.years thinness.5.9.years Income.composition.of.resources
+##  Min.   : 0.10        Min.   : 0.10      Min.   :0.0000                 
+##  1st Qu.: 1.60        1st Qu.: 1.50      1st Qu.:0.4930                 
+##  Median : 3.30        Median : 3.30      Median :0.6770                 
+##  Mean   : 4.84        Mean   : 4.87      Mean   :0.6276                 
+##  3rd Qu.: 7.20        3rd Qu.: 7.20      3rd Qu.:0.7790                 
+##  Max.   :27.70        Max.   :28.60      Max.   :0.9480                 
+##  NA&#39;s   :34           NA&#39;s   :34         NA&#39;s   :167                    
+##    Schooling    
+##  Min.   : 0.00  
+##  1st Qu.:10.10  
+##  Median :12.30  
+##  Mean   :11.99  
+##  3rd Qu.:14.30  
+##  Max.   :20.70  
+##  NA&#39;s   :163</code></pre>
+<p>Dalje improvizujemo…</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="graficki-prikaz-podataka.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
