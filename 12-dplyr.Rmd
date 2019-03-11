@@ -185,7 +185,7 @@ Kao primer, možemo da izdvojimo iz baze letova one letove koji idu ka Portlandu
 ```{r}
 portland_flights <- flights %>%
   filter(dest == "PDX")
-View(portland_flights)
+#View(portland_flights)
 ```
 
 Kao argument funkciji `filter` prosledjuje se uslov koji želimo da ispunjavaju redovi koje biramo. To je zapravo vektor `TRUE` i `FALSE` vrednosti, kao kod indeksiranja klasičnog dataframe-a. Ovde smo koristili operator jednakosti `==`, ali možemo koristiti i druge matematičke operatore poput `>`, `<`, `>=`, `<=`, `!=`. Više kriterijuma možemo spajati operatorima konjukcije `&` ('i') i disjunkcije `|` ('ili'). Naravno, pored ovih, mogu se koristiti bilo koje funkcije koje daju kao rezultat logičke vektore.
@@ -203,7 +203,7 @@ Odredimo sve letove sa JFK do Berlingtona (BTV) i Sijetla (SEA), koji su od okto
 ```{r}
 btv_sea_flights <- flights %>% 
   filter(origin == "JFK" & (dest == "BTV" | dest == "SEA") & month >= 10)
-View(btv_sea_flights)
+#View(btv_sea_flights)
 ```
 
 Umesto korišćenja operatora konjunkcije, možemo samo razdvojiti sve uslove koji moraju biti zadovoljeni sa zapetom.
@@ -211,7 +211,7 @@ Umesto korišćenja operatora konjunkcije, možemo samo razdvojiti sve uslove ko
 ```{r}
 btv_sea_flights <- flights %>% 
   filter(origin == "JFK", (dest == "BTV" | dest == "SEA"), month >= 10)
-View(btv_sea_flights)
+#View(btv_sea_flights)
 ```
 
 
@@ -275,7 +275,7 @@ Ovom funkcijom možemo da napravimo nove kolone koristeći postojeće. Na primer
 weather <- weather %>%
   mutate(celsius = (temp - 32) * 5 / 9)
 
-View(weather)
+#View(weather)
 ```
 
 Možemo praviti više novih kolona odjednom. Na primer, dodaćemo kolonu "gain" koja predstavlja razliku izmedju kašnjenja polaska i kašnjenja dolaska, tj. neki vid nadoknadjenog vremena kada je let kasnio sa polaskom. Pored toga, dodaćemo kolonu koja predstavlja let u satima, i odrediti i "gain" po satu.
