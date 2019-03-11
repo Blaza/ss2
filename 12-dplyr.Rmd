@@ -124,7 +124,7 @@ df %>%
 
 Ovime smo videli već primere korišćenja dve funkcije u `dplyr` paketu - `select` i `filter`.
 
-### Istraživanje podataka Svetske zdravstvene organizacije
+### Učitavanje eksternih podataka
 
 Prikažimo mogućnosti paketa `dplyr` kroz istraživanje podataka o životnom veku u državama, poteklih od Svetske zdravstvene organizacije. Podaci koje ćemo posmatrati su dostupni na https://www.kaggle.com/kumarajarshi/life-expectancy-who.
 
@@ -155,4 +155,167 @@ Sumarne podatke po kolonama vidimo ugradjenom funkcijom `summary`.
 summary(who_data)
 ```
 
-Dalje improvizujemo...
+### Osnovne funkcije paketa `dplyr`
+
+Proći ćemo nekoliko primera osnovnih funkcija iz paketa. Najviše ćemo koristiti podatke iz paketa `nycflights13`, pa ga učitavamo
+
+```{r}
+library(nycflights13)
+```
+
+Prelazimo na pregled funkcija.
+
+#### `select` - odabir kolona
+
+Sa ovom funkcijom smo se već susreli i nećemo dužiti. Ona služi da iz tabele koja ima mnogo kolona odaberemo samo one koje su nam od interesa, radi lakšeg pregleda.
+
+Odaberimo iz baze `flights` samo kolone godina, mesec, dan, polazipte i destinacija.
+
+```{r}
+flights %>%
+  select(year, month, day, origin, dest)
+```
+
+#### `filter` - Filtriranje redova
+
+Ova funkcija služi za odabir odgovarajućih vrsta tabele, tj. opservacija, na osnovu željenih kriterijuma.
+
+Kao primer, možemo da izdvojimo iz baze letova one letove koji idu ka Portlandu, sa kodom aerodroma `"PDX"`.
+
+```{r}
+portland_flights <- flights %>%
+  filter(dest == "PDX")
+View(portland_flights)
+```
+
+Kao argument funkciji `filter` prosledjuje se uslov koji želimo da ispunjavaju redovi koje biramo. To je zapravo vektor `TRUE` i `FALSE` vrednosti, kao kod indeksiranja klasičnog dataframe-a. Ovde smo koristili operator jednakosti `==`, ali možemo koristiti i druge matematičke operatore poput `>`, `<`, `>=`, `<=`, `!=`. Više kriterijuma možemo spajati operatorima konjukcije `&` ('i') i disjunkcije `|` ('ili'). Naravno, pored ovih, mogu se koristiti bilo koje funkcije koje daju kao rezultat logičke vektore.
+
+Na primer, možemo da odaberemo letove koji kreću sa aerodroma JFK, a leteli su duže od sat vremena.
+
+```{r}
+flights %>%
+  filter(origin == "JFK" & air_time > 60)
+```
+
+
+Odredimo sve letove sa JFK do Berlingtona (BTV) i Sijetla (SEA), koji su od oktobra do kraja godine.
+
+```{r}
+btv_sea_flights <- flights %>% 
+  filter(origin == "JFK" & (dest == "BTV" | dest == "SEA") & month >= 10)
+View(btv_sea_flights)
+```
+
+Umesto korišćenja operatora konjunkcije, možemo samo razdvojiti sve uslove koji moraju biti zadovoljeni sa zapetom.
+
+```{r}
+btv_sea_flights <- flights %>% 
+  filter(origin == "JFK", (dest == "BTV" | dest == "SEA"), month >= 10)
+View(btv_sea_flights)
+```
+
+
+#### `arrange` - sortiranje redova
+
+Često ima smisla sortirati podatke u odnosu na neku kolonu prilikom istraživanja podataka. Paket `dplyr` nam daje jednostavan način za to kroz funkciju `arrange`. Par jednostavnih primera sledi.
+
+Sortirajmo letove po trajanju leta rastuće...
+
+```{r}
+flights %>%
+  arrange(air_time) %>%
+  select(tailnum, air_time)
+```
+
+... ili opadajuće
+
+```{r}
+flights %>%
+  arrange(desc(air_time)) %>%
+  select(tailnum, air_time)
+```
+
+Vrlo korisna opcija je što se sortiranje može vršiti po više promenljivih. Na primer, da bismo sortirali letove po datumu leta, počevši od najskorijeg, treba da sortiramo prvo opadajuće po mesecu, ali i one iz istog meseca treba sortirati opadajuće po danu. Ovo radimo na sledeći način
+
+```{r}
+# radi lakseg pregleda, uzecemo podskup od
+# 10 letova
+set.seed(1)
+subflights <- flights %>% sample_n(10) 
+subflights %>%
+  arrange(desc(month), desc(day)) %>%
+  select(tailnum, month, day)
+```
+
+**Napomena!** Obratite pažnju, bitan je redosled argumenata u `arrange`, ako sortiramo prvo po danu pa po mesecu, ne dobijamo željeni rezultat.
+
+```{r}
+subflights %>%
+  arrange(desc(day), desc(month)) %>%
+  select(tailnum, month, day)
+```
+
+Sortirajmo letove opadajuće po datumu, ali rastuće po trajanju leta
+
+```{r}
+flights %>%
+  arrange(desc(month), desc(day), air_time) %>%
+  select(tailnum, month, day, air_time)
+```
+
+#### `mutate` - dodavanje nove kolone
+
+Ovom funkcijom možemo da napravimo nove kolone koristeći postojeće. Na primer, možemo da vršimo konverziju iz Farenhajta u Celzijus.
+
+```{r}
+# ovako smo ranije
+# weather$celsius <- (weather$temp - 32) * 5 / 9
+
+# dplyr nacin:
+weather <- weather %>%
+  mutate(celsius = (temp - 32) * 5 / 9)
+
+View(weather)
+```
+
+Možemo praviti više novih kolona odjednom. Na primer, dodaćemo kolonu "gain" koja predstavlja razliku izmedju kašnjenja polaska i kašnjenja dolaska, tj. neki vid nadoknadjenog vremena kada je let kasnio sa polaskom. Pored toga, dodaćemo kolonu koja predstavlja let u satima, i odrediti i "gain" po satu.
+
+```{r}
+flights <- flights %>% 
+  mutate(
+    gain = dep_delay - arr_delay,
+    hours = air_time / 60,
+    gain_per_hour = gain / hours
+  )
+```
+
+I sortiramo po `gain_per_hour`
+
+```{r}
+flights %>%
+  arrange(gain_per_hour) %>%
+  select(dep_delay, arr_delay, gain, hours, air_time, gain_per_hour)
+```
+
+Ako uposlimo i paket `lubridate`, koji značajno olakšava rad sa datumima u R-u, možemo dodati i kolonu koja sadrži tačno vreme leta, umesto komponenti koje imamo sada.
+
+```{r}
+#install.packages("lubridate")
+library(lubridate)
+
+flights <- flights %>% 
+  mutate(departure = make_datetime(year, month, day, hour, minute))
+
+flights %>%
+  select(year, month, day, hour, minute, departure)
+```
+
+Sada prethodno sortiranje opadajuće možemo odratiti po toj novoj koloni.
+
+```{r}
+set.seed(1)
+flights %>% sample_n(10) %>%
+  arrange(desc(departure)) %>%
+  select(tailnum, month, day, departure)
+```
+
