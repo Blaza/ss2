@@ -319,3 +319,50 @@ flights %>% sample_n(10) %>%
   select(tailnum, month, day, departure)
 ```
 
+
+Specijalan slučaj `mutate` naredbe je `rename` koju koristimo za preimenovanje kolona.
+
+```{r}
+weather %>% rename(temp_C = celsius)
+```
+
+#### `summarise` - sumarne statistike
+
+Ova, jedna od korisnijih funkcija, služi za računanje neke statistike nad podacima. Podaci mogu biti i grupisani, što ćemo videti kasnije. Za početak, vidimo neki prosti primer.
+
+Prosečno vreme trajanja letova dobijamo ovako:
+
+```{r}
+flights %>% summarise(mean(air_time))
+```
+Ima NA vrednosti, pa dodajemo `na.rm = TRUE`, da bi ih ignorisali prilikom računa.
+
+```{r}
+flights %>% summarise(mean(air_time, na.rm = TRUE))
+```
+
+Da vidimo i ukupan broj letova, koristimo specijalnu funkciju `n()`. Dodajmo i kvantile iz poziva `summary`.
+
+```{r}
+no_na_flights <- flights %>%
+  filter(!is.na(air_time))
+
+no_na_flights %>%
+  summarise(
+    count = n(),
+    min_time = min(air_time),
+    time_q1 = quantile(air_time, 0.25),
+    median_time = median(air_time),
+    mean_time = mean(air_time),
+    time_13 = quantile(air_time, 0.75),
+    max_time = max(air_time)
+  )
+```
+
+Vidimo poklapanje sa `summary`.
+
+```{r}
+summary(no_na_flights$air_time)
+```
+
+
