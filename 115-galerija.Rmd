@@ -1,0 +1,776 @@
+# Galerija grafika
+
+U nastavku je dat seminarski rad iz Statističkog softvera 1, pod naslovom "Paketi za grafičko predstavljanje", čiji su autori koleginice Aida Al-Raghyfi i Nataša Martinović. Yahvaljujemo im na vrlo interesantnim primera vizuelizacija mogućih paketom `ggplot`, ali i na prikazu drugih interaktivnih paketa.
+
+
+### Uvod
+
+ Grafičko predstavljanje podataka je metod koji prikazuje vrednosti, izveštaje, upoređuje rezultate ili daje predviđanja o toku određenih situacija. To je vizuelni prikaz podataka kroz grafikone.
+ 
+U ovom radu, bavićemo se paketima: ggplot2, plotly i highcharter.
+                                                                
+
+***
+### Ggplot2
+ Paket ggplot2 je jedan od najkorisnijih i najzastupljenijih paketa u R-u. Ima dosta različitu sintaksu od sintakse klasičnih grafika, i samim tim zahteva malo više učenja, ali najveća prednost ovog paketa je što se sa malo koda prave estetski bogati grafici.
+ 
+ Paket ggplot2 se zasniva na takozvanoj “gramatici grafike”. Grafici se prave “sabiranjem”, odnosno dodajemo komponentu po komponentu na grafik. Glavni delovi koje grafik ima su:
+
+1. Podaci (data): Skup podataka koji se prikazuje
+2. Geometrijski objekat (geom_*): Tip geometrijskog objekta kojim se prikazuju podaci.
+3. Estetski parametri (aes()): Estetski atributi koji se mogu dodeliti geometrijskim objektima.
+
+
+
+Sada ćemo proći kroz par jednostavnih primera
+```{r, cache=TRUE}
+library(ggplot2)
+data("midwest", package = "ggplot2")  
+ midwest <- read.csv("http://goo.gl/G1K41K")  
+#Za primer koristićemo skup podataka midwest iz paketa ggplot2. Ovo je skup podataka populacije svih okruga od 5 država srednjeg zapada SAD-a.
+
+g<-ggplot(midwest, aes(x=area, y=poptotal)) +  geom_point(col="steelblue",  size=3) +   #funkcija geom_point tačakama predstavlja svaki okrug iz naše tabele 
+  geom_smooth(method="lm", col="firebrick") #funkcija geom_smooth pravi određenu aproksimaciju podataka, u ovom slučaju je to linearni model, ali može biti i nelinearni model, što ćemo videti kasnije
+g
+
+g + xlim(c(0, 0.1)) + ylim(c(0, 1000000)) #Pošto se tačke većinom nalaze na donjoj polovini, funkcijom xlim/ylim možemo da posmatramo grafik u granicama koje mi odredimo, i na taj način obrišemo tačke van tih granica
+g1<-g+coord_cartesian(xlim=c(0, 0.1), ylim=c(0, 1000000)) #Ili funkcijom coord_cartesian() da zumiramo grafik u delu koji nama odgovara
+g1 + ggtitle("Area Vs Population", subtitle="From midwest dataset") + xlab("Area") + ylab("Population") #Funkcija za stavljanje naslova i podnaslova
+
+gg <- ggplot(midwest, aes(x=area, y=poptotal)) + 
+  geom_point(aes(col=state,size=popdensity)) +  #Stavljamo da svaki okrug ima svoju boju u zavisnoti od toga u kojoj državi se nalazi i veličinu u zavisnosti od gustine naseljenosti
+  geom_smooth(method="loess", col="firebrick", size=2) + #ovde možemo videti nelinearni metod aproksimacije podataka
+  coord_cartesian(xlim=c(0, 0.1), ylim=c(0, 1000000)) + #ograničavamo gornje i donje vrednosti koordinatnih osa
+  labs(title="Area Vs Population", subtitle="From midwest dataset", y="Population", x="Area", caption="Midwest Demographics")
+plot(gg)
+
+#Sada ćemo da izdvojimo i zaokružimo okruge koji imaju između 350000 i 500000 stanovnika i sa površinom izmedju 0.01 i 0.1
+library(ggalt)
+midwest_select <- midwest[midwest$poptotal > 350000 & 
+                            midwest$poptotal <= 500000 & 
+                            midwest$area > 0.01 & 
+                            midwest$area < 0.1, ]
+
+ggplot(midwest, aes(x=area, y=poptotal)) + 
+  geom_point(aes(col=state, size=popdensity)) +   
+  geom_smooth(method="loess", se=F) + 
+  xlim(c(0, 0.1)) + 
+  ylim(c(0, 500000)) +   
+  geom_encircle(aes(x=area, y=poptotal), 
+                data=midwest_select, 
+                color="red", 
+                size=2, 
+                expand=0.08) +
+  labs(subtitle="Area Vs Population", 
+       y="Population", 
+       x="Area", 
+       title="Scatterplot + Encircle", 
+       caption="Source: midwest")
+
+#Sada posmatramo skup podataka mpg iz paketa ggplot2, odnosno uzeti su podaci iz Motor Trend US magazina, iz 1974. godine, koji obuhvataju potrošnju goriva i 10 aspekata dizajna automobila i performanse za 32 automobila.
+
+data(mpg, package="ggplot2") 
+mpg <- read.csv("http://goo.gl/uEeRGu")
+g <- ggplot(mpg, aes(x=displ, y=hwy)) + 
+  geom_point() + 
+  geom_smooth(method="lm", se=FALSE) + 
+  theme_bw()  
+
+mpg1<-g + facet_wrap( ~ class, nrow=3) + labs(title="hwy vs displ", caption = "Source: mpg", subtitle="Ggplot2 - Faceting - Multiple plots in one figure")  
+#Funkcija facet_wrap() omogućava predstavljanje jednog grafika pomoću više manjih grafika za kategorije koje mi želimo
+#Koristeći nrow biramo broj vrsta u kojima će se nalaziti manji grafici
+mpg1
+
+mpg2<-g + facet_wrap( ~ class, scales = "free") + labs(title="hwy vs displ", caption = "Source: mpg", subtitle="Ggplot2 - Faceting - Multiple plots in one figure with free scales") 
+#Dok sa scales="free" program sam odabere
+mpg2
+
+#U ovom konkretnom primeru, upoređujući dobijene manje grafike zaključujemo da sportski automobili koji imaju velike motore, a malu masu troše manje nego pickup i minivan
+```
+
+```{r, cache=TRUE}
+#Sada prikazujemo estetske promene, kao što su: menjanje boje pozadine, menjanje debljine i boje svih unutrašnjih linija, kao i ivica i x/y-osa
+g <- ggplot(mpg, aes(x=displ, y=hwy)) + 
+  geom_point() + 
+  geom_smooth(method="lm", se=FALSE) + 
+  theme_bw()
+
+g + theme(panel.background = element_rect(fill = 'khaki'),
+          panel.grid.major = element_line(colour = "burlywood", size=1.5),
+          panel.grid.minor = element_line(colour = "tomato", 
+                                          size=.25, 
+                                          linetype = "dashed"),
+          panel.border = element_blank(),
+          axis.line.x = element_line(colour = "darkorange", 
+                                     size=1.5, 
+                                     lineend = "butt"),
+          axis.line.y = element_line(colour = "darkorange", 
+                                     size=1.5)) +
+  labs(title="Modified Background", 
+       subtitle="How to Change Major and Minor grid, Axis Lines, No Border")
+
+
+#Po želji se mogu menjati i margine grafika
+g + theme(plot.background=element_rect(fill="salmon"), 
+          plot.margin = unit(c(2, 2, 1, 1), "cm")) +  # gore,desno,dole,levo
+  labs(title="Modified Background", subtitle="How to Change Plot Margin") 
+```
+
+Sada ćemo prikazati još neke tipove geometrijskih objekata kojim se prikazuju podaci.
+
+***
+###  Linijski grafici
+
+Za crtanje vremenski uređenih podataka, poput vremenskih serija, standardni grafici su linijski. To je prosto linija koja prikazuje kretanje neke promenljive kroz vreme.
+
+```{r, cache=TRUE}
+#Za primer koristićemo skup podataka economics iz paketa ggplot2.
+data("economics", package = "ggplot2")
+
+ggplot(economics, aes(x = date, y = psavert)) +
+  geom_line(color = "darkgreen") +
+  geom_smooth() + 
+  scale_x_date(date_breaks = "5 years", date_labels = "%b %Y") +
+  labs(x = "Mesec", y = "Stopa stednje") #Funkcijom scale_x_date možemo da odaberemo na koliko godina ćemo da pratimo promene, u ovom konkretnom slučaju smo stavili 5 (“%b” u formatu označava mesec a “%Y” godinu, pa možemo da menjamo i redosled)
+```
+
+ 
+ 
+***
+### Stacked area chart 
+
+ Sličan linijskom grafiku, s tim da je oblast ispod linija obojen. Koristimo ga kada želimo da vidimo kako se kvantitet promenio kroz vreme, kada prikazujemo udeo individualnih komponenata.
+Treba primetiti jednu bitnu stvar, po default-u svaka geom_area() počinje od y-ose(što je obično 0), ali ako želimo da prikažemo udeo individualnih komponenata, potrebno je da svaka geom_area() bude naslagana jedna na drugu.
+S toga ćemo u sledećem primeru staviti  y=stopastednje+srednjetrajanjenezaposlenosti
+
+```{r, cache=TRUE}
+library(lubridate)
+theme_set(theme_bw())
+
+df <- economics[, c("date", "psavert", "uempmed")] #pravimo kolonu sa potrebnim vrednostima
+df <- df[lubridate::year(df$date) %in% c(1967:1981), ]
+
+brks <- df$date[seq(1, length(df$date), 12)]  #podele za x-osu, na svakih 12 meseci
+lbls <- lubridate::year(brks) #oznake koje će biti na x-osi
+
+
+ggplot(df, aes(x=date)) + 
+  geom_area(aes(y=psavert+uempmed, fill="psavert")) + 
+  geom_area(aes(y=uempmed, fill="uempmed")) + 
+  labs(title="Area Chart of Returns Percentage", 
+       subtitle="From Wide Data format", 
+       caption="Source: Economics", 
+       y="Returns %") +  
+  scale_x_date(labels = lbls, breaks = brks) +
+  scale_fill_manual(name="", 
+                    values = c("psavert"="#00ba38", "uempmed"="#f8766d")) # boja linija
+ 
+```
+
+
+
+
+
+*** 
+### Sezonski grafik
+Ako radimo sa vremenskim serijama klase ts ili xts, možemo da vidimo sezonske fluktuacije pomoću sezonskih grafika koristeći forecast::ggseasonplot.
+
+```{r}
+#install.packages("forecast")
+library(ggplot2)
+library(forecast)
+theme_set(theme_classic())
+#Uzimamo podatke o sezonskim promenenama broja putnika na međunarodnim letovima, kao i o sezonskim promenama vazdušne temperature u Nottingham Castle-u
+
+nottem_small <- window(nottem, start=c(1920, 1), end=c(1925, 12))  # uzimamo manji vremenski period
+
+
+#Sezonske promene broja putnika na međunarodnim letovima
+ggseasonplot(AirPassengers) + labs(title="Seasonal plot: International Airline Passengers")
+
+#Sezonske promene vazdušne temperature u Nottingham Castle-u
+ggseasonplot(nottem_small) + labs(title="Seasonal plot: Air temperatures at Nottingham Castle")
+```
+
+*** 
+### Bar plotovi
+  Bar plotovi nam služe za grafički prikaz kategoričkih promenljivih. Na njima se prikazuje koliko postoji podataka u bazi iz odgovarajuće kategorije.
+
+
+```{r}
+#Prebrojimo iz baze mpg broj automobila po klasi
+ggplot(mpg, aes(x = class)) +
+  geom_bar(fill = "forestgreen", color = "black")
+
+#Bar plotovi mogu biti i naslagani, da prikazuju više vrednosti za istu kategoriju odjednom. 
+#Nacrtaćemo bar plot gde se vidi populacija za 1997., 2002. i 2007. godinu izabranih zemalja.
+#position = "dodge" nam pomaže da lakše čitamo vrednosti sa grafika, tako što ih stavlja jednu do druge
+library(gapminder)
+
+# napravimo kratak spisak država koje ćemo gledati i upoređivati populacije tokom određenih godina
+countries <- c( "Turkey", "Argentina", "Australia", "Belgium")
+
+gm <- gapminder[(gapminder$year %in% c(1997, 2002, 2007)) &
+                            (gapminder$country %in% countries), ]
+ggplot(gm, aes(x = country, y = pop)) +
+  geom_col(color = "black", mapping = aes(fill = factor(year)), position = "dodge")
+```
+
+*** 
+###Lollipop grafik
+U suštini sadrži iste informacije kao bar plot, s tim što ih redukuje u tanke linije, pa samim tim izgledaju lepše i modernije.
+
+``` {r, cache=TRUE}
+library(ggplot2)
+theme_set(theme_bw())
+
+ggplot(gm, aes(x = country, y = pop,label=year)) + 
+  geom_point(size=3) + 
+  geom_segment(aes(x=country, 
+                   xend=country, 
+                   y=0, 
+                   yend=pop)) + 
+  labs(title="Lollipop Chart" 
+      ) + 
+  theme(axis.text.x = element_text(angle=65, vjust=0.6)) + #udaljenost naziva država od linije x-ose
+  geom_text(nudge_x = 0.2 ) #udaljenost godina od tačkica
+
+```
+
+*** 
+###Dumbbell plot
+
+Koristimo ga ako želimo da predstavimo rast i opadanje između dve tačke u vremenu i poredimo udaljenost između dve kategorije
+
+
+``` {r, cache=TRUE}
+#Posmatramo bazu podataka health koja nam daje procente iz 2013. i 2014. za 26 gradova u SAD-u.
+
+##devtools::install_github("hrbrmstr/ggalt")
+library(ggplot2)
+library(ggalt)
+theme_set(theme_classic())
+
+health <- read.csv("https://raw.githubusercontent.com/selva86/datasets/master/health.csv")
+health$Area <- factor(health$Area, levels=as.character(health$Area))  #za pravilno uređenje ovih tegića
+
+ ggplot(health, aes(x=pct_2013, xend=pct_2014, y=Area, group=Area)) + 
+  geom_dumbbell( 
+    color="blue", 
+    size=0.75, 
+    ) + 
+  
+  labs(x=NULL, 
+       y=NULL, 
+       title="Dumbbell Chart", 
+       subtitle="Pct Change: 2013 vs 2014", 
+       caption="Source: https://github.com/hrbrmstr/ggalt") +
+  theme(plot.title = element_text(hjust=0.5, face="bold"),
+        plot.background=element_rect(fill="#f7f7f7"),
+        panel.background=element_rect(fill="#f7f7f7"),
+        panel.grid.minor=element_blank(),
+        panel.grid.major.y=element_blank(),
+        panel.grid.major.x=element_line(),
+        axis.ticks=element_blank(),
+        legend.position="top",
+        panel.border=element_blank())
+
+```
+
+*** 
+###Histogram
+
+Gruba ocena raspodele uzorka se može vizuelizovati histogramima, gde brojimo koliko elemenata uzorka upada u odgovarajuće kategorije.
+Koristeći histogram, možemo da kontrolišemo broj pravougaonika, takođe možemo odabrati koliki interval pokriva svaki pravougaonik.
+ 
+``` {r}
+library(ggplot2)
+ theme_set(theme_classic())
+
+ ##Ponovo posmatramo automobile, i posmatramo broj vozila određene klase po zapremini motora
+ g <- ggplot(mpg, aes(displ)) + scale_fill_brewer(palette = "Spectral")
+ 
+ g + geom_histogram(aes(fill=class), 
+                    binwidth = .1, 
+                    col="black", 
+                    size=.1) + 
+   labs(title="Histogram sa automatskim brojem pravougaonika", 
+        subtitle="Engine Displacement across Vehicle Classes")  
+ 
+ g + geom_histogram(aes(fill=class), 
+                    bins=5, 
+                    col="black", 
+                    size=.1) +   
+   labs(title="Histogram sa fiksiranim brojem pravougaonika", 
+        subtitle="Engine Displacement across Vehicle Classes") 
+``` 
+
+*** 
+###Grafik gustine
+ 
+ Grafik gustine predstavlja raspodelu podataka u kontinuiranom intervalu ili vremenskom periodu. To je zapravo verzija histograma koja glatko iscrtava vrednosti kako bi se izbegli grubi prelazi.
+
+``` {r}
+library(ggplot2)
+ theme_set(theme_classic())
+#I dalje posmatramo mpg bazu podataka i pravimo grafik gustine gradske kilometraže u odnosu na broj cilindara
+ 
+#Podešavamo alfa transparentnost i bojimo gustine u odnosu na broj cilindara 
+ g <- ggplot(mpg, aes(cty))
+ g + geom_density(aes(fill=factor(cyl)), alpha=0.8) + 
+   labs(title="Density plot", 
+        subtitle="City Mileage Grouped by Number of cylinders",
+        caption="Source: mpg",
+        x="City Mileage",
+        fill="# Cylinders")
+
+```
+
+*** 
+###Boks plot
+
+ Boks plot predstavlja grafički prikaz 5 sumarnih statistika - minimum, 1. kvartil, medijanu, 3. kvartil i maksimum. 
+
+``` {r}
+ library(ggplot2)
+ theme_set(theme_classic())
+
+#Stavljanjem varwidth=T podešavamo da debljina boksova bude proporcionalna broju vrednosti koje sadrži
+#Posmatramo gradsku kilometražu grupisanu po klasi vozila
+ g <- ggplot(mpg, aes(class, cty))
+ g + geom_boxplot(varwidth=T, fill="plum") + 
+   labs(title="Box plot", 
+        subtitle="City Mileage grouped by Class of vehicle",
+        caption="Source: mpg",
+        x="Class of Vehicle",
+        y="City Mileage") 
+```  
+ 
+ *** 
+###Violinski grafik
+Sličan je box plotu, ali pokazuje gustinu unutar grupa. Ne prikazuje toliko informacija kao box plot.
+
+``` {r} 
+ library(ggplot2)
+ theme_set(theme_bw())
+
+ g <- ggplot(mpg, aes(class, cty))
+ g + geom_violin() + 
+   labs(title="Violin plot", 
+        subtitle="City Mileage vs Class of vehicle",
+        caption="Source: mpg",
+        x="Class of Vehicle",
+        y="City Mileage")
+```
+
+*** 
+###Populaciona piramida
+ Predstavlja unikatan način predstavljanja koliki procenat populacije spada u određenu kategoriju.
+Piramida ispod je odličan primer toga koliko korisnika se zadrži na svakoj fazi e-mail marketinške kampanje.
+ 
+``` {r, cache=TRUE}
+ #install.packages("ggthemes")
+ library(ggplot2)
+ library(ggthemes)
+ 
+#baza podataka koju posmatramo
+ email_campaign_funnel <- read.csv("https://raw.githubusercontent.com/selva86/datasets/master/email_campaign_funnel.csv")
+ 
+ #podele koje će se nalaziti na x-osi i oznake
+ brks <- seq(-15000000, 15000000, 5000000)
+ lbls = paste0(as.character(c(seq(15, 0, -5), seq(5, 15, 5))), "m")
+ 
+ 
+ ggplot(email_campaign_funnel, aes(x = Stage, y = Users, fill = Gender)) +   #x-osa sadrži faze, dok y-osa sadrži broj korisnika, i bojimo naše pravougaonike u odnosu na pol korisnika 
+   geom_bar(stat = "identity", width = .6) +   # crtanje pravougaonika
+   scale_y_continuous(breaks = brks,   # podele
+                      labels = lbls) + # oznake
+   coord_flip() +  # zamena osa
+   labs(title="Email Campaign Funnel") +
+   theme_tufte()  + # Tufte theme iz ggfortify
+   theme(plot.title = element_text(hjust = .5)) + #podešavanje i centriranje naslova
+    scale_fill_brewer(palette = "Dark2") #biramo paletu boja za naše pravougaonike
+```
+
+*** 
+###Pitica
+ Pitica (ili kružni dijagram) je kružni statistički grafik koji je podeljen na parčiće. Površina svakog parčića je proporcionalna količini koju predstavlja.
+
+``` {r}
+#Sada ćemo piticom da predstavimo odnos broja vozila svih ponudjenih klasa
+ pie <- ggplot(mpg, aes(x = "", fill = factor(class))) + 
+   geom_bar(width = 1) +
+   theme(axis.line = element_blank(), #izbacujemo x-osu i y-osu 
+         plot.title = element_text(hjust=0.5)) + #podešavamo i centriramo naslov
+   labs(fill="class", 
+        x=NULL, 
+        y=NULL, 
+        title="Pie Chart of class", 
+        caption="Source: mpg")
+ 
+ pie + coord_polar(theta = "y")
+```
+
+
+*** 
+###Hijerarhijski dendrogram
+
+Pomoću njih grupišemo objekte, koji su slični u nekom smislu, u grupe koje se zovu klasteri i zatim pravimo hijerarhijsku vezu.
+
+``` {r, cache=TRUE}
+#U narednom primeru ćemo hijerarhijski predstaviti broj uhapšenih kriminalaca na 100000 ljudi u svim državama SAD-a.
+
+ #install.packages("ggdendro")
+ library(ggplot2)
+ library(ggdendro)
+ theme_set(theme_bw())
+ 
+ hc <- hclust(dist(USArrests), "ave") #hijerarhijski klastering, metoda "average"
+ 
+ ggdendrogram(hc, rotate = T, size = 2) 
+ 
+
+```
+
+*** 
+###Plotly
+
+ Plotly je drugi paket koji ćemo posmatrati. Početna inspiracija za ovaj paket je bila podrška plotly.js tipova grafika koje ggplot2 ne podržava.
+Plotly ima bogate karakteristike, kao i dosta pristupačnih grafika. Poseduje web-based toolbox koristan za vizualizaciju. I takođe ima sposobnost da ggplot2 grafike učini interaktivnim.
+
+*** 
+###Scatterplot
+
+Scatterplot je koristan za vizualizaciju povezanosti dve kvantitativne promenljive, problem se javlja ako dođe do preklapanja, i to možemo rešiti na par načina.
+ 
+``` {r, cache=TRUE}
+#Posmatramo na x-osi gradsku miljažu, dok na y-osi posmatramo miljažu auto-puta
+ library(plotly)
+ subplot(
+   plot_ly(mpg, x = ~cty, y = ~hwy, name = "default"), #po default-u
+   plot_ly(mpg, x = ~cty, y = ~hwy) %>% 
+     add_markers(alpha = 0.2, name = "alpha"), #alfa transparentnost
+   plot_ly(mpg, x = ~cty, y = ~hwy) %>% 
+     add_markers(symbol = I(1), name = "hollow") #uzimamo jedan simbol, i stavićemo da bude šupalj
+ )
+ 
+#Sada ćemo da vidimo na koji način možemo da koristimo simbole
+  subplot(
+   plot_ly(x = 1:6, y = 1:6, symbol = I(1:6), name = "pch"),
+   plot_ly(mpg, x = ~cty, y = ~hwy,  symbol = ~cyl,
+           symbols = 1:3,name = "cyl")) #ponovo posmatramo na x-osi gradsku miljažu, dok na y-osi posmatramo miljažu auto-puta, i uzimamo različite simbole u odnosu na broj cilindara
+ 
+  
+#Kada mapiramo numeričku promenljivu u simbol, napravi se samo jedan trag, pa se ne generiše legenda. Međutim ako želimo jedan trag po simbolu, moramo da se postaramo da je promenljiva koju mapiramo faktor, kao u narednom primeru:
+ 
+
+ p <- plot_ly(mpg, x = ~cty, y = ~hwy, alpha = 0.3) 
+ subplot(
+   add_markers(p, symbol = ~cyl, name = "A single trace"),
+   add_markers(p, symbol = ~factor(cyl), color = I("black"))
+ )  
+ 
+#Argument color ima slične osobine kao simbol, odnosno, ako je numerička vrednost u pitanju, color ima jedan trag, ali se generiše kao colorbar kako bi se razlikovale vrednosti promenljivih. Viridis je po default-u namešten colorbar. Takođe, ako je u pitanju faktor, onda color za svaku vrednost napravi trag.
+ 
+ p <- plot_ly(mpg, x = ~cty, y = ~hwy, alpha = 0.5)
+ subplot(
+   add_markers(p, color = ~cyl, showlegend = FALSE) %>% 
+     colorbar(title = "Viridis"),
+   add_markers(p, color = ~factor(cyl))
+ )
+ 
+ #Postoji više načina kako da promenimo boje koje su nameštene po default-u
+ 
+ col1 <- c("#132B43", "#56B1F7")
+ col2 <- viridisLite::inferno(10)
+ col3 <- colorRamp(c("red", "white", "blue"))
+ subplot(
+   add_markers(p, color = ~cyl, colors = col1) %>%
+     colorbar(title = "ggplot2 default"),
+   add_markers(p, color = ~cyl, colors = col2) %>% 
+     colorbar(title = "Inferno"),
+   add_markers(p, color = ~cyl, colors = col3) %>% 
+     colorbar(title = "colorRamp")
+ ) %>% hide_legend()
+ 
+#Argument size kontroliše maksimum i minimum veličine kružića (u pikselima)
+
+  subplot(
+   add_markers(p, size = ~cyl, name = "default"),
+   add_markers(p, size = ~cyl, sizes = c(1, 200), name = "custom")
+ )
+
+
+```
+
+Sada ćemo proći kroz još neke tipove geometrijskih objekata kojim se prikazuju podaci.
+
+*** 
+###Histogram i Bar plot
+
+Glavna razlika ove dve funkcije je što bar plot zahteva i visinu (odnosno i x i y-osu), dok za histogram treba samo jedna promenljiva.
+U primeru ispod poredimo algoritam naslaganja po default-u u plotly.js sa nekoliko različitih algoritama dostupnih u R-u preko hist() funkcije.
+
+``` {r, cache=TRUE}
+#Hist() funkcija nam pruža priliku da spomenemo tri poznata algoritma po nazivu (Sturges 1926); (Freedman and Diaconis 1981); (Scott 1979).
+#Price_hist() služi da zadrži rezultate naslaganja, kao i njihovo mapiranje pomoću funkcije add_bars().
+#Posmatramo bazu podataka Diamonds iz paketa plotly i histogramom predstavljamo cenu dijamanata.
+
+
+  p1 <- plot_ly(diamonds, x = ~price) %>% add_histogram(name = "plotly.js")
+  
+  price_hist <- function(method) {
+    h <- hist(diamonds$price, breaks = method, plot = FALSE)
+    plot_ly(x = h$mids, y = h$counts) %>% add_bars(name = method)
+  }
+  
+  subplot(
+    p1, price_hist("FD"), price_hist("Sturges"),  price_hist("Scott"),
+    nrows = 4, shareX = TRUE )  #stavljamo grafike jedne ispod drugih, kako b delili x-osu
+  
+
+#U sledećem primeru gledamo dva načina kreiranja osnovnog bar plota, vizuelno su rezultati isti, ali pokazaćemo razliku u implementiranju.
+#add_histogram() funkcija šalje sve posmatrane vrednosti browser-u i dozvoljava plotly.js-u da obavlja naslaganje. Što se tiče drugog načina, potrebno je više ljudskog truda da se to izvede, ali je prednost što se šalje manje podataka i zahteva manje računanja od strane web browser-a.
+  
+#Pravimo bar plotove u odnosu na kvalitet po rezu
+  
+  p1 <- plot_ly(diamonds, x = ~cut) %>% add_histogram()
+  
+  p2 <- diamonds %>%
+    dplyr::count(cut) %>% #prebrojava sve vrednosti u zavisnosti od reza
+    plot_ly(x = ~cut, y = ~n) %>% 
+    add_bars()
+  
+  subplot(p1, p2) %>% hide_legend()
+
+``` 
+
+*** 
+###Box plot
+
+ Kao što smo već rekli, box plot predstavlja grafički prikaz 5 sumarnih statistika.
+Add_boxplot() funkcija zahteva jednu promenljivu i garantuje da box plotovi budu korektno orijentisani, bez obzira na to da li je promenljiva pozicionirana na x ili y-osi. 
+
+``` {r, cache=TRUE}
+#U sledećem primeru posmatramo sveukupne cene i cene po rezu. Stavićemo sve vrednosti na isti grafik, deleći njihovu y-osu.
+  
+  p <- plot_ly(diamonds, y = ~price, color = I("black"), 
+               alpha = 0.1, boxpoints = "suspectedoutliers")
+  p1 <- p %>% add_boxplot(x = "Overall")
+  p2 <- p %>% add_boxplot(x = ~cut)
+  subplot(
+    p1, p2, shareY = TRUE,
+    widths = c(0.2, 0.8), margin = 0
+  ) %>% hide_legend()
+  
+#Ako želimo da koristimo više promenljivih, preporučuje se mapiranje njihove interakcije na diskretnu osu i bojenje grupisanih vrednosti. 
+#U narednom primeru smo to uradili sa cenama dijamanata po rezu i bistrini.
+  
+  plot_ly(diamonds, x = ~price, y = ~interaction(clarity, cut)) %>%
+    add_boxplot(color = ~clarity) %>%
+    layout(yaxis = list(title = ""))
+```
+
+*** 
+###Pravougaono naslaganje
+
+ Postoje dve funkcije za predstavljanje pravougaonog naslaganja: add_heatmap() i add_histogram2d(). Add_heatmap() funkcija je 2D analogna funkciji add_bars(), a funkcija add_histogram2d() je 2D analogna funkciji add_histogram().
+ 
+``` {r, cache=TRUE}
+#U ovom primeru posmatramo odnos cena i broja karata i poredimo tri različite funkcije add_histogram2d():
+##1. Naslaganje po default-u
+##2. Naslaganje po default-u sa funkcijom zsmooth koja služi za efektivni rast broja pravougaoničića.
+##3. Određivanje broja pravougaonika
+
+  p <- plot_ly(diamonds, x = ~log(carat), y = ~log(price))
+  subplot(
+    add_histogram2d(p) %>%
+      colorbar(title = "default") %>%
+      layout(xaxis = list(title = "default")),
+    add_histogram2d(p, zsmooth = "best") %>%
+      colorbar(title = "zsmooth") %>%
+      layout(xaxis = list(title = "zsmooth")),
+    add_histogram2d(p, nbinsx = 60, nbinsy = 60) %>%
+      colorbar(title = "nbins") %>%
+      layout(xaxis = list(title = "nbins")),
+    shareY = TRUE, titleX = TRUE
+  )
+```
+
+*** 
+###Animacije
+
+``` {r, cache=TRUE}
+options(warn=-1)
+#Pokazaćemo evoluciju odnosa između bruto društvenog proizvoda i očekivanog životnog veka od 1952 do 2007 godine. 
+
+  data(gapminder, package = "gapminder")
+  
+  gg <- ggplot(gapminder, aes(gdpPercap, lifeExp, color = continent)) +
+    geom_point(aes(size = pop, frame = year, ids = country)) +
+    #za frame stavljamo year jer su podaci zabeleženi na godišnjoj bazi, dok je za ids postavljeno country, što omogućava glatki prelaz iz godine u godinu
+    
+    scale_x_log10()
+  ggplotly(gg)
+  
+ 
+  #sve dok postoji frame, animacija se realizuje sa play/pause dugmićima i slider komponentom za kontrolisanje animacije.
+ #Ove komponente se mogu ukloniti ili preurediti funkcijama animation_button() i animation_slider().
+ #Razne animacione opcije, kao što je vreme između kadrova, trajanje prelaza i olakšanje prelaza menjaju se preko funkcije animation_opts().
+  
+ # U sledećem primeru prikazani su isti podaci, ali je udvostručena količina vremena između kadrova, stavlja animacionu dugmad bliže slideru, modifikuje default currentvalue.prefix podešavanja slidera.
+  
+  base <- gapminder %>%
+    plot_ly(x = ~gdpPercap, y = ~lifeExp, size = ~pop, 
+            text = ~country, hoverinfo = "text") %>% #lebdeći tekst, da se prikazuju države kod kružića
+    layout(xaxis = list(type = "log"))
+  
+  base %>%
+    add_markers(color = ~continent, frame = ~year, ids = ~country) %>%
+    animation_opts(1000, easing = "elastic") %>%
+    animation_button(
+      x = 1, xanchor = "right", y = 0, yanchor = "bottom"
+    ) %>%
+    animation_slider(
+      currentvalue = list(prefix = "YEAR ", font = list(color="red"))
+    )
+  
+  
+  
+# I frame i ids služe da animiraju određene delove grafika. Može da se obezbedi pozadina koja prikazuje svaki mogući okvir (koji nije animiran) i preklapa animirane kadrove na tu pozadinu. Na narednoj slici prikazane su iste informacije kao na prethodnoj, ali slojevi animiranih okvira se pojavljuju na pozadini svih okvira.
+  
+  base %>%
+    add_markers(color = ~continent, alpha = 0.2, showlegend = F) %>%
+    add_markers(color = ~continent, frame = ~year, ids = ~country) %>%
+    animation_opts(1000, redraw = FALSE)
+options(warn=0)
+```
+
+*** 
+###Highcharter
+ 
+ Highcharter je R omotač za  Highcharts JavaScript bibiloteku.  Paket koristi sintaksu nalik na ggplot2, uključujući opcije za rukovanje dugim i opširnim podacima. 
+Postoje funkcije čije ponašanje je slično funkcijama ggplot2 paketa kao, što je hchart, koja radi kao ggplot, zatim hc_add_series radi kao geom_S i
+hcaes radi kao aes.
+Glavna razlika u geom_ funkcijama ggplot2-a i hc_add_series je u tome što moramo dodati podatke i estetiku eksplicitno u svakoj funkciji, dok u ggplot2 možemo ubaciti podatke i estetiku u sloj, a zatim dodati još geom_ funkcija koje mogu raditi na istim podacima i estetici.
+
+Sada ćemo videti jedan jednostavni primer.
+
+``` {r, cache=TRUE}
+ #install.packages("highcharter")
+  library(highcharter)
+  library(dplyr)
+  
+##Posmatraćemo podatke o pokemonima koji se nalaze u pakovanju highcharter
+##Prvo ćemo predstaviti preko bar chart-a ukupan broj iz svake kategorije type1, za to nam služi objekat type, koji smo podesili na "bar"
+  
+  pokemon%>%
+    count(type_1)%>%
+    arrange(n)%>%
+    hchart(type = "bar", hcaes(x = type_1, y = n))
+  
+
+##Takođe možemo istu stvar predstaviti i pomoću kolona   
+  
+  pokemon%>%
+    count(type_1)%>%
+    arrange(n)%>%
+    hchart(type = "column", hcaes(x = type_1, y = n))
+```   
+
+Sada ćemo iste podatke predstaviti preko treemap-e.
+  
+``` {r, cache=TRUE}
+
+  pokemon%>%
+    count(type_1)%>%
+    arrange(n)%>%
+    hchart(type = "treemap", hcaes(x = type_1, value = n, color = n))
+```
+
+U narednom kodu predstavićemo procentualni odnos populacije svih kontinenata tokom godina
+
+``` {r, cache=TRUE} 
+highchart() %>%
+    hc_chart(type = "area") %>%  #tip highcharter-a
+    hc_title(text = "Historic and Estimated Worldwide Population Distribution by Region") %>% #naslov
+    hc_subtitle(text = "Source: Wikipedia.org") %>% #podnaslov
+    hc_xAxis(categories = c("1750", "1800", "1850", "1900", "1950", "1999", "2050"), #x-osa podeljena po godinama
+             tickmarkPlacement = "on")%>% #oznake tačkicama kod izlomljenih linija
+    hc_yAxis(title = list(text = "Percent")) %>% 
+    hc_tooltip(pointFormat = "<span style=\"color:{series.color}\">{series.name}</span>:
+               <b>{point.percentage:.1f}%</b> ({point.y:,.0f} millions)<br/>",
+               shared = TRUE) %>% #tooltip koji prikazuje procenat i broj stanovnika za onu godinu na koju smo pokazali
+    hc_plotOptions(area = list(
+      stacking = "percent",
+      lineColor = "#ffffff",
+      lineWidth = 1,
+      marker = list(
+        lineWidth = 1,
+        lineColor = "#ffffff"
+      ))
+    ) %>% 
+    hc_add_series(name = "Asia", data = c(502, 635, 809, 947, 1402, 3634, 5268)) %>%
+    hc_add_series(name = "Africa", data = c(106, 107, 111, 133, 221, 767, 1766)) %>%
+    hc_add_series(name = "Europe", data = c(163, 203, 276, 408, 547, 729, 628)) %>%
+    hc_add_series(name = "America", data = c(18, 31, 54, 156, 339, 818, 1201)) %>%
+    hc_add_series(name = "Oceania", data = c(2, 2, 2, 6, 13, 30, 46))
+  #odnos u procentima pri svakoj izabranoj godini
+```
+Sada ponovo posmatramo bazu podataka mpg i pravimo sledeći grafik
+
+``` {r, cache=TRUE} 
+data(mpg, package = "ggplot2")
+  
+  mpgg <- mpg %>%
+    filter(class %in% c("suv", "compact", "midsize")) %>%
+    group_by(class, manufacturer) %>%
+    summarize(count = n()) #izdvojili smo tri klase i sabrali ukupan broj automobila po proizvođaču u svakoj klasi
+  
+  categories_grouped <- mpgg %>%
+    group_by(name = class) %>% #grupišemo u tri klase koje smo gore izdvojili
+    do(categories = .$manufacturer)  %>%
+    list_parse()
+   #navodimo proizvođače za svaku od klasa i funkcijom list_parse() raščlanimo listu
+  
+  highchart() %>%
+    hc_xAxis(categories = categories_grouped) %>%
+    hc_add_series(data = mpgg, type = "bar", hcaes(y = count, color = manufacturer),
+                  showInLegend = FALSE)
+```
+
+Sada ćemo pomoću treemap-e da podelimo pokemone prvo po tipu 1, zatim svaku tu kategoriju da podelimo na podkategorije prema tipu 2, pri čemu postoje pokemoni koji nemaju tip 2
+ 
+``` {r, cache=TRUE}
+  tm <- pokemon %>%
+    mutate(type_2 = ifelse(is.na(type_2), paste("only", type_1), type_2),
+           type_1 = type_1) %>% #za sve pokemone koji nemaju tip 2, stavićemo ih u kategoriju "only" tip 1 
+    group_by(type_1, type_2) %>%
+    summarise(n = n())  %>%
+    ungroup() %>%
+    treemap::treemap(index = c("type_1", "type_2"),
+                     vSize = "n", vColor = "type_1") #boja i veličina pravougaonika je podešena u odnosu na tip1 kom pripadaju i broju pokemona koja pripada tom tipu
+  
+```
+
+Sada pomoću baze podataka weather predstavljamo minimalnu, maksimalnu i srednju temperaturu svakog dana 2014-e godine.
+``` {r, cache=TRUE}
+data("weather")
+ 
+  x <- c("Min", "Mean", "Max")
+  y <- sprintf("{point.%s}", c("min_temperaturec", "mean_temperaturec", "max_temperaturec"))
+  tltip <- tooltip_table(x, y)
+  #U tooltip-u štampamo vrednosti minimalne, srednje i maksimalne temperature
+  
+  hchart(weather, type = "columnrange",
+         hcaes(x = date, low = min_temperaturec, high = max_temperaturec,
+               color = mean_temperaturec)) %>% 
+    hc_chart(polar = T) %>% #polarne koordinate
+    hc_yAxis( max = 30, min = -10, labels = list(format = "{value} C"),
+              showFirstLabel = FALSE) %>% #podešavamo podatke y-ose, maksimum, minimum, odnosno u ovom slučaju, centar je u -10, pa samim tim poluprečnik je 40.
+    hc_xAxis(
+      title = list(text = ""), gridLineWidth = 0.5,
+      labels = list(format = "{value: %b}")) %>%
+    hc_tooltip(useHTML = TRUE, pointFormat = tltip,
+               headerFormat = as.character(tags$small("{point.x:%d %B, %Y}")))
+```
