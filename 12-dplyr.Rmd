@@ -2,6 +2,10 @@
 
 U ovom poglavlju ćemo se upoznati sa osnovnim metodama rada sa podacima, prvenstveno kroz paket `dplyr`, koji je jedan od najkorišćenijih paketa u R-u. Pre upoznavanja sa tim paketom, osnvrnućemo se na osnovnu strukturu podataka u R-u, dataframe, koja se koristi za rad sa tabelarnim podacima.
 
+```{r echo=FALSE, include=FALSE}
+weather <- nycflights13::weather
+```
+
 ## Dataframe
 
 Dataframe je najčešći način čuvanja podataka u R-u i vrlo je pogodan za rad i analizu. Služi za prikaz tabelarnih podataka, pa liči na matricu, s tim što je dataframe u snovi lista koja sadrži vektore jednakih dužina (kolone), pri čemu ti vektori ne moraju biti istog tipa. Dakle možemo imati jednu kolonu koju čine brojevi, a drugu tekstualni podaci.
