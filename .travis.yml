@@ -9,3 +9,9 @@ before_script:
 script:
   - ./build.sh
   - ./deploy.sh
+
+addons:
+  apt:
+    packages:
+    - libproj-dev
+
