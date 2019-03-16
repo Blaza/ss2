@@ -267,7 +267,7 @@ flights %>%
 
 Ovom funkcijom možemo da napravimo nove kolone koristeći postojeće. Na primer, možemo da vršimo konverziju iz Farenhajta u Celzijus.
 
-```{r}
+```{r temperatura}
 # ovako smo ranije
 # weather$celsius <- (weather$temp - 32) * 5 / 9
 
