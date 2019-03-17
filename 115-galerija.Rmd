@@ -23,7 +23,7 @@ U ovom radu, bavićemo se paketima: ggplot2, plotly i highcharter.
 
 
 Sada ćemo proći kroz par jednostavnih primera
-```{r, cache=TRUE}
+```{r}
 library(ggplot2)
 data("midwest", package = "ggplot2")  
  midwest <- read.csv("http://goo.gl/G1K41K")  
@@ -88,7 +88,7 @@ mpg2
 #U ovom konkretnom primeru, upoređujući dobijene manje grafike zaključujemo da sportski automobili koji imaju velike motore, a malu masu troše manje nego pickup i minivan
 ```
 
-```{r, cache=TRUE}
+```{r}
 #Sada prikazujemo estetske promene, kao što su: menjanje boje pozadine, menjanje debljine i boje svih unutrašnjih linija, kao i ivica i x/y-osa
 g <- ggplot(mpg, aes(x=displ, y=hwy)) + 
   geom_point() + 
@@ -123,7 +123,7 @@ Sada ćemo prikazati još neke tipove geometrijskih objekata kojim se prikazuju 
 
 Za crtanje vremenski uređenih podataka, poput vremenskih serija, standardni grafici su linijski. To je prosto linija koja prikazuje kretanje neke promenljive kroz vreme.
 
-```{r, cache=TRUE}
+```{r}
 #Za primer koristićemo skup podataka economics iz paketa ggplot2.
 data("economics", package = "ggplot2")
 
@@ -143,7 +143,7 @@ ggplot(economics, aes(x = date, y = psavert)) +
 Treba primetiti jednu bitnu stvar, po default-u svaka geom_area() počinje od y-ose(što je obično 0), ali ako želimo da prikažemo udeo individualnih komponenata, potrebno je da svaka geom_area() bude naslagana jedna na drugu.
 S toga ćemo u sledećem primeru staviti  y=stopastednje+srednjetrajanjenezaposlenosti
 
-```{r, cache=TRUE}
+```{r}
 library(lubridate)
 theme_set(theme_bw())
 
@@ -220,7 +220,7 @@ ggplot(gm, aes(x = country, y = pop)) +
 ### Lollipop grafik
 U suštini sadrži iste informacije kao bar plot, s tim što ih redukuje u tanke linije, pa samim tim izgledaju lepše i modernije.
 
-``` {r, cache=TRUE}
+``` {r}
 library(ggplot2)
 theme_set(theme_bw())
 
@@ -243,7 +243,7 @@ ggplot(gm, aes(x = country, y = pop,label=year)) +
 Koristimo ga ako želimo da predstavimo rast i opadanje između dve tačke u vremenu i poredimo udaljenost između dve kategorije
 
 
-``` {r, cache=TRUE}
+``` {r}
 #Posmatramo bazu podataka health koja nam daje procente iz 2013. i 2014. za 26 gradova u SAD-u.
 
 ##devtools::install_github("hrbrmstr/ggalt")
@@ -368,7 +368,7 @@ Sličan je box plotu, ali pokazuje gustinu unutar grupa. Ne prikazuje toliko inf
  Predstavlja unikatan način predstavljanja koliki procenat populacije spada u određenu kategoriju.
 Piramida ispod je odličan primer toga koliko korisnika se zadrži na svakoj fazi e-mail marketinške kampanje.
  
-``` {r, cache=TRUE}
+``` {r}
  #install.packages("ggthemes")
  library(ggplot2)
  library(ggthemes)
@@ -417,7 +417,7 @@ Piramida ispod je odličan primer toga koliko korisnika se zadrži na svakoj faz
 
 Pomoću njih grupišemo objekte, koji su slični u nekom smislu, u grupe koje se zovu klasteri i zatim pravimo hijerarhijsku vezu.
 
-``` {r, cache=TRUE}
+``` {r}
 #U narednom primeru ćemo hijerarhijski predstaviti broj uhapšenih kriminalaca na 100000 ljudi u svim državama SAD-a.
 
  #install.packages("ggdendro")
@@ -443,7 +443,7 @@ Plotly ima bogate karakteristike, kao i dosta pristupačnih grafika. Poseduje we
 
 Scatterplot je koristan za vizualizaciju povezanosti dve kvantitativne promenljive, problem se javlja ako dođe do preklapanja, i to možemo rešiti na par načina.
  
-``` {r, cache=TRUE}
+``` {r}
 #Posmatramo na x-osi gradsku miljažu, dok na y-osi posmatramo miljažu auto-puta
  library(plotly)
  subplot(
@@ -511,7 +511,7 @@ Sada ćemo proći kroz još neke tipove geometrijskih objekata kojim se prikazuj
 Glavna razlika ove dve funkcije je što bar plot zahteva i visinu (odnosno i x i y-osu), dok za histogram treba samo jedna promenljiva.
 U primeru ispod poredimo algoritam naslaganja po default-u u plotly.js sa nekoliko različitih algoritama dostupnih u R-u preko hist() funkcije.
 
-``` {r, cache=TRUE}
+``` {r}
 #Hist() funkcija nam pruža priliku da spomenemo tri poznata algoritma po nazivu (Sturges 1926); (Freedman and Diaconis 1981); (Scott 1979).
 #Price_hist() služi da zadrži rezultate naslaganja, kao i njihovo mapiranje pomoću funkcije add_bars().
 #Posmatramo bazu podataka Diamonds iz paketa plotly i histogramom predstavljamo cenu dijamanata.
@@ -551,7 +551,7 @@ U primeru ispod poredimo algoritam naslaganja po default-u u plotly.js sa nekoli
  Kao što smo već rekli, box plot predstavlja grafički prikaz 5 sumarnih statistika.
 Add_boxplot() funkcija zahteva jednu promenljivu i garantuje da box plotovi budu korektno orijentisani, bez obzira na to da li je promenljiva pozicionirana na x ili y-osi. 
 
-``` {r, cache=TRUE}
+``` {r}
 #U sledećem primeru posmatramo sveukupne cene i cene po rezu. Stavićemo sve vrednosti na isti grafik, deleći njihovu y-osu.
   
   p <- plot_ly(diamonds, y = ~price, color = I("black"), 
@@ -576,7 +576,7 @@ Add_boxplot() funkcija zahteva jednu promenljivu i garantuje da box plotovi budu
 
  Postoje dve funkcije za predstavljanje pravougaonog naslaganja: add_heatmap() i add_histogram2d(). Add_heatmap() funkcija je 2D analogna funkciji add_bars(), a funkcija add_histogram2d() je 2D analogna funkciji add_histogram().
  
-``` {r, cache=TRUE}
+``` {r}
 #U ovom primeru posmatramo odnos cena i broja karata i poredimo tri različite funkcije add_histogram2d():
 ##1. Naslaganje po default-u
 ##2. Naslaganje po default-u sa funkcijom zsmooth koja služi za efektivni rast broja pravougaoničića.
@@ -600,7 +600,7 @@ Add_boxplot() funkcija zahteva jednu promenljivu i garantuje da box plotovi budu
 *** 
 ##Animacije
 
-``` {r, cache=TRUE}
+``` {r}
 options(warn=-1)
 #Pokazaćemo evoluciju odnosa između bruto društvenog proizvoda i očekivanog životnog veka od 1952 do 2007 godine. 
 
@@ -656,7 +656,7 @@ Glavna razlika u geom_ funkcijama ggplot2-a i hc_add_series je u tome što moram
 
 Sada ćemo videti jedan jednostavni primer.
 
-``` {r, cache=TRUE}
+``` {r}
  #install.packages("highcharter")
   library(highcharter)
   library(dplyr)
@@ -680,7 +680,7 @@ Sada ćemo videti jedan jednostavni primer.
 
 Sada ćemo iste podatke predstaviti preko treemap-e.
   
-``` {r, cache=TRUE}
+``` {r}
 
   pokemon%>%
     count(type_1)%>%
@@ -690,7 +690,7 @@ Sada ćemo iste podatke predstaviti preko treemap-e.
 
 U narednom kodu predstavićemo procentualni odnos populacije svih kontinenata tokom godina
 
-``` {r, cache=TRUE} 
+``` {r} 
 highchart() %>%
     hc_chart(type = "area") %>%  #tip highcharter-a
     hc_title(text = "Historic and Estimated Worldwide Population Distribution by Region") %>% #naslov
@@ -719,7 +719,7 @@ highchart() %>%
 ```
 Sada ponovo posmatramo bazu podataka mpg i pravimo sledeći grafik
 
-``` {r, cache=TRUE} 
+``` {r} 
 data(mpg, package = "ggplot2")
   
   mpgg <- mpg %>%
@@ -741,7 +741,7 @@ data(mpg, package = "ggplot2")
 
 Sada ćemo pomoću treemap-e da podelimo pokemone prvo po tipu 1, zatim svaku tu kategoriju da podelimo na podkategorije prema tipu 2, pri čemu postoje pokemoni koji nemaju tip 2
  
-``` {r, cache=TRUE}
+``` {r}
   tm <- pokemon %>%
     mutate(type_2 = ifelse(is.na(type_2), paste("only", type_1), type_2),
            type_1 = type_1) %>% #za sve pokemone koji nemaju tip 2, stavićemo ih u kategoriju "only" tip 1 
@@ -754,7 +754,7 @@ Sada ćemo pomoću treemap-e da podelimo pokemone prvo po tipu 1, zatim svaku tu
 ```
 
 Sada pomoću baze podataka weather predstavljamo minimalnu, maksimalnu i srednju temperaturu svakog dana 2014-e godine.
-``` {r, cache=TRUE}
+``` {r}
 data("weather")
  
   x <- c("Min", "Mean", "Max")
