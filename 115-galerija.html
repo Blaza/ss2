@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Galerija grafika | Statistički softver 2</title>
+  <meta name="description" content="2 Galerija grafika | Statistički softver 2" />
+  <meta name="generator" content="bookdown  and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Galerija grafika | Statistički softver 2" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Galerija grafika | Statistički softver 2" />
+  
+  
+  
+
+<meta name="author" content="Blagoje Ivanović" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="11-ggplot.html">
+<link rel="next" href="1152-plotly.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.8.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.39.2/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.39.2/plotly-latest.min.js"></script>
+<script src="libs/proj4js-2.3.15/proj4.js"></script>
+<link href="libs/highcharts-7.0.1/css/motion.css" rel="stylesheet" />
+<link href="libs/highcharts-7.0.1/css/htmlwdgtgrid.css" rel="stylesheet" />
+<script src="libs/highcharts-7.0.1/highcharts.js"></script>
+<script src="libs/highcharts-7.0.1/highcharts-3d.js"></script>
+<script src="libs/highcharts-7.0.1/highcharts-more.js"></script>
+<script src="libs/highcharts-7.0.1/modules/stock.js"></script>
+<script src="libs/highcharts-7.0.1/modules/map.js"></script>
+<script src="libs/highcharts-7.0.1/modules/annotations.js"></script>
+<script src="libs/highcharts-7.0.1/modules/boost.js"></script>
+<script src="libs/highcharts-7.0.1/modules/data.js"></script>
+<script src="libs/highcharts-7.0.1/modules/drag-panes.js"></script>
+<script src="libs/highcharts-7.0.1/modules/drilldown.js"></script>
+<script src="libs/highcharts-7.0.1/modules/item-series.js"></script>
+<script src="libs/highcharts-7.0.1/modules/offline-exporting.js"></script>
+<script src="libs/highcharts-7.0.1/modules/overlapping-datalabels.js"></script>
+<script src="libs/highcharts-7.0.1/modules/exporting.js"></script>
+<script src="libs/highcharts-7.0.1/modules/export-data.js"></script>
+<script src="libs/highcharts-7.0.1/modules/funnel.js"></script>
+<script src="libs/highcharts-7.0.1/modules/heatmap.js"></script>
+<script src="libs/highcharts-7.0.1/modules/treemap.js"></script>
+<script src="libs/highcharts-7.0.1/modules/sankey.js"></script>
+<script src="libs/highcharts-7.0.1/modules/solid-gauge.js"></script>
+<script src="libs/highcharts-7.0.1/modules/streamgraph.js"></script>
+<script src="libs/highcharts-7.0.1/modules/sunburst.js"></script>
+<script src="libs/highcharts-7.0.1/modules/vector.js"></script>
+<script src="libs/highcharts-7.0.1/modules/wordcloud.js"></script>
+<script src="libs/highcharts-7.0.1/modules/xrange.js"></script>
+<script src="libs/highcharts-7.0.1/modules/tilemap.js"></script>
+<script src="libs/highcharts-7.0.1/modules/venn.js"></script>
+<script src="libs/highcharts-7.0.1/modules/gantt.js"></script>
+<script src="libs/highcharts-7.0.1/modules/timeline.js"></script>
+<script src="libs/highcharts-7.0.1/modules/parallel-coordinates.js"></script>
+<script src="libs/highcharts-7.0.1/plugins/grouped-categories.js"></script>
+<script src="libs/highcharts-7.0.1/plugins/motion.js"></script>
+<script src="libs/highcharts-7.0.1/plugins/multicolor_series.js"></script>
+<script src="libs/highcharts-7.0.1/custom/reset.js"></script>
+<script src="libs/highcharts-7.0.1/custom/symbols-extra.js"></script>
+<script src="libs/highcharts-7.0.1/custom/text-symbols.js"></script>
+<script src="libs/highchart-binding-0.7.0/highchart.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Predgovor</a></li>
+<li class="chapter" data-level="1" data-path="11-ggplot.html"><a href="11-ggplot.html"><i class="fa fa-check"></i><b>1</b> Grafički prikaz podataka</a><ul>
+<li class="chapter" data-level="1.1" data-path="11-ggplot.html"><a href="11-ggplot.html#uvodni-primeri-i-napomene"><i class="fa fa-check"></i><b>1.1</b> Uvodni primeri i napomene</a></li>
+<li class="chapter" data-level="1.2" data-path="11-ggplot.html"><a href="11-ggplot.html#razni-primeri-grafika"><i class="fa fa-check"></i><b>1.2</b> Razni primeri grafika</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="11-ggplot.html"><a href="11-ggplot.html#scatterplotovi"><i class="fa fa-check"></i><b>1.2.1</b> Scatterplotovi</a></li>
+<li class="chapter" data-level="1.2.2" data-path="11-ggplot.html"><a href="11-ggplot.html#linijski-grafici"><i class="fa fa-check"></i><b>1.2.2</b> Linijski grafici</a></li>
+<li class="chapter" data-level="1.2.3" data-path="11-ggplot.html"><a href="11-ggplot.html#histogrami"><i class="fa fa-check"></i><b>1.2.3</b> Histogrami</a></li>
+<li class="chapter" data-level="1.2.4" data-path="11-ggplot.html"><a href="11-ggplot.html#crtanje-vise-grafika-odjednom"><i class="fa fa-check"></i><b>1.2.4</b> Crtanje više grafika odjednom</a></li>
+<li class="chapter" data-level="1.2.5" data-path="11-ggplot.html"><a href="11-ggplot.html#boks-plotovi"><i class="fa fa-check"></i><b>1.2.5</b> Boks plotovi</a></li>
+<li class="chapter" data-level="1.2.6" data-path="11-ggplot.html"><a href="11-ggplot.html#bar-plotovi"><i class="fa fa-check"></i><b>1.2.6</b> Bar plotovi</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="115-galerija.html"><a href="115-galerija.html"><i class="fa fa-check"></i><b>2</b> Galerija grafika</a><ul>
+<li class="chapter" data-level="" data-path="115-galerija.html"><a href="115-galerija.html#uvod"><i class="fa fa-check"></i>Uvod</a></li>
+<li class="chapter" data-level="2.1" data-path="115-galerija.html"><a href="115-galerija.html#ggplot2"><i class="fa fa-check"></i><b>2.1</b> Ggplot2</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="115-galerija.html"><a href="115-galerija.html#linijski-grafici-1"><i class="fa fa-check"></i><b>2.1.1</b> Linijski grafici</a></li>
+<li class="chapter" data-level="2.1.2" data-path="115-galerija.html"><a href="115-galerija.html#stacked-area-chart"><i class="fa fa-check"></i><b>2.1.2</b> Stacked area chart</a></li>
+<li class="chapter" data-level="2.1.3" data-path="115-galerija.html"><a href="115-galerija.html#sezonski-grafik"><i class="fa fa-check"></i><b>2.1.3</b> Sezonski grafik</a></li>
+<li class="chapter" data-level="2.1.4" data-path="115-galerija.html"><a href="115-galerija.html#bar-plotovi-1"><i class="fa fa-check"></i><b>2.1.4</b> Bar plotovi</a></li>
+<li class="chapter" data-level="2.1.5" data-path="115-galerija.html"><a href="115-galerija.html#lollipop-grafik"><i class="fa fa-check"></i><b>2.1.5</b> Lollipop grafik</a></li>
+<li class="chapter" data-level="2.1.6" data-path="115-galerija.html"><a href="115-galerija.html#dumbbell-plot"><i class="fa fa-check"></i><b>2.1.6</b> Dumbbell plot</a></li>
+<li class="chapter" data-level="2.1.7" data-path="115-galerija.html"><a href="115-galerija.html#histogram"><i class="fa fa-check"></i><b>2.1.7</b> Histogram</a></li>
+<li class="chapter" data-level="2.1.8" data-path="115-galerija.html"><a href="115-galerija.html#grafik-gustine"><i class="fa fa-check"></i><b>2.1.8</b> Grafik gustine</a></li>
+<li class="chapter" data-level="2.1.9" data-path="115-galerija.html"><a href="115-galerija.html#boks-plot"><i class="fa fa-check"></i><b>2.1.9</b> Boks plot</a></li>
+<li class="chapter" data-level="2.1.10" data-path="115-galerija.html"><a href="115-galerija.html#violinski-grafik"><i class="fa fa-check"></i><b>2.1.10</b> Violinski grafik</a></li>
+<li class="chapter" data-level="2.1.11" data-path="115-galerija.html"><a href="115-galerija.html#populaciona-piramida"><i class="fa fa-check"></i><b>2.1.11</b> Populaciona piramida</a></li>
+<li class="chapter" data-level="2.1.12" data-path="115-galerija.html"><a href="115-galerija.html#pitica"><i class="fa fa-check"></i><b>2.1.12</b> Pitica</a></li>
+<li class="chapter" data-level="2.1.13" data-path="115-galerija.html"><a href="115-galerija.html#hijerarhijski-dendrogram"><i class="fa fa-check"></i><b>2.1.13</b> Hijerarhijski dendrogram</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="1152-plotly.html"><a href="1152-plotly.html"><i class="fa fa-check"></i><b>2.2</b> Plotly</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="1152-plotly.html"><a href="1152-plotly.html#scatterplot"><i class="fa fa-check"></i><b>2.2.1</b> Scatterplot</a></li>
+<li class="chapter" data-level="2.2.2" data-path="1152-plotly.html"><a href="1152-plotly.html#histogram-i-bar-plot"><i class="fa fa-check"></i><b>2.2.2</b> Histogram i Bar plot</a></li>
+<li class="chapter" data-level="2.2.3" data-path="1152-plotly.html"><a href="1152-plotly.html#box-plot"><i class="fa fa-check"></i><b>2.2.3</b> Box plot</a></li>
+<li class="chapter" data-level="2.2.4" data-path="1152-plotly.html"><a href="1152-plotly.html#pravougaono-naslaganje"><i class="fa fa-check"></i><b>2.2.4</b> Pravougaono naslaganje</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="1153-highcharter.html"><a href="1153-highcharter.html"><i class="fa fa-check"></i><b>2.3</b> Highcharter</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="12-dplyr.html"><a href="12-dplyr.html"><i class="fa fa-check"></i><b>3</b> Rad sa podacima</a><ul>
+<li class="chapter" data-level="3.1" data-path="12-dplyr.html"><a href="12-dplyr.html#dataframe"><i class="fa fa-check"></i><b>3.1</b> Dataframe</a></li>
+<li class="chapter" data-level="3.2" data-path="12-dplyr.html"><a href="12-dplyr.html#obrada-podataka---dplyr-paket"><i class="fa fa-check"></i><b>3.2</b> Obrada podataka - <code>dplyr</code> paket</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="12-dplyr.html"><a href="12-dplyr.html#ucitavanje-eksternih-podataka"><i class="fa fa-check"></i><b>3.2.1</b> Učitavanje eksternih podataka</a></li>
+<li class="chapter" data-level="3.2.2" data-path="12-dplyr.html"><a href="12-dplyr.html#osnovne-funkcije-paketa-dplyr"><i class="fa fa-check"></i><b>3.2.2</b> Osnovne funkcije paketa <code>dplyr</code></a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistički softver 2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="galerija-grafika" class="section level1">
+<h1><span class="header-section-number">2</span> Galerija grafika</h1>
+<p>U nastavku je dat seminarski rad iz Statističkog softvera 1, pod naslovom “Paketi za grafičko predstavljanje”, čiji su autori koleginice Aida Al-Raghyfi i Nataša Martinović. Zahvaljujemo im na vrlo interesantnim primerima vizuelizacija mogućih paketom <code>ggplot</code>, kao i na prikazu drugih paketa za interaktivne grafike.</p>
+<p>Napomena. Radi brzine učitavanja, paketi plotly i highcharter su podeljeni u svoje stranice, koje su dostupne u sadržaju sa leve strane.</p>
+<div id="uvod" class="section level2 unnumbered">
+<h2>Uvod</h2>
+<p>Grafičko predstavljanje podataka je metod koji prikazuje vrednosti, izveštaje, upoređuje rezultate ili daje predviđanja o toku određenih situacija. To je vizuelni prikaz podataka kroz grafikone.</p>
+<p>U ovom radu, bavićemo se paketima: ggplot2, plotly i highcharter.</p>
+<hr />
+</div>
+<div id="ggplot2" class="section level2">
+<h2><span class="header-section-number">2.1</span> Ggplot2</h2>
+<p>Paket ggplot2 je jedan od najkorisnijih i najzastupljenijih paketa u R-u. Ima dosta različitu sintaksu od sintakse klasičnih grafika, i samim tim zahteva malo više učenja, ali najveća prednost ovog paketa je što se sa malo koda prave estetski bogati grafici.</p>
+<p>Paket ggplot2 se zasniva na takozvanoj “gramatici grafike”. Grafici se prave “sabiranjem”, odnosno dodajemo komponentu po komponentu na grafik. Glavni delovi koje grafik ima su:</p>
+<ol style="list-style-type: decimal">
+<li>Podaci (data): Skup podataka koji se prikazuje</li>
+<li>Geometrijski objekat (geom_*): Tip geometrijskog objekta kojim se prikazuju podaci.</li>
+<li>Estetski parametri (aes()): Estetski atributi koji se mogu dodeliti geometrijskim objektima.</li>
+</ol>
+<p>Sada ćemo proći kroz par jednostavnih primera</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">data</span>(<span class="st">&quot;midwest&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;ggplot2&quot;</span>)  
+ midwest &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;http://goo.gl/G1K41K&quot;</span>)  
+<span class="co">#Za primer koristićemo skup podataka midwest iz paketa ggplot2. Ovo je skup podataka populacije svih okruga od 5 država srednjeg zapada SAD-a.</span>
+
+g&lt;-<span class="kw">ggplot</span>(midwest, <span class="kw">aes</span>(<span class="dt">x=</span>area, <span class="dt">y=</span>poptotal)) <span class="op">+</span><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">col=</span><span class="st">&quot;steelblue&quot;</span>,  <span class="dt">size=</span><span class="dv">3</span>) <span class="op">+</span><span class="st">   </span><span class="co">#funkcija geom_point tačakama predstavlja svaki okrug iz naše tabele </span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">col=</span><span class="st">&quot;firebrick&quot;</span>) <span class="co">#funkcija geom_smooth pravi određenu aproksimaciju podataka, u ovom slučaju je to linearni model, ali može biti i nelinearni model, što ćemo videti kasnije</span>
+g</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">g <span class="op">+</span><span class="st"> </span><span class="kw">xlim</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>)) <span class="op">+</span><span class="st"> </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1000000</span>)) <span class="co">#Pošto se tačke većinom nalaze na donjoj polovini, funkcijom xlim/ylim možemo da posmatramo grafik u granicama koje mi odredimo, i na taj način obrišemo tačke van tih granica</span></code></pre>
+<pre><code>## Warning: Removed 5 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 5 rows containing missing values (geom_point).</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-38-2.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">g1&lt;-g<span class="op">+</span><span class="kw">coord_cartesian</span>(<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1000000</span>)) <span class="co">#Ili funkcijom coord_cartesian() da zumiramo grafik u delu koji nama odgovara</span>
+g1 <span class="op">+</span><span class="st"> </span><span class="kw">ggtitle</span>(<span class="st">&quot;Area Vs Population&quot;</span>, <span class="dt">subtitle=</span><span class="st">&quot;From midwest dataset&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;Area&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Population&quot;</span>) <span class="co">#Funkcija za stavljanje naslova i podnaslova</span></code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-38-3.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">gg &lt;-<span class="st"> </span><span class="kw">ggplot</span>(midwest, <span class="kw">aes</span>(<span class="dt">x=</span>area, <span class="dt">y=</span>poptotal)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">col=</span>state,<span class="dt">size=</span>popdensity)) <span class="op">+</span><span class="st">  </span><span class="co">#Stavljamo da svaki okrug ima svoju boju u zavisnoti od toga u kojoj državi se nalazi i veličinu u zavisnosti od gustine naseljenosti</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;loess&quot;</span>, <span class="dt">col=</span><span class="st">&quot;firebrick&quot;</span>, <span class="dt">size=</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="co">#ovde možemo videti nelinearni metod aproksimacije podataka</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1000000</span>)) <span class="op">+</span><span class="st"> </span><span class="co">#ograničavamo gornje i donje vrednosti koordinatnih osa</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Area Vs Population&quot;</span>, <span class="dt">subtitle=</span><span class="st">&quot;From midwest dataset&quot;</span>, <span class="dt">y=</span><span class="st">&quot;Population&quot;</span>, <span class="dt">x=</span><span class="st">&quot;Area&quot;</span>, <span class="dt">caption=</span><span class="st">&quot;Midwest Demographics&quot;</span>)
+<span class="kw">plot</span>(gg)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-38-4.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Sada ćemo da izdvojimo i zaokružimo okruge koji imaju između 350000 i 500000 stanovnika i sa površinom izmedju 0.01 i 0.1</span>
+<span class="kw">library</span>(ggalt)
+midwest_select &lt;-<span class="st"> </span>midwest[midwest<span class="op">$</span>poptotal <span class="op">&gt;</span><span class="st"> </span><span class="dv">350000</span> <span class="op">&amp;</span><span class="st"> </span>
+<span class="st">                            </span>midwest<span class="op">$</span>poptotal <span class="op">&lt;=</span><span class="st"> </span><span class="dv">500000</span> <span class="op">&amp;</span><span class="st"> </span>
+<span class="st">                            </span>midwest<span class="op">$</span>area <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.01</span> <span class="op">&amp;</span><span class="st"> </span>
+<span class="st">                            </span>midwest<span class="op">$</span>area <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.1</span>, ]
+
+<span class="kw">ggplot</span>(midwest, <span class="kw">aes</span>(<span class="dt">x=</span>area, <span class="dt">y=</span>poptotal)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">col=</span>state, <span class="dt">size=</span>popdensity)) <span class="op">+</span><span class="st">   </span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;loess&quot;</span>, <span class="dt">se=</span>F) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">xlim</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.1</span>)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ylim</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">500000</span>)) <span class="op">+</span><span class="st">   </span>
+<span class="st">  </span><span class="kw">geom_encircle</span>(<span class="kw">aes</span>(<span class="dt">x=</span>area, <span class="dt">y=</span>poptotal), 
+                <span class="dt">data=</span>midwest_select, 
+                <span class="dt">color=</span><span class="st">&quot;red&quot;</span>, 
+                <span class="dt">size=</span><span class="dv">2</span>, 
+                <span class="dt">expand=</span><span class="fl">0.08</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">subtitle=</span><span class="st">&quot;Area Vs Population&quot;</span>, 
+       <span class="dt">y=</span><span class="st">&quot;Population&quot;</span>, 
+       <span class="dt">x=</span><span class="st">&quot;Area&quot;</span>, 
+       <span class="dt">title=</span><span class="st">&quot;Scatterplot + Encircle&quot;</span>, 
+       <span class="dt">caption=</span><span class="st">&quot;Source: midwest&quot;</span>)</code></pre>
+<pre><code>## Warning: Removed 15 rows containing non-finite values (stat_smooth).</code></pre>
+<pre><code>## Warning: Removed 15 rows containing missing values (geom_point).</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-38-5.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Sada posmatramo skup podataka mpg iz paketa ggplot2, odnosno uzeti su podaci iz Motor Trend US magazina, iz 1974. godine, koji obuhvataju potrošnju goriva i 10 aspekata dizajna automobila i performanse za 32 automobila.</span>
+
+<span class="kw">data</span>(mpg, <span class="dt">package=</span><span class="st">&quot;ggplot2&quot;</span>) 
+mpg &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;http://goo.gl/uEeRGu&quot;</span>)
+g &lt;-<span class="st"> </span><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(<span class="dt">x=</span>displ, <span class="dt">y=</span>hwy)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>()  
+
+mpg1&lt;-g <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>( <span class="op">~</span><span class="st"> </span>class, <span class="dt">nrow=</span><span class="dv">3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;hwy vs displ&quot;</span>, <span class="dt">caption =</span> <span class="st">&quot;Source: mpg&quot;</span>, <span class="dt">subtitle=</span><span class="st">&quot;Ggplot2 - Faceting - Multiple plots in one figure&quot;</span>)  
+<span class="co">#Funkcija facet_wrap() omogućava predstavljanje jednog grafika pomoću više manjih grafika za kategorije koje mi želimo</span>
+<span class="co">#Koristeći nrow biramo broj vrsta u kojima će se nalaziti manji grafici</span>
+mpg1</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-38-6.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">mpg2&lt;-g <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>( <span class="op">~</span><span class="st"> </span>class, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;hwy vs displ&quot;</span>, <span class="dt">caption =</span> <span class="st">&quot;Source: mpg&quot;</span>, <span class="dt">subtitle=</span><span class="st">&quot;Ggplot2 - Faceting - Multiple plots in one figure with free scales&quot;</span>) 
+<span class="co">#Dok sa scales=&quot;free&quot; program sam odabere</span>
+mpg2</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-38-7.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#U ovom konkretnom primeru, upoređujući dobijene manje grafike zaključujemo da sportski automobili koji imaju velike motore, a malu masu troše manje nego pickup i minivan</span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Sada prikazujemo estetske promene, kao što su: menjanje boje pozadine, menjanje debljine i boje svih unutrašnjih linija, kao i ivica i x/y-osa</span>
+g &lt;-<span class="st"> </span><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(<span class="dt">x=</span>displ, <span class="dt">y=</span>hwy)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se=</span><span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>()
+
+g <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="st">&#39;khaki&#39;</span>),
+          <span class="dt">panel.grid.major =</span> <span class="kw">element_line</span>(<span class="dt">colour =</span> <span class="st">&quot;burlywood&quot;</span>, <span class="dt">size=</span><span class="fl">1.5</span>),
+          <span class="dt">panel.grid.minor =</span> <span class="kw">element_line</span>(<span class="dt">colour =</span> <span class="st">&quot;tomato&quot;</span>, 
+                                          <span class="dt">size=</span>.<span class="dv">25</span>, 
+                                          <span class="dt">linetype =</span> <span class="st">&quot;dashed&quot;</span>),
+          <span class="dt">panel.border =</span> <span class="kw">element_blank</span>(),
+          <span class="dt">axis.line.x =</span> <span class="kw">element_line</span>(<span class="dt">colour =</span> <span class="st">&quot;darkorange&quot;</span>, 
+                                     <span class="dt">size=</span><span class="fl">1.5</span>, 
+                                     <span class="dt">lineend =</span> <span class="st">&quot;butt&quot;</span>),
+          <span class="dt">axis.line.y =</span> <span class="kw">element_line</span>(<span class="dt">colour =</span> <span class="st">&quot;darkorange&quot;</span>, 
+                                     <span class="dt">size=</span><span class="fl">1.5</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Modified Background&quot;</span>, 
+       <span class="dt">subtitle=</span><span class="st">&quot;How to Change Major and Minor grid, Axis Lines, No Border&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Po želji se mogu menjati i margine grafika</span>
+g <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">plot.background=</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&quot;salmon&quot;</span>), 
+          <span class="dt">plot.margin =</span> <span class="kw">unit</span>(<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span><span class="st">  </span><span class="co"># gore,desno,dole,levo</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Modified Background&quot;</span>, <span class="dt">subtitle=</span><span class="st">&quot;How to Change Plot Margin&quot;</span>) </code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-39-2.png" width="672" /></p>
+<p>Sada ćemo prikazati još neke tipove geometrijskih objekata kojim se prikazuju podaci.</p>
+<hr />
+<div id="linijski-grafici-1" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Linijski grafici</h3>
+<p>Za crtanje vremenski uređenih podataka, poput vremenskih serija, standardni grafici su linijski. To je prosto linija koja prikazuje kretanje neke promenljive kroz vreme.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Za primer koristićemo skup podataka economics iz paketa ggplot2.</span>
+<span class="kw">data</span>(<span class="st">&quot;economics&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;ggplot2&quot;</span>)
+
+<span class="kw">ggplot</span>(economics, <span class="kw">aes</span>(<span class="dt">x =</span> date, <span class="dt">y =</span> psavert)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">&quot;darkgreen&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">date_breaks =</span> <span class="st">&quot;5 years&quot;</span>, <span class="dt">date_labels =</span> <span class="st">&quot;%b %Y&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Mesec&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Stopa stednje&quot;</span>) <span class="co">#Funkcijom scale_x_date možemo da odaberemo na koliko godina ćemo da pratimo promene, u ovom konkretnom slučaju smo stavili 5 (“%b” u formatu označava mesec a “%Y” godinu, pa možemo da menjamo i redosled)</span></code></pre>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="stacked-area-chart" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Stacked area chart</h3>
+<p>Sličan linijskom grafiku, s tim da je oblast ispod linija obojen. Koristimo ga kada želimo da vidimo kako se kvantitet promenio kroz vreme, kada prikazujemo udeo individualnih komponenata.
+Treba primetiti jednu bitnu stvar, po default-u svaka geom_area() počinje od y-ose(što je obično 0), ali ako želimo da prikažemo udeo individualnih komponenata, potrebno je da svaka geom_area() bude naslagana jedna na drugu.
+S toga ćemo u sledećem primeru staviti y=stopastednje+srednjetrajanjenezaposlenosti</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lubridate&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     date</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())
+
+df &lt;-<span class="st"> </span>economics[, <span class="kw">c</span>(<span class="st">&quot;date&quot;</span>, <span class="st">&quot;psavert&quot;</span>, <span class="st">&quot;uempmed&quot;</span>)] <span class="co">#pravimo kolonu sa potrebnim vrednostima</span>
+df &lt;-<span class="st"> </span>df[lubridate<span class="op">::</span><span class="kw">year</span>(df<span class="op">$</span>date) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1967</span><span class="op">:</span><span class="dv">1981</span>), ]
+
+brks &lt;-<span class="st"> </span>df<span class="op">$</span>date[<span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">length</span>(df<span class="op">$</span>date), <span class="dv">12</span>)]  <span class="co">#podele za x-osu, na svakih 12 meseci</span>
+lbls &lt;-<span class="st"> </span>lubridate<span class="op">::</span><span class="kw">year</span>(brks) <span class="co">#oznake koje će biti na x-osi</span>
+
+
+<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span>date)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_area</span>(<span class="kw">aes</span>(<span class="dt">y=</span>psavert<span class="op">+</span>uempmed, <span class="dt">fill=</span><span class="st">&quot;psavert&quot;</span>)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_area</span>(<span class="kw">aes</span>(<span class="dt">y=</span>uempmed, <span class="dt">fill=</span><span class="st">&quot;uempmed&quot;</span>)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Area Chart of Returns Percentage&quot;</span>, 
+       <span class="dt">subtitle=</span><span class="st">&quot;From Wide Data format&quot;</span>, 
+       <span class="dt">caption=</span><span class="st">&quot;Source: Economics&quot;</span>, 
+       <span class="dt">y=</span><span class="st">&quot;Returns %&quot;</span>) <span class="op">+</span><span class="st">  </span>
+<span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">labels =</span> lbls, <span class="dt">breaks =</span> brks) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">name=</span><span class="st">&quot;&quot;</span>, 
+                    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;psavert&quot;</span>=<span class="st">&quot;#00ba38&quot;</span>, <span class="st">&quot;uempmed&quot;</span>=<span class="st">&quot;#f8766d&quot;</span>)) <span class="co"># boja linija</span></code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-41-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="sezonski-grafik" class="section level3">
+<h3><span class="header-section-number">2.1.3</span> Sezonski grafik</h3>
+<p>Ako radimo sa vremenskim serijama klase ts ili xts, možemo da vidimo sezonske fluktuacije pomoću sezonskih grafika koristeći forecast::ggseasonplot.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#install.packages(&quot;forecast&quot;)</span>
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(forecast)
+<span class="kw">theme_set</span>(<span class="kw">theme_classic</span>())
+<span class="co">#Uzimamo podatke o sezonskim promenenama broja putnika na međunarodnim letovima, kao i o sezonskim promenama vazdušne temperature u Nottingham Castle-u</span>
+
+nottem_small &lt;-<span class="st"> </span><span class="kw">window</span>(nottem, <span class="dt">start=</span><span class="kw">c</span>(<span class="dv">1920</span>, <span class="dv">1</span>), <span class="dt">end=</span><span class="kw">c</span>(<span class="dv">1925</span>, <span class="dv">12</span>))  <span class="co"># uzimamo manji vremenski period</span>
+
+
+<span class="co">#Sezonske promene broja putnika na međunarodnim letovima</span>
+<span class="kw">ggseasonplot</span>(AirPassengers) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Seasonal plot: International Airline Passengers&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-42-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Sezonske promene vazdušne temperature u Nottingham Castle-u</span>
+<span class="kw">ggseasonplot</span>(nottem_small) <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Seasonal plot: Air temperatures at Nottingham Castle&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-42-2.png" width="672" /></p>
+<hr />
+</div>
+<div id="bar-plotovi-1" class="section level3">
+<h3><span class="header-section-number">2.1.4</span> Bar plotovi</h3>
+<p>Bar plotovi nam služe za grafički prikaz kategoričkih promenljivih. Na njima se prikazuje koliko postoji podataka u bazi iz odgovarajuće kategorije.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Prebrojimo iz baze mpg broj automobila po klasi</span>
+<span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(<span class="dt">x =</span> class)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">fill =</span> <span class="st">&quot;forestgreen&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Bar plotovi mogu biti i naslagani, da prikazuju više vrednosti za istu kategoriju odjednom. </span>
+<span class="co">#Nacrtaćemo bar plot gde se vidi populacija za 1997., 2002. i 2007. godinu izabranih zemalja.</span>
+<span class="co">#position = &quot;dodge&quot; nam pomaže da lakše čitamo vrednosti sa grafika, tako što ih stavlja jednu do druge</span>
+<span class="kw">library</span>(gapminder)
+
+<span class="co"># napravimo kratak spisak država koje ćemo gledati i upoređivati populacije tokom određenih godina</span>
+countries &lt;-<span class="st"> </span><span class="kw">c</span>( <span class="st">&quot;Turkey&quot;</span>, <span class="st">&quot;Argentina&quot;</span>, <span class="st">&quot;Australia&quot;</span>, <span class="st">&quot;Belgium&quot;</span>)
+
+gm &lt;-<span class="st"> </span>gapminder[(gapminder<span class="op">$</span>year <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">1997</span>, <span class="dv">2002</span>, <span class="dv">2007</span>)) <span class="op">&amp;</span>
+<span class="st">                            </span>(gapminder<span class="op">$</span>country <span class="op">%in%</span><span class="st"> </span>countries), ]
+<span class="kw">ggplot</span>(gm, <span class="kw">aes</span>(<span class="dt">x =</span> country, <span class="dt">y =</span> pop)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_col</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">mapping =</span> <span class="kw">aes</span>(<span class="dt">fill =</span> <span class="kw">factor</span>(year)), <span class="dt">position =</span> <span class="st">&quot;dodge&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-43-2.png" width="672" /></p>
+<hr />
+</div>
+<div id="lollipop-grafik" class="section level3">
+<h3><span class="header-section-number">2.1.5</span> Lollipop grafik</h3>
+<p>U suštini sadrži iste informacije kao bar plot, s tim što ih redukuje u tanke linije, pa samim tim izgledaju lepše i modernije.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+<span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())
+
+<span class="kw">ggplot</span>(gm, <span class="kw">aes</span>(<span class="dt">x =</span> country, <span class="dt">y =</span> pop,<span class="dt">label=</span>year)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size=</span><span class="dv">3</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">x=</span>country, 
+                   <span class="dt">xend=</span>country, 
+                   <span class="dt">y=</span><span class="dv">0</span>, 
+                   <span class="dt">yend=</span>pop)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Lollipop Chart&quot;</span> 
+      ) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">65</span>, <span class="dt">vjust=</span><span class="fl">0.6</span>)) <span class="op">+</span><span class="st"> </span><span class="co">#udaljenost naziva država od linije x-ose</span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">nudge_x =</span> <span class="fl">0.2</span> ) <span class="co">#udaljenost godina od tačkica</span></code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="dumbbell-plot" class="section level3">
+<h3><span class="header-section-number">2.1.6</span> Dumbbell plot</h3>
+<p>Koristimo ga ako želimo da predstavimo rast i opadanje između dve tačke u vremenu i poredimo udaljenost između dve kategorije</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Posmatramo bazu podataka health koja nam daje procente iz 2013. i 2014. za 26 gradova u SAD-u.</span>
+
+##devtools::install_github(&quot;hrbrmstr/ggalt&quot;)
+<span class="kw">library</span>(ggplot2)
+<span class="kw">library</span>(ggalt)
+<span class="kw">theme_set</span>(<span class="kw">theme_classic</span>())
+
+health &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/selva86/datasets/master/health.csv&quot;</span>)
+health<span class="op">$</span>Area &lt;-<span class="st"> </span><span class="kw">factor</span>(health<span class="op">$</span>Area, <span class="dt">levels=</span><span class="kw">as.character</span>(health<span class="op">$</span>Area))  <span class="co">#za pravilno uređenje ovih tegića</span>
+
+ <span class="kw">ggplot</span>(health, <span class="kw">aes</span>(<span class="dt">x=</span>pct_<span class="dv">2013</span>, <span class="dt">xend=</span>pct_<span class="dv">2014</span>, <span class="dt">y=</span>Area, <span class="dt">group=</span>Area)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_dumbbell</span>( 
+    <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>, 
+    <span class="dt">size=</span><span class="fl">0.75</span>, 
+    ) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x=</span><span class="ot">NULL</span>, 
+       <span class="dt">y=</span><span class="ot">NULL</span>, 
+       <span class="dt">title=</span><span class="st">&quot;Dumbbell Chart&quot;</span>, 
+       <span class="dt">subtitle=</span><span class="st">&quot;Pct Change: 2013 vs 2014&quot;</span>, 
+       <span class="dt">caption=</span><span class="st">&quot;Source: https://github.com/hrbrmstr/ggalt&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust=</span><span class="fl">0.5</span>, <span class="dt">face=</span><span class="st">&quot;bold&quot;</span>),
+        <span class="dt">plot.background=</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&quot;#f7f7f7&quot;</span>),
+        <span class="dt">panel.background=</span><span class="kw">element_rect</span>(<span class="dt">fill=</span><span class="st">&quot;#f7f7f7&quot;</span>),
+        <span class="dt">panel.grid.minor=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid.major.y=</span><span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid.major.x=</span><span class="kw">element_line</span>(),
+        <span class="dt">axis.ticks=</span><span class="kw">element_blank</span>(),
+        <span class="dt">legend.position=</span><span class="st">&quot;top&quot;</span>,
+        <span class="dt">panel.border=</span><span class="kw">element_blank</span>())</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="histogram" class="section level3">
+<h3><span class="header-section-number">2.1.7</span> Histogram</h3>
+<p>Gruba ocena raspodele uzorka se može vizuelizovati histogramima, gde brojimo koliko elemenata uzorka upada u odgovarajuće kategorije.
+Koristeći histogram, možemo da kontrolišemo broj pravougaonika, takođe možemo odabrati koliki interval pokriva svaki pravougaonik.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+ <span class="kw">theme_set</span>(<span class="kw">theme_classic</span>())
+
+ ##Ponovo posmatramo automobile, i posmatramo broj vozila određene klase po zapremini motora
+ g &lt;-<span class="st"> </span><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(displ)) <span class="op">+</span><span class="st"> </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Spectral&quot;</span>)
+ 
+ g <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">fill=</span>class), 
+                    <span class="dt">binwidth =</span> <span class="fl">.1</span>, 
+                    <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, 
+                    <span class="dt">size=</span>.<span class="dv">1</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Histogram sa automatskim brojem pravougaonika&quot;</span>, 
+        <span class="dt">subtitle=</span><span class="st">&quot;Engine Displacement across Vehicle Classes&quot;</span>)  </code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r"> g <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">fill=</span>class), 
+                    <span class="dt">bins=</span><span class="dv">5</span>, 
+                    <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, 
+                    <span class="dt">size=</span>.<span class="dv">1</span>) <span class="op">+</span><span class="st">   </span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Histogram sa fiksiranim brojem pravougaonika&quot;</span>, 
+        <span class="dt">subtitle=</span><span class="st">&quot;Engine Displacement across Vehicle Classes&quot;</span>) </code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-46-2.png" width="672" /></p>
+<hr />
+</div>
+<div id="grafik-gustine" class="section level3">
+<h3><span class="header-section-number">2.1.8</span> Grafik gustine</h3>
+<p>Grafik gustine predstavlja raspodelu podataka u kontinuiranom intervalu ili vremenskom periodu. To je zapravo verzija histograma koja glatko iscrtava vrednosti kako bi se izbegli grubi prelazi.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+ <span class="kw">theme_set</span>(<span class="kw">theme_classic</span>())
+<span class="co">#I dalje posmatramo mpg bazu podataka i pravimo grafik gustine gradske kilometraže u odnosu na broj cilindara</span>
+ 
+<span class="co">#Podešavamo alfa transparentnost i bojimo gustine u odnosu na broj cilindara </span>
+ g &lt;-<span class="st"> </span><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(cty))
+ g <span class="op">+</span><span class="st"> </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(<span class="dt">fill=</span><span class="kw">factor</span>(cyl)), <span class="dt">alpha=</span><span class="fl">0.8</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Density plot&quot;</span>, 
+        <span class="dt">subtitle=</span><span class="st">&quot;City Mileage Grouped by Number of cylinders&quot;</span>,
+        <span class="dt">caption=</span><span class="st">&quot;Source: mpg&quot;</span>,
+        <span class="dt">x=</span><span class="st">&quot;City Mileage&quot;</span>,
+        <span class="dt">fill=</span><span class="st">&quot;# Cylinders&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="boks-plot" class="section level3">
+<h3><span class="header-section-number">2.1.9</span> Boks plot</h3>
+<p>Boks plot predstavlja grafički prikaz 5 sumarnih statistika - minimum, 1. kvartil, medijanu, 3. kvartil i maksimum.</p>
+<pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">library</span>(ggplot2)
+ <span class="kw">theme_set</span>(<span class="kw">theme_classic</span>())
+
+<span class="co">#Stavljanjem varwidth=T podešavamo da debljina boksova bude proporcionalna broju vrednosti koje sadrži</span>
+<span class="co">#Posmatramo gradsku kilometražu grupisanu po klasi vozila</span>
+ g &lt;-<span class="st"> </span><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(class, cty))
+ g <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>(<span class="dt">varwidth=</span>T, <span class="dt">fill=</span><span class="st">&quot;plum&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Box plot&quot;</span>, 
+        <span class="dt">subtitle=</span><span class="st">&quot;City Mileage grouped by Class of vehicle&quot;</span>,
+        <span class="dt">caption=</span><span class="st">&quot;Source: mpg&quot;</span>,
+        <span class="dt">x=</span><span class="st">&quot;Class of Vehicle&quot;</span>,
+        <span class="dt">y=</span><span class="st">&quot;City Mileage&quot;</span>) </code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="violinski-grafik" class="section level3">
+<h3><span class="header-section-number">2.1.10</span> Violinski grafik</h3>
+<p>Sličan je box plotu, ali pokazuje gustinu unutar grupa. Ne prikazuje toliko informacija kao box plot.</p>
+<pre class="sourceCode r"><code class="sourceCode r"> <span class="kw">library</span>(ggplot2)
+ <span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())
+
+ g &lt;-<span class="st"> </span><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(class, cty))
+ g <span class="op">+</span><span class="st"> </span><span class="kw">geom_violin</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Violin plot&quot;</span>, 
+        <span class="dt">subtitle=</span><span class="st">&quot;City Mileage vs Class of vehicle&quot;</span>,
+        <span class="dt">caption=</span><span class="st">&quot;Source: mpg&quot;</span>,
+        <span class="dt">x=</span><span class="st">&quot;Class of Vehicle&quot;</span>,
+        <span class="dt">y=</span><span class="st">&quot;City Mileage&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="populaciona-piramida" class="section level3">
+<h3><span class="header-section-number">2.1.11</span> Populaciona piramida</h3>
+<p>Predstavlja unikatan način predstavljanja koliki procenat populacije spada u određenu kategoriju.
+Piramida ispod je odličan primer toga koliko korisnika se zadrži na svakoj fazi e-mail marketinške kampanje.</p>
+<pre class="sourceCode r"><code class="sourceCode r"> <span class="co">#install.packages(&quot;ggthemes&quot;)</span>
+ <span class="kw">library</span>(ggplot2)
+ <span class="kw">library</span>(ggthemes)
+ 
+<span class="co">#baza podataka koju posmatramo</span>
+ email_campaign_funnel &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;https://raw.githubusercontent.com/selva86/datasets/master/email_campaign_funnel.csv&quot;</span>)
+ 
+ <span class="co">#podele koje će se nalaziti na x-osi i oznake</span>
+ brks &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">15000000</span>, <span class="dv">15000000</span>, <span class="dv">5000000</span>)
+ lbls =<span class="st"> </span><span class="kw">paste0</span>(<span class="kw">as.character</span>(<span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">15</span>, <span class="dv">0</span>, <span class="dv">-5</span>), <span class="kw">seq</span>(<span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">5</span>))), <span class="st">&quot;m&quot;</span>)
+ 
+ 
+ <span class="kw">ggplot</span>(email_campaign_funnel, <span class="kw">aes</span>(<span class="dt">x =</span> Stage, <span class="dt">y =</span> Users, <span class="dt">fill =</span> Gender)) <span class="op">+</span><span class="st">   </span><span class="co">#x-osa sadrži faze, dok y-osa sadrži broj korisnika, i bojimo naše pravougaonike u odnosu na pol korisnika </span>
+<span class="st">   </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">width =</span> <span class="fl">.6</span>) <span class="op">+</span><span class="st">   </span><span class="co"># crtanje pravougaonika</span>
+<span class="st">   </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> brks,   <span class="co"># podele</span>
+                      <span class="dt">labels =</span> lbls) <span class="op">+</span><span class="st"> </span><span class="co"># oznake</span>
+<span class="st">   </span><span class="kw">coord_flip</span>() <span class="op">+</span><span class="st">  </span><span class="co"># zamena osa</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">title=</span><span class="st">&quot;Email Campaign Funnel&quot;</span>) <span class="op">+</span>
+<span class="st">   </span><span class="kw">theme_tufte</span>()  <span class="op">+</span><span class="st"> </span><span class="co"># Tufte theme iz ggfortify</span>
+<span class="st">   </span><span class="kw">theme</span>(<span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust =</span> <span class="fl">.5</span>)) <span class="op">+</span><span class="st"> </span><span class="co">#podešavanje i centriranje naslova</span>
+<span class="st">    </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Dark2&quot;</span>) <span class="co">#biramo paletu boja za naše pravougaonike</span></code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="pitica" class="section level3">
+<h3><span class="header-section-number">2.1.12</span> Pitica</h3>
+<p>Pitica (ili kružni dijagram) je kružni statistički grafik koji je podeljen na parčiće. Površina svakog parčića je proporcionalna količini koju predstavlja.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#Sada ćemo piticom da predstavimo odnos broja vozila svih ponudjenih klasa</span>
+ pie &lt;-<span class="st"> </span><span class="kw">ggplot</span>(mpg, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">fill =</span> <span class="kw">factor</span>(class))) <span class="op">+</span><span class="st"> </span>
+<span class="st">   </span><span class="kw">geom_bar</span>(<span class="dt">width =</span> <span class="dv">1</span>) <span class="op">+</span>
+<span class="st">   </span><span class="kw">theme</span>(<span class="dt">axis.line =</span> <span class="kw">element_blank</span>(), <span class="co">#izbacujemo x-osu i y-osu </span>
+         <span class="dt">plot.title =</span> <span class="kw">element_text</span>(<span class="dt">hjust=</span><span class="fl">0.5</span>)) <span class="op">+</span><span class="st"> </span><span class="co">#podešavamo i centriramo naslov</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">fill=</span><span class="st">&quot;class&quot;</span>, 
+        <span class="dt">x=</span><span class="ot">NULL</span>, 
+        <span class="dt">y=</span><span class="ot">NULL</span>, 
+        <span class="dt">title=</span><span class="st">&quot;Pie Chart of class&quot;</span>, 
+        <span class="dt">caption=</span><span class="st">&quot;Source: mpg&quot;</span>)
+ 
+ pie <span class="op">+</span><span class="st"> </span><span class="kw">coord_polar</span>(<span class="dt">theta =</span> <span class="st">&quot;y&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
+<hr />
+</div>
+<div id="hijerarhijski-dendrogram" class="section level3">
+<h3><span class="header-section-number">2.1.13</span> Hijerarhijski dendrogram</h3>
+<p>Pomoću njih grupišemo objekte, koji su slični u nekom smislu, u grupe koje se zovu klasteri i zatim pravimo hijerarhijsku vezu.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co">#U narednom primeru ćemo hijerarhijski predstaviti broj uhapšenih kriminalaca na 100000 ljudi u svim državama SAD-a.</span>
+
+ <span class="co">#install.packages(&quot;ggdendro&quot;)</span>
+ <span class="kw">library</span>(ggplot2)
+ <span class="kw">library</span>(ggdendro)
+ <span class="kw">theme_set</span>(<span class="kw">theme_bw</span>())
+ 
+ hc &lt;-<span class="st"> </span><span class="kw">hclust</span>(<span class="kw">dist</span>(USArrests), <span class="st">&quot;ave&quot;</span>) <span class="co">#hijerarhijski klastering, metoda &quot;average&quot;</span>
+ 
+ <span class="kw">ggdendrogram</span>(hc, <span class="dt">rotate =</span> T, <span class="dt">size =</span> <span class="dv">2</span>) </code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
+<hr />
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="11-ggplot.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="1152-plotly.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
