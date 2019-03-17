@@ -1,0 +1,214 @@
+## Plotly
+
+ Plotly je drugi paket koji ćemo posmatrati. Početna inspiracija za ovaj paket je bila podrška plotly.js tipova grafika koje ggplot2 ne podržava.
+Plotly ima bogate karakteristike, kao i dosta pristupačnih grafika. Poseduje web-based toolbox koristan za vizualizaciju. I takođe ima sposobnost da ggplot2 grafike učini interaktivnim.
+
+*** 
+### Scatterplot
+
+Scatterplot je koristan za vizualizaciju povezanosti dve kvantitativne promenljive, problem se javlja ako dođe do preklapanja, i to možemo rešiti na par načina.
+ 
+``` {r}
+#Posmatramo na x-osi gradsku miljažu, dok na y-osi posmatramo miljažu auto-puta
+ library(plotly)
+ subplot(
+   plot_ly(mpg, x = ~cty, y = ~hwy, name = "default"), #po default-u
+   plot_ly(mpg, x = ~cty, y = ~hwy) %>% 
+     add_markers(alpha = 0.2, name = "alpha"), #alfa transparentnost
+   plot_ly(mpg, x = ~cty, y = ~hwy) %>% 
+     add_markers(symbol = I(1), name = "hollow") #uzimamo jedan simbol, i stavićemo da bude šupalj
+ )
+ 
+#Sada ćemo da vidimo na koji način možemo da koristimo simbole
+  subplot(
+   plot_ly(x = 1:6, y = 1:6, symbol = I(1:6), name = "pch"),
+   plot_ly(mpg, x = ~cty, y = ~hwy,  symbol = ~cyl,
+           symbols = 1:3,name = "cyl")) #ponovo posmatramo na x-osi gradsku miljažu, dok na y-osi posmatramo miljažu auto-puta, i uzimamo različite simbole u odnosu na broj cilindara
+ 
+  
+#Kada mapiramo numeričku promenljivu u simbol, napravi se samo jedan trag, pa se ne generiše legenda. Međutim ako želimo jedan trag po simbolu, moramo da se postaramo da je promenljiva koju mapiramo faktor, kao u narednom primeru:
+ 
+
+ p <- plot_ly(mpg, x = ~cty, y = ~hwy, alpha = 0.3) 
+ subplot(
+   add_markers(p, symbol = ~cyl, name = "A single trace"),
+   add_markers(p, symbol = ~factor(cyl), color = I("black"))
+ )  
+ 
+#Argument color ima slične osobine kao simbol, odnosno, ako je numerička vrednost u pitanju, color ima jedan trag, ali se generiše kao colorbar kako bi se razlikovale vrednosti promenljivih. Viridis je po default-u namešten colorbar. Takođe, ako je u pitanju faktor, onda color za svaku vrednost napravi trag.
+ 
+ p <- plot_ly(mpg, x = ~cty, y = ~hwy, alpha = 0.5)
+ subplot(
+   add_markers(p, color = ~cyl, showlegend = FALSE) %>% 
+     colorbar(title = "Viridis"),
+   add_markers(p, color = ~factor(cyl))
+ )
+ 
+ #Postoji više načina kako da promenimo boje koje su nameštene po default-u
+ 
+ col1 <- c("#132B43", "#56B1F7")
+ col2 <- viridisLite::inferno(10)
+ col3 <- colorRamp(c("red", "white", "blue"))
+ subplot(
+   add_markers(p, color = ~cyl, colors = col1) %>%
+     colorbar(title = "ggplot2 default"),
+   add_markers(p, color = ~cyl, colors = col2) %>% 
+     colorbar(title = "Inferno"),
+   add_markers(p, color = ~cyl, colors = col3) %>% 
+     colorbar(title = "colorRamp")
+ ) %>% hide_legend()
+ 
+#Argument size kontroliše maksimum i minimum veličine kružića (u pikselima)
+
+  subplot(
+   add_markers(p, size = ~cyl, name = "default"),
+   add_markers(p, size = ~cyl, sizes = c(1, 200), name = "custom")
+ )
+
+
+```
+
+Sada ćemo proći kroz još neke tipove geometrijskih objekata kojim se prikazuju podaci.
+
+*** 
+### Histogram i Bar plot
+
+Glavna razlika ove dve funkcije je što bar plot zahteva i visinu (odnosno i x i y-osu), dok za histogram treba samo jedna promenljiva.
+U primeru ispod poredimo algoritam naslaganja po default-u u plotly.js sa nekoliko različitih algoritama dostupnih u R-u preko hist() funkcije.
+
+``` {r}
+#Hist() funkcija nam pruža priliku da spomenemo tri poznata algoritma po nazivu (Sturges 1926); (Freedman and Diaconis 1981); (Scott 1979).
+#Price_hist() služi da zadrži rezultate naslaganja, kao i njihovo mapiranje pomoću funkcije add_bars().
+#Posmatramo bazu podataka Diamonds iz paketa plotly i histogramom predstavljamo cenu dijamanata.
+
+
+  p1 <- plot_ly(diamonds, x = ~price) %>% add_histogram(name = "plotly.js")
+  
+  price_hist <- function(method) {
+    h <- hist(diamonds$price, breaks = method, plot = FALSE)
+    plot_ly(x = h$mids, y = h$counts) %>% add_bars(name = method)
+  }
+  
+  subplot(
+    p1, price_hist("FD"), price_hist("Sturges"),  price_hist("Scott"),
+    nrows = 4, shareX = TRUE )  #stavljamo grafike jedne ispod drugih, kako b delili x-osu
+  
+
+#U sledećem primeru gledamo dva načina kreiranja osnovnog bar plota, vizuelno su rezultati isti, ali pokazaćemo razliku u implementiranju.
+#add_histogram() funkcija šalje sve posmatrane vrednosti browser-u i dozvoljava plotly.js-u da obavlja naslaganje. Što se tiče drugog načina, potrebno je više ljudskog truda da se to izvede, ali je prednost što se šalje manje podataka i zahteva manje računanja od strane web browser-a.
+  
+#Pravimo bar plotove u odnosu na kvalitet po rezu
+  
+  p1 <- plot_ly(diamonds, x = ~cut) %>% add_histogram()
+  
+  p2 <- diamonds %>%
+    dplyr::count(cut) %>% #prebrojava sve vrednosti u zavisnosti od reza
+    plot_ly(x = ~cut, y = ~n) %>% 
+    add_bars()
+  
+  subplot(p1, p2) %>% hide_legend()
+
+``` 
+
+*** 
+### Box plot
+
+ Kao što smo već rekli, box plot predstavlja grafički prikaz 5 sumarnih statistika.
+Add_boxplot() funkcija zahteva jednu promenljivu i garantuje da box plotovi budu korektno orijentisani, bez obzira na to da li je promenljiva pozicionirana na x ili y-osi. 
+
+``` {r}
+#U sledećem primeru posmatramo sveukupne cene i cene po rezu. Stavićemo sve vrednosti na isti grafik, deleći njihovu y-osu.
+  
+  p <- plot_ly(diamonds, y = ~price, color = I("black"), 
+               alpha = 0.1, boxpoints = "suspectedoutliers")
+  p1 <- p %>% add_boxplot(x = "Overall")
+  p2 <- p %>% add_boxplot(x = ~cut)
+  subplot(
+    p1, p2, shareY = TRUE,
+    widths = c(0.2, 0.8), margin = 0
+  ) %>% hide_legend()
+  
+#Ako želimo da koristimo više promenljivih, preporučuje se mapiranje njihove interakcije na diskretnu osu i bojenje grupisanih vrednosti. 
+#U narednom primeru smo to uradili sa cenama dijamanata po rezu i bistrini.
+  
+  plot_ly(diamonds, x = ~price, y = ~interaction(clarity, cut)) %>%
+    add_boxplot(color = ~clarity) %>%
+    layout(yaxis = list(title = ""))
+```
+
+*** 
+### Pravougaono naslaganje
+
+ Postoje dve funkcije za predstavljanje pravougaonog naslaganja: add_heatmap() i add_histogram2d(). Add_heatmap() funkcija je 2D analogna funkciji add_bars(), a funkcija add_histogram2d() je 2D analogna funkciji add_histogram().
+ 
+``` {r}
+#U ovom primeru posmatramo odnos cena i broja karata i poredimo tri različite funkcije add_histogram2d():
+##1. Naslaganje po default-u
+##2. Naslaganje po default-u sa funkcijom zsmooth koja služi za efektivni rast broja pravougaoničića.
+##3. Određivanje broja pravougaonika
+
+  p <- plot_ly(diamonds, x = ~log(carat), y = ~log(price))
+  subplot(
+    add_histogram2d(p) %>%
+      colorbar(title = "default") %>%
+      layout(xaxis = list(title = "default")),
+    add_histogram2d(p, zsmooth = "best") %>%
+      colorbar(title = "zsmooth") %>%
+      layout(xaxis = list(title = "zsmooth")),
+    add_histogram2d(p, nbinsx = 60, nbinsy = 60) %>%
+      colorbar(title = "nbins") %>%
+      layout(xaxis = list(title = "nbins")),
+    shareY = TRUE, titleX = TRUE
+  )
+```
+
+*** 
+##Animacije
+
+``` {r}
+options(warn=-1)
+#Pokazaćemo evoluciju odnosa između bruto društvenog proizvoda i očekivanog životnog veka od 1952 do 2007 godine. 
+
+  data(gapminder, package = "gapminder")
+  
+  gg <- ggplot(gapminder, aes(gdpPercap, lifeExp, color = continent)) +
+    geom_point(aes(size = pop, frame = year, ids = country)) +
+    #za frame stavljamo year jer su podaci zabeleženi na godišnjoj bazi, dok je za ids postavljeno country, što omogućava glatki prelaz iz godine u godinu
+    
+    scale_x_log10()
+  ggplotly(gg)
+  
+ 
+  #sve dok postoji frame, animacija se realizuje sa play/pause dugmićima i slider komponentom za kontrolisanje animacije.
+ #Ove komponente se mogu ukloniti ili preurediti funkcijama animation_button() i animation_slider().
+ #Razne animacione opcije, kao što je vreme između kadrova, trajanje prelaza i olakšanje prelaza menjaju se preko funkcije animation_opts().
+  
+ # U sledećem primeru prikazani su isti podaci, ali je udvostručena količina vremena između kadrova, stavlja animacionu dugmad bliže slideru, modifikuje default currentvalue.prefix podešavanja slidera.
+  
+  base <- gapminder %>%
+    plot_ly(x = ~gdpPercap, y = ~lifeExp, size = ~pop, 
+            text = ~country, hoverinfo = "text") %>% #lebdeći tekst, da se prikazuju države kod kružića
+    layout(xaxis = list(type = "log"))
+  
+  base %>%
+    add_markers(color = ~continent, frame = ~year, ids = ~country) %>%
+    animation_opts(1000, easing = "elastic") %>%
+    animation_button(
+      x = 1, xanchor = "right", y = 0, yanchor = "bottom"
+    ) %>%
+    animation_slider(
+      currentvalue = list(prefix = "YEAR ", font = list(color="red"))
+    )
+  
+  
+  
+# I frame i ids služe da animiraju određene delove grafika. Može da se obezbedi pozadina koja prikazuje svaki mogući okvir (koji nije animiran) i preklapa animirane kadrove na tu pozadinu. Na narednoj slici prikazane su iste informacije kao na prethodnoj, ali slojevi animiranih okvira se pojavljuju na pozadini svih okvira.
+  
+  base %>%
+    add_markers(color = ~continent, alpha = 0.2, showlegend = F) %>%
+    add_markers(color = ~continent, frame = ~year, ids = ~country) %>%
+    animation_opts(1000, redraw = FALSE)
+options(warn=0)
+```
+
+*** 
