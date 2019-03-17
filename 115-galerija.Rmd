@@ -1,9 +1,9 @@
 # Galerija grafika
 
-U nastavku je dat seminarski rad iz Statističkog softvera 1, pod naslovom "Paketi za grafičko predstavljanje", čiji su autori koleginice Aida Al-Raghyfi i Nataša Martinović. Yahvaljujemo im na vrlo interesantnim primera vizuelizacija mogućih paketom `ggplot`, ali i na prikazu drugih interaktivnih paketa.
+U nastavku je dat seminarski rad iz Statističkog softvera 1, pod naslovom "Paketi za grafičko predstavljanje", čiji su autori koleginice Aida Al-Raghyfi i Nataša Martinović. Zahvaljujemo im na vrlo interesantnim primerima vizuelizacija mogućih paketom `ggplot`, kao i na prikazu drugih paketa za interaktivne grafike.
 
 
-### Uvod
+## Uvod {-}
 
  Grafičko predstavljanje podataka je metod koji prikazuje vrednosti, izveštaje, upoređuje rezultate ili daje predviđanja o toku određenih situacija. To je vizuelni prikaz podataka kroz grafikone.
  
@@ -11,7 +11,7 @@ U ovom radu, bavićemo se paketima: ggplot2, plotly i highcharter.
                                                                 
 
 ***
-### Ggplot2
+## Ggplot2
  Paket ggplot2 je jedan od najkorisnijih i najzastupljenijih paketa u R-u. Ima dosta različitu sintaksu od sintakse klasičnih grafika, i samim tim zahteva malo više učenja, ali najveća prednost ovog paketa je što se sa malo koda prave estetski bogati grafici.
  
  Paket ggplot2 se zasniva na takozvanoj “gramatici grafike”. Grafici se prave “sabiranjem”, odnosno dodajemo komponentu po komponentu na grafik. Glavni delovi koje grafik ima su:
@@ -119,7 +119,7 @@ g + theme(plot.background=element_rect(fill="salmon"),
 Sada ćemo prikazati još neke tipove geometrijskih objekata kojim se prikazuju podaci.
 
 ***
-###  Linijski grafici
+### Linijski grafici
 
 Za crtanje vremenski uređenih podataka, poput vremenskih serija, standardni grafici su linijski. To je prosto linija koja prikazuje kretanje neke promenljive kroz vreme.
 
@@ -217,7 +217,7 @@ ggplot(gm, aes(x = country, y = pop)) +
 ```
 
 *** 
-###Lollipop grafik
+### Lollipop grafik
 U suštini sadrži iste informacije kao bar plot, s tim što ih redukuje u tanke linije, pa samim tim izgledaju lepše i modernije.
 
 ``` {r, cache=TRUE}
@@ -238,7 +238,7 @@ ggplot(gm, aes(x = country, y = pop,label=year)) +
 ```
 
 *** 
-###Dumbbell plot
+### Dumbbell plot
 
 Koristimo ga ako želimo da predstavimo rast i opadanje između dve tačke u vremenu i poredimo udaljenost između dve kategorije
 
@@ -278,7 +278,7 @@ health$Area <- factor(health$Area, levels=as.character(health$Area))  #za pravil
 ```
 
 *** 
-###Histogram
+### Histogram
 
 Gruba ocena raspodele uzorka se može vizuelizovati histogramima, gde brojimo koliko elemenata uzorka upada u odgovarajuće kategorije.
 Koristeći histogram, možemo da kontrolišemo broj pravougaonika, takođe možemo odabrati koliki interval pokriva svaki pravougaonik.
@@ -306,7 +306,7 @@ library(ggplot2)
 ``` 
 
 *** 
-###Grafik gustine
+### Grafik gustine
  
  Grafik gustine predstavlja raspodelu podataka u kontinuiranom intervalu ili vremenskom periodu. To je zapravo verzija histograma koja glatko iscrtava vrednosti kako bi se izbegli grubi prelazi.
 
@@ -327,7 +327,7 @@ library(ggplot2)
 ```
 
 *** 
-###Boks plot
+### Boks plot
 
  Boks plot predstavlja grafički prikaz 5 sumarnih statistika - minimum, 1. kvartil, medijanu, 3. kvartil i maksimum. 
 
@@ -347,7 +347,7 @@ library(ggplot2)
 ```  
  
  *** 
-###Violinski grafik
+### Violinski grafik
 Sličan je box plotu, ali pokazuje gustinu unutar grupa. Ne prikazuje toliko informacija kao box plot.
 
 ``` {r} 
@@ -364,7 +364,7 @@ Sličan je box plotu, ali pokazuje gustinu unutar grupa. Ne prikazuje toliko inf
 ```
 
 *** 
-###Populaciona piramida
+### Populaciona piramida
  Predstavlja unikatan način predstavljanja koliki procenat populacije spada u određenu kategoriju.
 Piramida ispod je odličan primer toga koliko korisnika se zadrži na svakoj fazi e-mail marketinške kampanje.
  
@@ -393,7 +393,7 @@ Piramida ispod je odličan primer toga koliko korisnika se zadrži na svakoj faz
 ```
 
 *** 
-###Pitica
+### Pitica
  Pitica (ili kružni dijagram) je kružni statistički grafik koji je podeljen na parčiće. Površina svakog parčića je proporcionalna količini koju predstavlja.
 
 ``` {r}
@@ -413,7 +413,7 @@ Piramida ispod je odličan primer toga koliko korisnika se zadrži na svakoj faz
 
 
 *** 
-###Hijerarhijski dendrogram
+### Hijerarhijski dendrogram
 
 Pomoću njih grupišemo objekte, koji su slični u nekom smislu, u grupe koje se zovu klasteri i zatim pravimo hijerarhijsku vezu.
 
@@ -433,13 +433,13 @@ Pomoću njih grupišemo objekte, koji su slični u nekom smislu, u grupe koje se
 ```
 
 *** 
-###Plotly
+## Plotly
 
  Plotly je drugi paket koji ćemo posmatrati. Početna inspiracija za ovaj paket je bila podrška plotly.js tipova grafika koje ggplot2 ne podržava.
 Plotly ima bogate karakteristike, kao i dosta pristupačnih grafika. Poseduje web-based toolbox koristan za vizualizaciju. I takođe ima sposobnost da ggplot2 grafike učini interaktivnim.
 
 *** 
-###Scatterplot
+### Scatterplot
 
 Scatterplot je koristan za vizualizaciju povezanosti dve kvantitativne promenljive, problem se javlja ako dođe do preklapanja, i to možemo rešiti na par načina.
  
@@ -506,7 +506,7 @@ Scatterplot je koristan za vizualizaciju povezanosti dve kvantitativne promenlji
 Sada ćemo proći kroz još neke tipove geometrijskih objekata kojim se prikazuju podaci.
 
 *** 
-###Histogram i Bar plot
+### Histogram i Bar plot
 
 Glavna razlika ove dve funkcije je što bar plot zahteva i visinu (odnosno i x i y-osu), dok za histogram treba samo jedna promenljiva.
 U primeru ispod poredimo algoritam naslaganja po default-u u plotly.js sa nekoliko različitih algoritama dostupnih u R-u preko hist() funkcije.
@@ -546,7 +546,7 @@ U primeru ispod poredimo algoritam naslaganja po default-u u plotly.js sa nekoli
 ``` 
 
 *** 
-###Box plot
+### Box plot
 
  Kao što smo već rekli, box plot predstavlja grafički prikaz 5 sumarnih statistika.
 Add_boxplot() funkcija zahteva jednu promenljivu i garantuje da box plotovi budu korektno orijentisani, bez obzira na to da li je promenljiva pozicionirana na x ili y-osi. 
@@ -572,7 +572,7 @@ Add_boxplot() funkcija zahteva jednu promenljivu i garantuje da box plotovi budu
 ```
 
 *** 
-###Pravougaono naslaganje
+### Pravougaono naslaganje
 
  Postoje dve funkcije za predstavljanje pravougaonog naslaganja: add_heatmap() i add_histogram2d(). Add_heatmap() funkcija je 2D analogna funkciji add_bars(), a funkcija add_histogram2d() je 2D analogna funkciji add_histogram().
  
@@ -598,7 +598,7 @@ Add_boxplot() funkcija zahteva jednu promenljivu i garantuje da box plotovi budu
 ```
 
 *** 
-###Animacije
+##Animacije
 
 ``` {r, cache=TRUE}
 options(warn=-1)
@@ -647,7 +647,7 @@ options(warn=0)
 ```
 
 *** 
-###Highcharter
+## Highcharter
  
  Highcharter je R omotač za  Highcharts JavaScript bibiloteku.  Paket koristi sintaksu nalik na ggplot2, uključujući opcije za rukovanje dugim i opširnim podacima. 
 Postoje funkcije čije ponašanje je slično funkcijama ggplot2 paketa kao, što je hchart, koja radi kao ggplot, zatim hc_add_series radi kao geom_S i
