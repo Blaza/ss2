@@ -17,11 +17,13 @@ df <- data.frame(kolona1 = c(1, 2, 3), kolona2 = c("prvi", "drugi", "treci"))
 df
 ```
 
-Ovako smo dobili dataframe sa dve kolone, od kojih je jedna numeri;ka a druga tekstualna.
+Ovako smo dobili dataframe sa dve kolone, od kojih je jedna numerička a druga tekstualna.
+
 ```{r}
 str(df)
 ```
-R podrazumevano pretvara tekstualne podatke u faktore, to možemo preduprediti ako dodamo argument `stringsAsFactors = FALSE`
+
+R podrazumevano pretvara tekstualne podatke u faktore, to možemo preduprediti ako dodamo argument `stringsAsFactors = FALSE`.
 
 ```{r}
 df <- data.frame(kolona1 = c(1, 2, 3), kolona2 = c("prvi", "drugi", "treci"), stringsAsFactors = FALSE)
@@ -128,7 +130,7 @@ df %>%
 
 Ovime smo videli već primere korišćenja dve funkcije u `dplyr` paketu - `select` i `filter`.
 
-### Učitavanje eksternih podataka
+## Učitavanje eksternih podataka
 
 Prikažimo mogućnosti paketa `dplyr` kroz istraživanje podataka o životnom veku u državama, poteklih od Svetske zdravstvene organizacije. Podaci koje ćemo posmatrati su dostupni na https://www.kaggle.com/kumarajarshi/life-expectancy-who.
 
@@ -159,7 +161,7 @@ Sumarne podatke po kolonama vidimo ugradjenom funkcijom `summary`.
 summary(who_data)
 ```
 
-### Osnovne funkcije paketa `dplyr`
+## Osnovne funkcije paketa `dplyr`
 
 Proći ćemo nekoliko primera osnovnih funkcija iz paketa. Najviše ćemo koristiti podatke iz paketa `nycflights13`, pa ga učitavamo
 
@@ -169,7 +171,7 @@ library(nycflights13)
 
 Prelazimo na pregled funkcija.
 
-#### `select` - odabir kolona
+### `select` - odabir kolona
 
 Sa ovom funkcijom smo se već susreli i nećemo dužiti. Ona služi da iz tabele koja ima mnogo kolona odaberemo samo one koje su nam od interesa, radi lakšeg pregleda.
 
@@ -180,7 +182,7 @@ flights %>%
   select(year, month, day, origin, dest)
 ```
 
-#### `filter` - Filtriranje redova
+### `filter` - Filtriranje redova
 
 Ova funkcija služi za odabir odgovarajućih vrsta tabele, tj. opservacija, na osnovu željenih kriterijuma.
 
@@ -219,7 +221,7 @@ btv_sea_flights <- flights %>%
 ```
 
 
-#### `arrange` - sortiranje redova
+### `arrange` - sortiranje redova
 
 Često ima smisla sortirati podatke u odnosu na neku kolonu prilikom istraživanja podataka. Paket `dplyr` nam daje jednostavan način za to kroz funkciju `arrange`. Par jednostavnih primera sledi.
 
@@ -267,7 +269,7 @@ flights %>%
   select(tailnum, month, day, air_time)
 ```
 
-#### `mutate` - dodavanje nove kolone
+### `mutate` - dodavanje nove kolone
 
 Ovom funkcijom možemo da napravimo nove kolone koristeći postojeće. Na primer, možemo da vršimo konverziju iz Farenhajta u Celzijus.
 
@@ -330,7 +332,7 @@ Specijalan slučaj `mutate` naredbe je `rename` koju koristimo za preimenovanje 
 weather %>% rename(temp_C = celsius)
 ```
 
-#### `summarise` - sumarne statistike
+### `summarise` - sumarne statistike
 
 Ova, jedna od korisnijih funkcija, služi za računanje neke statistike nad podacima. Podaci mogu biti i grupisani, što ćemo videti kasnije. Za početak, vidimo neki prosti primer.
 
@@ -369,4 +371,217 @@ Vidimo poklapanje sa `summary`.
 summary(no_na_flights$air_time)
 ```
 
+### `group_by` - grupisanje opservacija
 
+Često je potrebno, posebno za sumarizavije, da grupišemo podatke u odnosu na neku promenljivu, da bismo videli svojstva odgovarajućih grupa. Na primer, možda želimo da vidimo prosečnu temperaturu po mesecima iz skupa podataka `weather`, umesto sveukupnog proseka temperature u celoj tabeli. To radimo uz pomoć funkcije `group_by`.
+
+```{r}
+library(nycflights13)
+library(dplyr)
+weather %>%
+  group_by(month) %>%
+  summarise(mean_temp = mean(temp, na.rm = TRUE),
+            stdev_temp = sd(temp, na.rm = TRUE))
+  
+```
+
+Ovo naravno možemo i prikazati grafiički pomoću bar plota.
+
+```{r}
+library(ggplot2)
+weather %>%
+  group_by(month) %>%
+  summarise(mean_temp = mean(temp, na.rm = TRUE),
+            stdev_temp = sd(temp, na.rm = TRUE)) %>%
+  ggplot(aes(x = month, y = mean_temp)) + geom_col()
+```
+
+Analizirajmo malo dijamante. U `ggplot2` paketu postoji skup podataka `diamonds`.
+
+```{r}
+diamonds
+glimpse(diamonds)
+```
+
+Pogledajmo cenu u zavisnosti kvaliteta (promenljiva `cut`)
+
+```{r}
+diamonds %>%
+  group_by(cut) %>%
+  summarise(avg_price = mean(price))
+```
+
+Pogledajmo malo kako radi `group_by`. Ideja je da od originalnog dataframe-a napravi grupisani dataframe kod koga se operacije primenjuju na svaku grupu ponaosob, umesto kolektivno na celu tabelu.
+
+```{r}
+diamonds_by_cut <- diamonds %>% group_by(cut)
+diamonds_by_cut
+```
+
+Ovaj dataframe je u suštini isti kao ranije, samo što je naznačeno da se grupiše po promenljivoj `cut`.
+Svaka operacija se sada na ovaj dataframe primenjuje na svaku grupu, npr, da vidimo broj elemenata:
+```{r}
+# grupisano
+diamonds_by_cut %>%
+  summarise(n())
+# negrupisano
+diamonds %>% # moze i ungroup(diamonds_by_cut)
+  summarise(n())
+```
+
+Nisu sumarizacije jedina opcija. Možemo i odabrati podatak kod koga je najveća cena u svakoj grupi.
+
+```{r}
+diamonds_by_cut %>%
+  filter(price == max(price))
+```
+
+Primetimo, ovde biramo celu vrstu, ne gledamo samo koliki je maksimum.
+
+Dakle, možemo i filtrirati po grupama. Uzmimo iz svake grupe 0.0001% najskupljih.
+```{r}
+diamonds_by_cut %>%
+  filter(price > quantile(price, 0.9999)) %>%
+  arrange(cut)
+```
+Vidimo da ovo nije isto kao negrupisani poziv, gde su `"Fair"` i `"Good"` kvaliteti izostavljeni.
+```{r}
+ungroup(diamonds_by_cut) %>%
+  filter(price > quantile(price, 0.9999)) %>%
+  arrange(cut)
+```
+
+Bolje od kvantila je da koristimo funkciju `top_n`, za top 2 najskuplja po kvalitetu
+
+```{r}
+diamonds_by_cut %>%
+  top_n(2, price) %>%
+  arrange(cut)
+```
+
+Poput sortiranja, i grupisanje se može vršiti po više promenljivih. Na primer, da se vratimo na naše avione, možemo da proverimo koliko je letova bilo u svakom mesecu, ali i njih da grupišemo po aerodromima sa kog su poleteli.
+
+```{r}
+flights %>%
+  group_by(origin, month) %>%
+  summarise(count = n())
+```
+
+Možemo i izdvojiti 3 najprometnija meseca za svaki aerodrom. 
+
+```{r}
+flights %>%
+  group_by(origin, month) %>%
+  summarise(count = n()) %>%
+  top_n(3, count)
+```
+
+Kako ovo radi? Prilikom prvog poziva `summarise` "skinuli" smo zadnji sloj grupisanja, pa smo dobili dataframe grupisan samo po `origin`, pa na njemu `top_n` radi po grupama za polazni aerordrom. Stoga je bitan redosled grupisanja za ovakve operacije.
+
+### `join` - spajanje tabela
+
+Kada radimo sa dva povezana skupa podataka, nailazićemo na promenljive koje postoje u oba i po kojima bismo mogli ta dva skupa da spojimo u jednu tabelu. Dobar i dosta dublji tutorijal za join operacije je u okviru knjige R for Data Science, na [ovom linku](https://r4ds.had.co.nz/relational-data.html#mutating-joins).
+
+Na primer, ako pogledamo tabele `airlines` i `flights`
+
+```{r}
+airlines
+flights
+```
+
+vidimo da imaju kolonu `carrier` koja označava skraćenicu avio kompanije. Možemo dodati u tabelu flights puno ime avio kompanije koristeći informaciju u tabeli `airlines`:
+
+```{r}
+full_airline <- flights %>%
+  inner_join(airlines, by = "carrier")
+full_airline %>%
+  select(tailnum, carrier, name)
+```
+
+Iskoristili smo funkciju `inner_join` ovaj put. Postoji više `*_join` funkcija u `dplyr` paketu, koje odgovaraju onima iz SQL jezika. Takodje, ova operacija je toliko popularna u SQL-u, da ima svoju adresu: http://www.sql-join.com/ (koja se može koristiti za razumevanje).
+
+Glavna razlika medju `*_join` funkcijama je:
+
+* `inner_join` zadržava samo one redove za koje u obe tabele postoji vrednost, tj. koje je mogao da upari sa redovima iz druge tabele.
+* `left_join` zadržava sve redove iz prve tabele, a tamo gde nema para stavi NA
+* `right_join` zadržava sve redove iz druge tabele
+* `full_join` zadržava sve redove iz obe tabele
+
+Na sledećoj slici vidi se grafički prikaz ovih operacija.
+
+![*Ilustracije raznih join operacija. Preuzeto sa https://r4ds.had.co.nz.*](joins.png){width=50%}
+
+Dakle, kod nas je više smisla imalo koristiti `left_join`, iako je isti rezultat ovaj put.
+
+```{r}
+full_airline <- flights %>%
+  left_join(airlines, by = "carrier")
+```
+
+Pokazaćemo sada na primeru razlike izmedju ovih raznih vrsta join operacije. Koristimo primere preuzete sa uputstva na stranici https://stat545.com/bit001_dplyr-cheatsheet.html.
+
+Prvo kreiramo tabele
+
+```{r}
+library(readr)
+superheroes <- "
+    name, alignment, gender,         publisher
+ Magneto,       bad,   male,            Marvel
+   Storm,      good, female,            Marvel
+Mystique,       bad, female,            Marvel
+  Batman,      good,   male,                DC
+   Joker,       bad,   male,                DC
+Catwoman,       bad, female,                DC
+ Hellboy,      good,   male, Dark Horse Comics
+"
+superheroes <- read_csv(superheroes, skip = 1)
+
+publishers <- "
+  publisher, yr_founded
+         DC,       1934
+     Marvel,       1939
+      Image,       1992
+"
+publishers <- read_csv(publishers, skip = 1)
+```
+
+#### Inner join
+
+Prvo da vidimo inner join
+
+```{r}
+inner_join(superheroes, publishers, by = "publisher")
+```
+
+Vidimo da fali Hellboy, jer Dark Horse Comics nije medju izdavačima u tabeli (a isto nema ni izdavača Image iz tabele izdavača, jer se ne pojavljuje medju herojima).
+
+#### Left join
+
+Kod left join operacije, čuvamo originalnu tabelu u celosti i uparujemo sa drugom gde je moguće
+
+```{r}
+left_join(superheroes, publishers, by = "publisher")
+```
+
+Sada kod Hellboy-a nemamo godinu osnivanja izdavača. jer ne postoji u tabeli.
+
+#### Right join
+
+Pogledajmo right join.
+
+```{r}
+right_join(superheroes, publishers, by = "publisher")
+```
+
+Dodao je jedan red pun NA vrednosti, za izdavača Image, koji nije nadjen u prvoj tabeli. Svrha ove operacije je vrlo upitna, pa se retko i koristi.
+
+#### Full join
+
+Full join prikazuje sve redove i upisuje NA tamo gde nešto fali
+
+```{r}
+full_join(superheroes, publishers, by = "publisher")
+```
+ Dakle imamo uniju left i right joina.
+ 
+ 
