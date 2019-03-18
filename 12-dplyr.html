@@ -212,9 +212,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="12-dplyr.html"><a href="12-dplyr.html"><i class="fa fa-check"></i><b>3</b> Rad sa podacima</a><ul>
 <li class="chapter" data-level="3.1" data-path="12-dplyr.html"><a href="12-dplyr.html#dataframe"><i class="fa fa-check"></i><b>3.1</b> Dataframe</a></li>
-<li class="chapter" data-level="3.2" data-path="12-dplyr.html"><a href="12-dplyr.html#obrada-podataka---dplyr-paket"><i class="fa fa-check"></i><b>3.2</b> Obrada podataka - <code>dplyr</code> paket</a><ul>
-<li class="chapter" data-level="3.2.1" data-path="12-dplyr.html"><a href="12-dplyr.html#ucitavanje-eksternih-podataka"><i class="fa fa-check"></i><b>3.2.1</b> Učitavanje eksternih podataka</a></li>
-<li class="chapter" data-level="3.2.2" data-path="12-dplyr.html"><a href="12-dplyr.html#osnovne-funkcije-paketa-dplyr"><i class="fa fa-check"></i><b>3.2.2</b> Osnovne funkcije paketa <code>dplyr</code></a></li>
+<li class="chapter" data-level="3.2" data-path="12-dplyr.html"><a href="12-dplyr.html#obrada-podataka---dplyr-paket"><i class="fa fa-check"></i><b>3.2</b> Obrada podataka - <code>dplyr</code> paket</a></li>
+<li class="chapter" data-level="3.3" data-path="12-dplyr.html"><a href="12-dplyr.html#ucitavanje-eksternih-podataka"><i class="fa fa-check"></i><b>3.3</b> Učitavanje eksternih podataka</a></li>
+<li class="chapter" data-level="3.4" data-path="12-dplyr.html"><a href="12-dplyr.html#osnovne-funkcije-paketa-dplyr"><i class="fa fa-check"></i><b>3.4</b> Osnovne funkcije paketa <code>dplyr</code></a><ul>
+<li class="chapter" data-level="3.4.1" data-path="12-dplyr.html"><a href="12-dplyr.html#select---odabir-kolona"><i class="fa fa-check"></i><b>3.4.1</b> <code>select</code> - odabir kolona</a></li>
+<li class="chapter" data-level="3.4.2" data-path="12-dplyr.html"><a href="12-dplyr.html#filter---filtriranje-redova"><i class="fa fa-check"></i><b>3.4.2</b> <code>filter</code> - Filtriranje redova</a></li>
+<li class="chapter" data-level="3.4.3" data-path="12-dplyr.html"><a href="12-dplyr.html#arrange---sortiranje-redova"><i class="fa fa-check"></i><b>3.4.3</b> <code>arrange</code> - sortiranje redova</a></li>
+<li class="chapter" data-level="3.4.4" data-path="12-dplyr.html"><a href="12-dplyr.html#mutate---dodavanje-nove-kolone"><i class="fa fa-check"></i><b>3.4.4</b> <code>mutate</code> - dodavanje nove kolone</a></li>
+<li class="chapter" data-level="3.4.5" data-path="12-dplyr.html"><a href="12-dplyr.html#summarise---sumarne-statistike"><i class="fa fa-check"></i><b>3.4.5</b> <code>summarise</code> - sumarne statistike</a></li>
+<li class="chapter" data-level="3.4.6" data-path="12-dplyr.html"><a href="12-dplyr.html#group_by---grupisanje-opservacija"><i class="fa fa-check"></i><b>3.4.6</b> <code>group_by</code> - grupisanje opservacija</a></li>
+<li class="chapter" data-level="3.4.7" data-path="12-dplyr.html"><a href="12-dplyr.html#join---spajanje-tabela"><i class="fa fa-check"></i><b>3.4.7</b> <code>join</code> - spajanje tabela</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -247,12 +254,12 @@ df</code></pre>
 ## 1       1    prvi
 ## 2       2   drugi
 ## 3       3   treci</code></pre>
-<p>Ovako smo dobili dataframe sa dve kolone, od kojih je jedna numeri;ka a druga tekstualna.</p>
+<p>Ovako smo dobili dataframe sa dve kolone, od kojih je jedna numerička a druga tekstualna.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">str</span>(df)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    3 obs. of  2 variables:
 ##  $ kolona1: num  1 2 3
 ##  $ kolona2: Factor w/ 3 levels &quot;drugi&quot;,&quot;prvi&quot;,..: 2 1 3</code></pre>
-<p>R podrazumevano pretvara tekstualne podatke u faktore, to možemo preduprediti ako dodamo argument <code>stringsAsFactors = FALSE</code></p>
+<p>R podrazumevano pretvara tekstualne podatke u faktore, to možemo preduprediti ako dodamo argument <code>stringsAsFactors = FALSE</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">kolona1 =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>), <span class="dt">kolona2 =</span> <span class="kw">c</span>(<span class="st">&quot;prvi&quot;</span>, <span class="st">&quot;drugi&quot;</span>, <span class="st">&quot;treci&quot;</span>), <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
 <span class="kw">str</span>(df)</code></pre>
 <pre><code>## &#39;data.frame&#39;:    3 obs. of  2 variables:
@@ -385,92 +392,93 @@ df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">selec
 ## 1       2   drugi
 ## 2       3   treci</code></pre>
 <p>Ovime smo videli već primere korišćenja dve funkcije u <code>dplyr</code> paketu - <code>select</code> i <code>filter</code>.</p>
-<div id="ucitavanje-eksternih-podataka" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> Učitavanje eksternih podataka</h3>
+</div>
+<div id="ucitavanje-eksternih-podataka" class="section level2">
+<h2><span class="header-section-number">3.3</span> Učitavanje eksternih podataka</h2>
 <p>Prikažimo mogućnosti paketa <code>dplyr</code> kroz istraživanje podataka o životnom veku u državama, poteklih od Svetske zdravstvene organizacije. Podaci koje ćemo posmatrati su dostupni na <a href="https://www.kaggle.com/kumarajarshi/life-expectancy-who" class="uri">https://www.kaggle.com/kumarajarshi/life-expectancy-who</a>.</p>
 <p>Kada preuzmemo podatke, učitavamo ih funkcijom <code>read.csv</code>:</p>
 <pre class="sourceCode r"><code class="sourceCode r">who_data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Life Expectancy Data.csv&quot;</span>)
 who_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">15</span>) <span class="co"># stampamo 15 slucajno izabranih</span></code></pre>
-<pre><code>##                     Country Year     Status Life.expectancy
-## 1     Sao Tome and Principe 2010 Developing            66.2
-## 2                 Mauritius 2006 Developing            71.8
-## 3                   Senegal 2012 Developing            65.6
-## 4                Azerbaijan 2002 Developing            67.8
-## 5                  Slovenia 2011  Developed            79.8
-## 6                  Maldives 2014 Developing            78.2
-## 7                   Estonia 2005 Developing            72.8
-## 8             Côte d&#39;Ivoire 2000 Developing            47.9
-## 9  Central African Republic 2003 Developing            45.7
-## 10                   Guyana 2008 Developing            66.3
-## 11                Swaziland 2008 Developing            51.4
-## 12                  Myanmar 2007 Developing            64.5
-## 13                 Cameroon 2015 Developing            57.3
-## 14                Australia 2001  Developed            79.9
-## 15                   Gambia 2012 Developing            62.0
+<pre><code>##                               Country Year     Status Life.expectancy
+## 1                             Belgium 2012  Developed            83.0
+## 2                              Angola 2001 Developing            45.7
+## 3                             Czechia 2009  Developed            77.1
+## 4  Venezuela (Bolivarian Republic of) 2003 Developing            72.4
+## 5                              Rwanda 2010 Developing            62.8
+## 6                           Guatemala 2009 Developing            76.0
+## 7                            Portugal 2015  Developed            81.1
+## 8                Syrian Arab Republic 2009 Developing            73.8
+## 9                          Uzbekistan 2014 Developing            69.2
+## 10                             Uganda 2007 Developing            55.5
+## 11                           Suriname 2011 Developing            76.0
+## 12                       Burkina Faso 2008 Developing            56.1
+## 13                             Cyprus 2008  Developed            79.1
+## 14                              Sudan 2001 Developing            58.9
+## 15                          Singapore 2013  Developed            82.7
 ##    Adult.Mortality infant.deaths Alcohol percentage.expenditure
-## 1               24             0    5.58             63.0403268
-## 2              165             0    3.73            502.3844946
-## 3                2            20    0.28             10.2065946
-## 4              146             7    0.55             39.3325369
-## 5               84             0   10.61           3343.0262190
-## 6               62             0    0.01           2051.7486150
-## 7              189             0   15.52            153.5045263
-## 8              461            67    3.45              0.0000000
-## 9               51            17    1.49             46.1161944
-## 10             218             1    7.32            493.3279293
-## 11             477             3    4.87            413.0063027
-## 12             217            58    0.26              0.5305728
-## 13             357            45      NA              0.0000000
-## 14              75             1    9.53           3064.3011440
-## 15             269             3    0.01              0.0000000
+## 1               78             0   10.08            664.4738975
+## 2               44            97    2.58             30.3599365
+## 3               12             0   13.23              0.0000000
+## 4              172            10    6.30              0.0000000
+## 5               26            16    7.92             63.7872363
+## 6              198            12    2.14            445.4423371
+## 7               76             0      NA              0.0000000
+## 8              124             7    0.81              0.0000000
+## 9              184            16    0.01              0.4428024
+## 10              41            88    9.65              6.0025277
+## 11             187             0    5.64            989.1263558
+## 12             288            45    4.50            107.7988339
+## 13              62             0   12.01            239.6409938
+## 14             283            71    1.81             28.8806966
+## 15              57             0    1.83            714.3441019
 ##    Hepatitis.B Measles  BMI under.five.deaths Polio Total.expenditure
-## 1           98       0 26.9                 0    98              5.24
-## 2           97       3 28.6                 0    98              4.38
-## 3           91      46 22.7                29    83              4.31
-## 4            5    4353 43.1                 9     8              4.47
-## 5           NA      22 57.6                 0    96              9.80
-## 6           99       0 26.2                 0    99             13.73
-## 7           95       2 55.5                 0    96              5.20
-## 8           NA    5729 19.4                95    66              6.00
-## 9           NA     652 17.5                26    44              4.31
-## 10          93       0  4.9                 1    93              7.46
-## 11           9       1 28.9                 4    89              8.19
-## 12          85    1088 17.6                78    84              1.68
-## 13          84    1809 29.0                68    83                NA
-## 14          94     141 59.0                 2    91              8.18
-## 15          98       0 25.4                 5    98              6.12
+## 1           98     109 62.6                 1    99              1.54
+## 2           NA    9046 15.8               159    41              5.38
+## 3           99       5 63.1                 0    99              7.85
+## 4           72       0 55.3                12    86              4.93
+## 5           97     121 18.3                23    93              7.91
+## 6           92       0 46.5                15    92              6.79
+## 7           98       8 61.6                 0    98                NA
+## 8           84      22 51.3                 9    83              3.55
+## 9           99       8 43.9                18    99              5.84
+## 10          73    3776 15.2               137     7              9.76
+## 11          86       0 55.5                 0    86              5.93
+## 12          93     395 15.6                80    92              6.77
+## 13          93       1 56.8                 0    97              6.89
+## 14          NA    4362   NA               108    66              2.96
+## 15          97     138 32.7                 0    97              4.53
 ##    Diphtheria HIV.AIDS        GDP Population thinness..1.19.years
-## 1          98      0.5  1129.7550     174776                  6.1
-## 2          97      0.1  5695.9693    1233996                  7.6
-## 3          91      0.4   136.4518    1373513                  1.0
-## 4          76      0.1   763.7386     817195                  3.1
-## 5          96      0.1 24985.2483     252843                  1.6
-## 6          99      0.1  7716.2415         41                 13.6
-## 7          96      0.1  1338.3132    1354775                  2.1
-## 8          65      7.1         NA         NA                  8.1
-## 9          47     12.8   286.2582    3981665                  1.0
-## 10         93      0.8  2576.1250     746314                  5.6
-## 11         88     40.2  2842.4384    1158897                  6.1
-## 12         86      0.6    41.4510   49171586                 13.2
-## 13         84      3.5  1244.4294   22834522                  5.6
-## 14         92      0.1 19517.8417      19413                  0.7
-## 15         98      1.4         NA         NA                  7.8
+## 1          99      0.1 4474.57170   11128246                  0.9
+## 2          38      2.1  526.16874   16983266                  1.7
+## 3          99      0.1         NA         NA                  1.9
+## 4          68      0.1         NA         NA                  1.7
+## 5          97      2.3  563.49149    1246842                  6.5
+## 6          92      0.4 2635.75347    1431628                  1.3
+## 7          98      0.1 1922.68100     135876                  0.7
+## 8           8      0.1         NA    2824893                  6.4
+## 9          99      0.1   25.44841      37577                  3.0
+## 10         73      8.4   41.85863     359487                  6.3
+## 11         86      0.1 8318.97692     531589                  3.5
+## 12         93      1.5  569.76128   14689726                  9.5
+## 13         97      0.1 3539.74880     181563                  0.9
+## 14         66      0.2  377.52545     279455                   NA
+## 15         97      0.1 5629.18914         NA                  2.2
 ##    thinness.5.9.years Income.composition.of.resources Schooling
-## 1                 6.0                           0.542      10.6
-## 2                 7.5                           0.713      13.4
-## 3                 9.9                           0.463       8.3
-## 4                 3.1                           0.651      10.6
-## 5                 1.6                           0.876      17.0
-## 6                13.7                           0.693      12.7
-## 7                 2.2                           0.812      15.9
-## 8                 8.1                              NA        NA
-## 9                 1.1                           0.316       5.6
-## 10                5.4                           0.618      10.7
-## 11                6.3                           0.514      10.6
-## 12               13.5                           0.484       8.1
-## 13                5.5                           0.514      10.4
-## 14                0.7                           0.899      20.5
-## 15                7.7                           0.440       8.8</code></pre>
+## 1                 0.9                           0.886      16.2
+## 2                 1.7                           0.391       5.1
+## 3                 2.0                              NA        NA
+## 4                 1.6                           0.688      11.6
+## 5                 6.3                           0.454      10.0
+## 6                 1.3                           0.596      10.4
+## 7                 0.5                           0.841      16.6
+## 8                 6.2                           0.648      11.8
+## 9                 3.1                           0.690      12.1
+## 10                6.3                           0.442      10.3
+## 11                3.4                           0.704      12.5
+## 12                9.1                           0.345       5.4
+## 13                1.0                           0.844      13.7
+## 14                 NA                           0.399       5.6
+## 15                2.2                           0.920      15.4</code></pre>
 <p>Paket <code>dplyr</code> koristi malo bogatiju strukturu umesto dataframe-a za tabelarne podatke, a to je tibble. Podatke pretvaramo u taj format na sledeći način:</p>
 <pre class="sourceCode r"><code class="sourceCode r">who_data &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(who_data)
 who_data</code></pre>
@@ -580,13 +588,13 @@ who_data</code></pre>
 ##  Max.   :20.70  
 ##  NA&#39;s   :163</code></pre>
 </div>
-<div id="osnovne-funkcije-paketa-dplyr" class="section level3">
-<h3><span class="header-section-number">3.2.2</span> Osnovne funkcije paketa <code>dplyr</code></h3>
+<div id="osnovne-funkcije-paketa-dplyr" class="section level2">
+<h2><span class="header-section-number">3.4</span> Osnovne funkcije paketa <code>dplyr</code></h2>
 <p>Proći ćemo nekoliko primera osnovnih funkcija iz paketa. Najviše ćemo koristiti podatke iz paketa <code>nycflights13</code>, pa ga učitavamo</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nycflights13)</code></pre>
 <p>Prelazimo na pregled funkcija.</p>
-<div id="select---odabir-kolona" class="section level4">
-<h4><span class="header-section-number">3.2.2.1</span> <code>select</code> - odabir kolona</h4>
+<div id="select---odabir-kolona" class="section level3">
+<h3><span class="header-section-number">3.4.1</span> <code>select</code> - odabir kolona</h3>
 <p>Sa ovom funkcijom smo se već susreli i nećemo dužiti. Ona služi da iz tabele koja ima mnogo kolona odaberemo samo one koje su nam od interesa, radi lakšeg pregleda.</p>
 <p>Odaberimo iz baze <code>flights</code> samo kolone godina, mesec, dan, polazipte i destinacija.</p>
 <pre class="sourceCode r"><code class="sourceCode r">flights <span class="op">%&gt;%</span>
@@ -606,8 +614,8 @@ who_data</code></pre>
 ## 10  2013     1     1 LGA    ORD  
 ## # … with 336,766 more rows</code></pre>
 </div>
-<div id="filter---filtriranje-redova" class="section level4">
-<h4><span class="header-section-number">3.2.2.2</span> <code>filter</code> - Filtriranje redova</h4>
+<div id="filter---filtriranje-redova" class="section level3">
+<h3><span class="header-section-number">3.4.2</span> <code>filter</code> - Filtriranje redova</h3>
 <p>Ova funkcija služi za odabir odgovarajućih vrsta tabele, tj. opservacija, na osnovu željenih kriterijuma.</p>
 <p>Kao primer, možemo da izdvojimo iz baze letova one letove koji idu ka Portlandu, sa kodom aerodroma <code>&quot;PDX&quot;</code>.</p>
 <pre class="sourceCode r"><code class="sourceCode r">portland_flights &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span>
@@ -643,8 +651,8 @@ who_data</code></pre>
 <span class="st">  </span><span class="kw">filter</span>(origin <span class="op">==</span><span class="st"> &quot;JFK&quot;</span>, (dest <span class="op">==</span><span class="st"> &quot;BTV&quot;</span> <span class="op">|</span><span class="st"> </span>dest <span class="op">==</span><span class="st"> &quot;SEA&quot;</span>), month <span class="op">&gt;=</span><span class="st"> </span><span class="dv">10</span>)
 <span class="co">#View(btv_sea_flights)</span></code></pre>
 </div>
-<div id="arrange---sortiranje-redova" class="section level4">
-<h4><span class="header-section-number">3.2.2.3</span> <code>arrange</code> - sortiranje redova</h4>
+<div id="arrange---sortiranje-redova" class="section level3">
+<h3><span class="header-section-number">3.4.3</span> <code>arrange</code> - sortiranje redova</h3>
 <p>Često ima smisla sortirati podatke u odnosu na neku kolonu prilikom istraživanja podataka. Paket <code>dplyr</code> nam daje jednostavan način za to kroz funkciju <code>arrange</code>. Par jednostavnih primera sledi.</p>
 <p>Sortirajmo letove po trajanju leta rastuće…</p>
 <pre class="sourceCode r"><code class="sourceCode r">flights <span class="op">%&gt;%</span>
@@ -739,8 +747,8 @@ subflights <span class="op">%&gt;%</span>
 ## 10 N206JB     12    31       33
 ## # … with 336,766 more rows</code></pre>
 </div>
-<div id="mutate---dodavanje-nove-kolone" class="section level4">
-<h4><span class="header-section-number">3.2.2.4</span> <code>mutate</code> - dodavanje nove kolone</h4>
+<div id="mutate---dodavanje-nove-kolone" class="section level3">
+<h3><span class="header-section-number">3.4.4</span> <code>mutate</code> - dodavanje nove kolone</h3>
 <p>Ovom funkcijom možemo da napravimo nove kolone koristeći postojeće. Na primer, možemo da vršimo konverziju iz Farenhajta u Celzijus.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># ovako smo ranije</span>
 <span class="co"># weather$celsius &lt;- (weather$temp - 32) * 5 / 9</span>
@@ -835,8 +843,8 @@ flights <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">
 ## #   precip &lt;dbl&gt;, pressure &lt;dbl&gt;, visib &lt;dbl&gt;, time_hour &lt;dttm&gt;,
 ## #   temp_C &lt;dbl&gt;</code></pre>
 </div>
-<div id="summarise---sumarne-statistike" class="section level4">
-<h4><span class="header-section-number">3.2.2.5</span> <code>summarise</code> - sumarne statistike</h4>
+<div id="summarise---sumarne-statistike" class="section level3">
+<h3><span class="header-section-number">3.4.5</span> <code>summarise</code> - sumarne statistike</h3>
 <p>Ova, jedna od korisnijih funkcija, služi za računanje neke statistike nad podacima. Podaci mogu biti i grupisani, što ćemo videti kasnije. Za početak, vidimo neki prosti primer.</p>
 <p>Prosečno vreme trajanja letova dobijamo ovako:</p>
 <pre class="sourceCode r"><code class="sourceCode r">flights <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="kw">mean</span>(air_time))</code></pre>
@@ -872,6 +880,381 @@ no_na_flights <span class="op">%&gt;%</span>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(no_na_flights<span class="op">$</span>air_time)</code></pre>
 <pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##    20.0    82.0   129.0   150.7   192.0   695.0</code></pre>
+</div>
+<div id="group_by---grupisanje-opservacija" class="section level3">
+<h3><span class="header-section-number">3.4.6</span> <code>group_by</code> - grupisanje opservacija</h3>
+<p>Često je potrebno, posebno za sumarizavije, da grupišemo podatke u odnosu na neku promenljivu, da bismo videli svojstva odgovarajućih grupa. Na primer, možda želimo da vidimo prosečnu temperaturu po mesecima iz skupa podataka <code>weather</code>, umesto sveukupnog proseka temperature u celoj tabeli. To radimo uz pomoć funkcije <code>group_by</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nycflights13)
+<span class="kw">library</span>(dplyr)
+weather <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean_temp =</span> <span class="kw">mean</span>(temp, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
+            <span class="dt">stdev_temp =</span> <span class="kw">sd</span>(temp, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</code></pre>
+<pre><code>## # A tibble: 12 x 3
+##    month mean_temp stdev_temp
+##    &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+##  1     1      35.6      10.2 
+##  2     2      34.3       6.98
+##  3     3      39.9       6.25
+##  4     4      51.7       8.79
+##  5     5      61.8       9.68
+##  6     6      72.2       7.55
+##  7     7      80.1       7.12
+##  8     8      74.5       5.19
+##  9     9      67.4       8.47
+## 10    10      60.1       8.85
+## 11    11      45.0      10.4 
+## 12    12      38.4       9.98</code></pre>
+<p>Ovo naravno možemo i prikazati grafiički pomoću bar plota.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+weather <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(month) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean_temp =</span> <span class="kw">mean</span>(temp, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
+            <span class="dt">stdev_temp =</span> <span class="kw">sd</span>(temp, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month, <span class="dt">y =</span> mean_temp)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_col</span>()</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-104-1.png" width="672" /></p>
+<p>Analizirajmo malo dijamante. U <code>ggplot2</code> paketu postoji skup podataka <code>diamonds</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">diamonds</code></pre>
+<pre><code>## # A tibble: 53,940 x 10
+##    carat cut       color clarity depth table price     x     y     z
+##    &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 0.23  Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+##  2 0.21  Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+##  3 0.23  Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+##  4 0.290 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+##  5 0.31  Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+##  6 0.24  Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+##  7 0.24  Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+##  8 0.26  Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+##  9 0.22  Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+## 10 0.23  Very Good H     VS1      59.4    61   338  4     4.05  2.39
+## # … with 53,930 more rows</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glimpse</span>(diamonds)</code></pre>
+<pre><code>## Observations: 53,940
+## Variables: 10
+## $ carat   &lt;dbl&gt; 0.23, 0.21, 0.23, 0.29, 0.31, 0.24, 0.24, 0.26, 0.22, 0.…
+## $ cut     &lt;ord&gt; Ideal, Premium, Good, Premium, Good, Very Good, Very Goo…
+## $ color   &lt;ord&gt; E, E, E, I, J, J, I, H, E, H, J, J, F, J, E, E, I, J, J,…
+## $ clarity &lt;ord&gt; SI2, SI1, VS1, VS2, SI2, VVS2, VVS1, SI1, VS2, VS1, SI1,…
+## $ depth   &lt;dbl&gt; 61.5, 59.8, 56.9, 62.4, 63.3, 62.8, 62.3, 61.9, 65.1, 59…
+## $ table   &lt;dbl&gt; 55, 61, 65, 58, 58, 57, 57, 55, 61, 61, 55, 56, 61, 54, …
+## $ price   &lt;int&gt; 326, 326, 327, 334, 335, 336, 336, 337, 337, 338, 339, 3…
+## $ x       &lt;dbl&gt; 3.95, 3.89, 4.05, 4.20, 4.34, 3.94, 3.95, 4.07, 3.87, 4.…
+## $ y       &lt;dbl&gt; 3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78, 4.…
+## $ z       &lt;dbl&gt; 2.43, 2.31, 2.31, 2.63, 2.75, 2.48, 2.47, 2.53, 2.49, 2.…</code></pre>
+<p>Pogledajmo cenu u zavisnosti kvaliteta (promenljiva <code>cut</code>)</p>
+<pre class="sourceCode r"><code class="sourceCode r">diamonds <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(cut) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">avg_price =</span> <span class="kw">mean</span>(price))</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   cut       avg_price
+##   &lt;ord&gt;         &lt;dbl&gt;
+## 1 Fair          4359.
+## 2 Good          3929.
+## 3 Very Good     3982.
+## 4 Premium       4584.
+## 5 Ideal         3458.</code></pre>
+<p>Pogledajmo malo kako radi <code>group_by</code>. Ideja je da od originalnog dataframe-a napravi grupisani dataframe kod koga se operacije primenjuju na svaku grupu ponaosob, umesto kolektivno na celu tabelu.</p>
+<pre class="sourceCode r"><code class="sourceCode r">diamonds_by_cut &lt;-<span class="st"> </span>diamonds <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(cut)
+diamonds_by_cut</code></pre>
+<pre><code>## # A tibble: 53,940 x 10
+## # Groups:   cut [5]
+##    carat cut       color clarity depth table price     x     y     z
+##    &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1 0.23  Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+##  2 0.21  Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+##  3 0.23  Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+##  4 0.290 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+##  5 0.31  Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+##  6 0.24  Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+##  7 0.24  Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+##  8 0.26  Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+##  9 0.22  Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+## 10 0.23  Very Good H     VS1      59.4    61   338  4     4.05  2.39
+## # … with 53,930 more rows</code></pre>
+<p>Ovaj dataframe je u suštini isti kao ranije, samo što je naznačeno da se grupiše po promenljivoj <code>cut</code>.
+Svaka operacija se sada na ovaj dataframe primenjuje na svaku grupu, npr, da vidimo broj elemenata:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># grupisano</span>
+diamonds_by_cut <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="kw">n</span>())</code></pre>
+<pre><code>## # A tibble: 5 x 2
+##   cut       `n()`
+##   &lt;ord&gt;     &lt;int&gt;
+## 1 Fair       1610
+## 2 Good       4906
+## 3 Very Good 12082
+## 4 Premium   13791
+## 5 Ideal     21551</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># negrupisano</span>
+diamonds <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># moze i ungroup(diamonds_by_cut)</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="kw">n</span>())</code></pre>
+<pre><code>## # A tibble: 1 x 1
+##   `n()`
+##   &lt;int&gt;
+## 1 53940</code></pre>
+<p>Nisu sumarizacije jedina opcija. Možemo i odabrati podatak kod koga je najveća cena u svakoj grupi.</p>
+<pre class="sourceCode r"><code class="sourceCode r">diamonds_by_cut <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(price <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(price))</code></pre>
+<pre><code>## # A tibble: 5 x 10
+## # Groups:   cut [5]
+##   carat cut       color clarity depth table price     x     y     z
+##   &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  2.01 Fair      G     SI1      70.6    64 18574  7.43  6.64  4.69
+## 2  2.8  Good      G     SI2      63.8    58 18788  8.9   8.85  0   
+## 3  1.51 Ideal     G     IF       61.7    55 18806  7.37  7.41  4.56
+## 4  2    Very Good G     SI1      63.5    56 18818  7.9   7.97  5.04
+## 5  2.29 Premium   I     VS2      60.8    60 18823  8.5   8.47  5.16</code></pre>
+<p>Primetimo, ovde biramo celu vrstu, ne gledamo samo koliki je maksimum.</p>
+<p>Dakle, možemo i filtrirati po grupama. Uzmimo iz svake grupe 0.0001% najskupljih.</p>
+<pre class="sourceCode r"><code class="sourceCode r">diamonds_by_cut <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(price <span class="op">&gt;</span><span class="st"> </span><span class="kw">quantile</span>(price, <span class="fl">0.9999</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">arrange</span>(cut)</code></pre>
+<pre><code>## # A tibble: 9 x 10
+## # Groups:   cut [5]
+##   carat cut       color clarity depth table price     x     y     z
+##   &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  2.01 Fair      G     SI1      70.6    64 18574  7.43  6.64  4.69
+## 2  2.8  Good      G     SI2      63.8    58 18788  8.9   8.85  0   
+## 3  2    Very Good H     SI1      62.8    57 18803  7.95  8     5.01
+## 4  2    Very Good G     SI1      63.5    56 18818  7.9   7.97  5.04
+## 5  2.29 Premium   I     SI1      61.8    59 18797  8.52  8.45  5.24
+## 6  2.29 Premium   I     VS2      60.8    60 18823  8.5   8.47  5.16
+## 7  2.15 Ideal     G     SI2      62.6    54 18791  8.29  8.35  5.21
+## 8  2.07 Ideal     G     SI2      62.5    55 18804  8.2   8.13  5.11
+## 9  1.51 Ideal     G     IF       61.7    55 18806  7.37  7.41  4.56</code></pre>
+<p>Vidimo da ovo nije isto kao negrupisani poziv, gde su <code>&quot;Fair&quot;</code> i <code>&quot;Good&quot;</code> kvaliteti izostavljeni.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ungroup</span>(diamonds_by_cut) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(price <span class="op">&gt;</span><span class="st"> </span><span class="kw">quantile</span>(price, <span class="fl">0.9999</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">arrange</span>(cut)</code></pre>
+<pre><code>## # A tibble: 6 x 10
+##   carat cut       color clarity depth table price     x     y     z
+##   &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  2    Very Good H     SI1      62.8    57 18803  7.95  8     5.01
+## 2  2    Very Good G     SI1      63.5    56 18818  7.9   7.97  5.04
+## 3  2.29 Premium   I     SI1      61.8    59 18797  8.52  8.45  5.24
+## 4  2.29 Premium   I     VS2      60.8    60 18823  8.5   8.47  5.16
+## 5  2.07 Ideal     G     SI2      62.5    55 18804  8.2   8.13  5.11
+## 6  1.51 Ideal     G     IF       61.7    55 18806  7.37  7.41  4.56</code></pre>
+<p>Bolje od kvantila je da koristimo funkciju <code>top_n</code>, za top 2 najskuplja po kvalitetu</p>
+<pre class="sourceCode r"><code class="sourceCode r">diamonds_by_cut <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">2</span>, price) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">arrange</span>(cut)</code></pre>
+<pre><code>## # A tibble: 10 x 10
+## # Groups:   cut [5]
+##    carat cut       color clarity depth table price     x     y     z
+##    &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+##  1  2.02 Fair      H     VS2      64.5    57 18565  8     7.95  5.14
+##  2  2.01 Fair      G     SI1      70.6    64 18574  7.43  6.64  4.69
+##  3  2.07 Good      I     VS2      61.8    61 18707  8.12  8.16  5.03
+##  4  2.8  Good      G     SI2      63.8    58 18788  8.9   8.85  0   
+##  5  2    Very Good H     SI1      62.8    57 18803  7.95  8     5.01
+##  6  2    Very Good G     SI1      63.5    56 18818  7.9   7.97  5.04
+##  7  2.29 Premium   I     SI1      61.8    59 18797  8.52  8.45  5.24
+##  8  2.29 Premium   I     VS2      60.8    60 18823  8.5   8.47  5.16
+##  9  2.07 Ideal     G     SI2      62.5    55 18804  8.2   8.13  5.11
+## 10  1.51 Ideal     G     IF       61.7    55 18806  7.37  7.41  4.56</code></pre>
+<p>Poput sortiranja, i grupisanje se može vršiti po više promenljivih. Na primer, da se vratimo na naše avione, možemo da proverimo koliko je letova bilo u svakom mesecu, ali i njih da grupišemo po aerodromima sa kog su poleteli.</p>
+<pre class="sourceCode r"><code class="sourceCode r">flights <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(origin, month) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">count =</span> <span class="kw">n</span>())</code></pre>
+<pre><code>## # A tibble: 36 x 3
+## # Groups:   origin [3]
+##    origin month count
+##    &lt;chr&gt;  &lt;int&gt; &lt;int&gt;
+##  1 EWR        1  9893
+##  2 EWR        2  9107
+##  3 EWR        3 10420
+##  4 EWR        4 10531
+##  5 EWR        5 10592
+##  6 EWR        6 10175
+##  7 EWR        7 10475
+##  8 EWR        8 10359
+##  9 EWR        9  9550
+## 10 EWR       10 10104
+## # … with 26 more rows</code></pre>
+<p>Možemo i izdvojiti 3 najprometnija meseca za svaki aerodrom.</p>
+<pre class="sourceCode r"><code class="sourceCode r">flights <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(origin, month) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">count =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">top_n</span>(<span class="dv">3</span>, count)</code></pre>
+<pre><code>## # A tibble: 9 x 3
+## # Groups:   origin [3]
+##   origin month count
+##   &lt;chr&gt;  &lt;int&gt; &lt;int&gt;
+## 1 EWR        4 10531
+## 2 EWR        5 10592
+## 3 EWR        7 10475
+## 4 JFK        3  9697
+## 5 JFK        7 10023
+## 6 JFK        8  9983
+## 7 LGA        9  9116
+## 8 LGA       10  9642
+## 9 LGA       12  9067</code></pre>
+<p>Kako ovo radi? Prilikom prvog poziva <code>summarise</code> “skinuli” smo zadnji sloj grupisanja, pa smo dobili dataframe grupisan samo po <code>origin</code>, pa na njemu <code>top_n</code> radi po grupama za polazni aerordrom. Stoga je bitan redosled grupisanja za ovakve operacije.</p>
+</div>
+<div id="join---spajanje-tabela" class="section level3">
+<h3><span class="header-section-number">3.4.7</span> <code>join</code> - spajanje tabela</h3>
+<p>Kada radimo sa dva povezana skupa podataka, nailazićemo na promenljive koje postoje u oba i po kojima bismo mogli ta dva skupa da spojimo u jednu tabelu. Dobar i dosta dublji tutorijal za join operacije je u okviru knjige R for Data Science, na <a href="https://r4ds.had.co.nz/relational-data.html#mutating-joins">ovom linku</a>.</p>
+<p>Na primer, ako pogledamo tabele <code>airlines</code> i <code>flights</code></p>
+<pre class="sourceCode r"><code class="sourceCode r">airlines</code></pre>
+<pre><code>## # A tibble: 16 x 2
+##    carrier name                       
+##    &lt;chr&gt;   &lt;chr&gt;                      
+##  1 9E      Endeavor Air Inc.          
+##  2 AA      American Airlines Inc.     
+##  3 AS      Alaska Airlines Inc.       
+##  4 B6      JetBlue Airways            
+##  5 DL      Delta Air Lines Inc.       
+##  6 EV      ExpressJet Airlines Inc.   
+##  7 F9      Frontier Airlines Inc.     
+##  8 FL      AirTran Airways Corporation
+##  9 HA      Hawaiian Airlines Inc.     
+## 10 MQ      Envoy Air                  
+## 11 OO      SkyWest Airlines Inc.      
+## 12 UA      United Air Lines Inc.      
+## 13 US      US Airways Inc.            
+## 14 VX      Virgin America             
+## 15 WN      Southwest Airlines Co.     
+## 16 YV      Mesa Airlines Inc.</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">flights</code></pre>
+<pre><code>## # A tibble: 336,776 x 23
+##     year month   day dep_time sched_dep_time dep_delay arr_time
+##    &lt;int&gt; &lt;int&gt; &lt;int&gt;    &lt;int&gt;          &lt;int&gt;     &lt;dbl&gt;    &lt;int&gt;
+##  1  2013     1     1      517            515         2      830
+##  2  2013     1     1      533            529         4      850
+##  3  2013     1     1      542            540         2      923
+##  4  2013     1     1      544            545        -1     1004
+##  5  2013     1     1      554            600        -6      812
+##  6  2013     1     1      554            558        -4      740
+##  7  2013     1     1      555            600        -5      913
+##  8  2013     1     1      557            600        -3      709
+##  9  2013     1     1      557            600        -3      838
+## 10  2013     1     1      558            600        -2      753
+## # … with 336,766 more rows, and 16 more variables: sched_arr_time &lt;int&gt;,
+## #   arr_delay &lt;dbl&gt;, carrier &lt;chr&gt;, flight &lt;int&gt;, tailnum &lt;chr&gt;,
+## #   origin &lt;chr&gt;, dest &lt;chr&gt;, air_time &lt;dbl&gt;, distance &lt;dbl&gt;, hour &lt;dbl&gt;,
+## #   minute &lt;dbl&gt;, time_hour &lt;dttm&gt;, gain &lt;dbl&gt;, hours &lt;dbl&gt;,
+## #   gain_per_hour &lt;dbl&gt;, departure &lt;dttm&gt;</code></pre>
+<p>vidimo da imaju kolonu <code>carrier</code> koja označava skraćenicu avio kompanije. Možemo dodati u tabelu flights puno ime avio kompanije koristeći informaciju u tabeli <code>airlines</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">full_airline &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">inner_join</span>(airlines, <span class="dt">by =</span> <span class="st">&quot;carrier&quot;</span>)
+full_airline <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(tailnum, carrier, name)</code></pre>
+<pre><code>## # A tibble: 336,776 x 3
+##    tailnum carrier name                    
+##    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;                   
+##  1 N14228  UA      United Air Lines Inc.   
+##  2 N24211  UA      United Air Lines Inc.   
+##  3 N619AA  AA      American Airlines Inc.  
+##  4 N804JB  B6      JetBlue Airways         
+##  5 N668DN  DL      Delta Air Lines Inc.    
+##  6 N39463  UA      United Air Lines Inc.   
+##  7 N516JB  B6      JetBlue Airways         
+##  8 N829AS  EV      ExpressJet Airlines Inc.
+##  9 N593JB  B6      JetBlue Airways         
+## 10 N3ALAA  AA      American Airlines Inc.  
+## # … with 336,766 more rows</code></pre>
+<p>Iskoristili smo funkciju <code>inner_join</code> ovaj put. Postoji više <code>*_join</code> funkcija u <code>dplyr</code> paketu, koje odgovaraju onima iz SQL jezika. Takodje, ova operacija je toliko popularna u SQL-u, da ima svoju adresu: <a href="http://www.sql-join.com/" class="uri">http://www.sql-join.com/</a> (koja se može koristiti za razumevanje).</p>
+<p>Glavna razlika medju <code>*_join</code> funkcijama je:</p>
+<ul>
+<li><code>inner_join</code> zadržava samo one redove za koje u obe tabele postoji vrednost, tj. koje je mogao da upari sa redovima iz druge tabele.</li>
+<li><code>left_join</code> zadržava sve redove iz prve tabele, a tamo gde nema para stavi NA</li>
+<li><code>right_join</code> zadržava sve redove iz druge tabele</li>
+<li><code>full_join</code> zadržava sve redove iz obe tabele</li>
+</ul>
+<p>Na sledećoj slici vidi se grafički prikaz ovih operacija.</p>
+<div class="figure">
+<img src="joins.png" alt="Ilustracije raznih join operacija. Preuzeto sa https://r4ds.had.co.nz." style="width:50.0%" />
+<p class="caption"><em>Ilustracije raznih join operacija. Preuzeto sa <a href="https://r4ds.had.co.nz" class="uri">https://r4ds.had.co.nz</a>.</em></p>
+</div>
+<p>Dakle, kod nas je više smisla imalo koristiti <code>left_join</code>, iako je isti rezultat ovaj put.</p>
+<pre class="sourceCode r"><code class="sourceCode r">full_airline &lt;-<span class="st"> </span>flights <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">left_join</span>(airlines, <span class="dt">by =</span> <span class="st">&quot;carrier&quot;</span>)</code></pre>
+<p>Pokazaćemo sada na primeru razlike izmedju ovih raznih vrsta join operacije. Koristimo primere preuzete sa uputstva na stranici <a href="https://stat545.com/bit001_dplyr-cheatsheet.html" class="uri">https://stat545.com/bit001_dplyr-cheatsheet.html</a>.</p>
+<p>Prvo kreiramo tabele</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(readr)
+superheroes &lt;-<span class="st"> &quot;</span>
+<span class="st">    name, alignment, gender,         publisher</span>
+<span class="st"> Magneto,       bad,   male,            Marvel</span>
+<span class="st">   Storm,      good, female,            Marvel</span>
+<span class="st">Mystique,       bad, female,            Marvel</span>
+<span class="st">  Batman,      good,   male,                DC</span>
+<span class="st">   Joker,       bad,   male,                DC</span>
+<span class="st">Catwoman,       bad, female,                DC</span>
+<span class="st"> Hellboy,      good,   male, Dark Horse Comics</span>
+<span class="st">&quot;</span>
+superheroes &lt;-<span class="st"> </span><span class="kw">read_csv</span>(superheroes, <span class="dt">skip =</span> <span class="dv">1</span>)
+
+publishers &lt;-<span class="st"> &quot;</span>
+<span class="st">  publisher, yr_founded</span>
+<span class="st">         DC,       1934</span>
+<span class="st">     Marvel,       1939</span>
+<span class="st">      Image,       1992</span>
+<span class="st">&quot;</span>
+publishers &lt;-<span class="st"> </span><span class="kw">read_csv</span>(publishers, <span class="dt">skip =</span> <span class="dv">1</span>)</code></pre>
+<div id="inner-join" class="section level4">
+<h4><span class="header-section-number">3.4.7.1</span> Inner join</h4>
+<p>Prvo da vidimo inner join</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">inner_join</span>(superheroes, publishers, <span class="dt">by =</span> <span class="st">&quot;publisher&quot;</span>)</code></pre>
+<pre><code>## # A tibble: 6 x 5
+##   name     alignment gender publisher yr_founded
+##   &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;          &lt;dbl&gt;
+## 1 Magneto  bad       male   Marvel          1939
+## 2 Storm    good      female Marvel          1939
+## 3 Mystique bad       female Marvel          1939
+## 4 Batman   good      male   DC              1934
+## 5 Joker    bad       male   DC              1934
+## 6 Catwoman bad       female DC              1934</code></pre>
+<p>Vidimo da fali Hellboy, jer Dark Horse Comics nije medju izdavačima u tabeli (a isto nema ni izdavača Image iz tabele izdavača, jer se ne pojavljuje medju herojima).</p>
+</div>
+<div id="left-join" class="section level4">
+<h4><span class="header-section-number">3.4.7.2</span> Left join</h4>
+<p>Kod left join operacije, čuvamo originalnu tabelu u celosti i uparujemo sa drugom gde je moguće</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">left_join</span>(superheroes, publishers, <span class="dt">by =</span> <span class="st">&quot;publisher&quot;</span>)</code></pre>
+<pre><code>## # A tibble: 7 x 5
+##   name     alignment gender publisher         yr_founded
+##   &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;                  &lt;dbl&gt;
+## 1 Magneto  bad       male   Marvel                  1939
+## 2 Storm    good      female Marvel                  1939
+## 3 Mystique bad       female Marvel                  1939
+## 4 Batman   good      male   DC                      1934
+## 5 Joker    bad       male   DC                      1934
+## 6 Catwoman bad       female DC                      1934
+## 7 Hellboy  good      male   Dark Horse Comics         NA</code></pre>
+<p>Sada kod Hellboy-a nemamo godinu osnivanja izdavača. jer ne postoji u tabeli.</p>
+</div>
+<div id="right-join" class="section level4">
+<h4><span class="header-section-number">3.4.7.3</span> Right join</h4>
+<p>Pogledajmo right join.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">right_join</span>(superheroes, publishers, <span class="dt">by =</span> <span class="st">&quot;publisher&quot;</span>)</code></pre>
+<pre><code>## # A tibble: 7 x 5
+##   name     alignment gender publisher yr_founded
+##   &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;          &lt;dbl&gt;
+## 1 Batman   good      male   DC              1934
+## 2 Joker    bad       male   DC              1934
+## 3 Catwoman bad       female DC              1934
+## 4 Magneto  bad       male   Marvel          1939
+## 5 Storm    good      female Marvel          1939
+## 6 Mystique bad       female Marvel          1939
+## 7 &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;   Image           1992</code></pre>
+<p>Dodao je jedan red pun NA vrednosti, za izdavača Image, koji nije nadjen u prvoj tabeli. Svrha ove operacije je vrlo upitna, pa se retko i koristi.</p>
+</div>
+<div id="full-join" class="section level4">
+<h4><span class="header-section-number">3.4.7.4</span> Full join</h4>
+<p>Full join prikazuje sve redove i upisuje NA tamo gde nešto fali</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">full_join</span>(superheroes, publishers, <span class="dt">by =</span> <span class="st">&quot;publisher&quot;</span>)</code></pre>
+<pre><code>## # A tibble: 8 x 5
+##   name     alignment gender publisher         yr_founded
+##   &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;                  &lt;dbl&gt;
+## 1 Magneto  bad       male   Marvel                  1939
+## 2 Storm    good      female Marvel                  1939
+## 3 Mystique bad       female Marvel                  1939
+## 4 Batman   good      male   DC                      1934
+## 5 Joker    bad       male   DC                      1934
+## 6 Catwoman bad       female DC                      1934
+## 7 Hellboy  good      male   Dark Horse Comics         NA
+## 8 &lt;NA&gt;     &lt;NA&gt;      &lt;NA&gt;   Image                   1992</code></pre>
+<p>Dakle imamo uniju left i right joina.</p>
 
 </div>
 </div>
