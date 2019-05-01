@@ -228,6 +228,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.1" data-path="21-mle.html"><a href="21-mle.html#njutnova-metoda"><i class="fa fa-check"></i><b>4.1</b> Njutnova metoda</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="21-mle.html"><a href="21-mle.html#primer-kosijeve-raspodele"><i class="fa fa-check"></i><b>4.1.1</b> Primer Košijeve raspodele</a></li>
 </ul></li>
+<li class="chapter" data-level="4.2" data-path="21-mle.html"><a href="21-mle.html#em-algoritam"><i class="fa fa-check"></i><b>4.2</b> EM algoritam</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="21-mle.html"><a href="21-mle.html#ocena-parametra-sa-histograma"><i class="fa fa-check"></i><b>4.2.1</b> Ocena parametra sa histograma</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -408,8 +411,111 @@ fishd2logL &lt;-<span class="st"> </span><span class="cf">function</span>(teta, 
 ## [1] 9.939738</code></pre>
 <pre><code>## [1] 9.939738</code></pre>
 <p>Možemo primetiti da imamo dosta više iteracija u Fišerovoj verziji, što je mana ove metode u odnosu na Njutnovu, koja brže konvergira (ukoliko konvergira).</p>
-
 </div>
+</div>
+</div>
+<div id="em-algoritam" class="section level2">
+<h2><span class="header-section-number">4.2</span> EM algoritam</h2>
+<p>EM algoritam (Expectation-Maximization) je algoritam za nalaženje ocena maksimalne verodostojnosti, koji nalazi veoma široku upotrebu u statistici, posebno Bajesovskoj. Glavna ideja je da nam omogući da nadjemo ocene maksimalne verodostojnosti u prisustvu nedostajućih podataka ili skrivenih parametara.</p>
+<p>Ilustrovaćemo postupak kroz dva primera.</p>
+<div id="ocena-parametra-sa-histograma" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> Ocena parametra sa histograma</h3>
+<p>Pretpostavimo da smo, umesto konkretnog uzorka, dobili samo histogram odredjenog uzorka iz eksponencijalne raspodele sa nepoznatim parametrom <span class="math inline">\(\lambda\)</span> koji želimo da ocenimo na osnovu tog histograma.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
+<span class="co"># napravicemo histogram uzorka iz iz nepoznate eksponencijalne raspodele</span>
+h &lt;-<span class="st"> </span><span class="kw">hist</span>(<span class="kw">rexp</span>(<span class="dv">1000</span>, <span class="dt">rate =</span> <span class="kw">rexp</span>(<span class="dv">1</span>, <span class="fl">0.1</span>)))</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-135-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">h</code></pre>
+<pre><code>## $breaks
+##  [1] 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9
+## 
+## $counts
+## [1] 509 266 121  58  22  11   8   2   3
+## 
+## $density
+## [1] 5.09 2.66 1.21 0.58 0.22 0.11 0.08 0.02 0.03
+## 
+## $mids
+## [1] 0.05 0.15 0.25 0.35 0.45 0.55 0.65 0.75 0.85
+## 
+## $xname
+## [1] &quot;rexp(1000, rate = rexp(1, 0.1))&quot;
+## 
+## $equidist
+## [1] TRUE
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;histogram&quot;</code></pre>
+<p>Budući da je logaritamska verodostojnost jednaka <span class="math display">\[\log L(\lambda; \mathbf{x})=n\log\lambda - \lambda\sum_{i=1}^nx_i,\]</span>
+klasičnim postupkom možemo zaključiti da je ocena maksimalne verodostojnosti <span class="math display">\[\hat{\lambda} = \frac{n}{\sum_{i=1}^nx_i}=\frac1{\overline{X}_n}.\]</span> Medjutim, naš problem je sada što mi nemamo uzorak <span class="math inline">\(x_1,\dots,x_n\)</span>, pa ovako ne možemo odrediti ocenu. Ono što imamo je niz parova <span class="math inline">\((u_1,v_1),\dots,(u_n, v_n)\)</span> koji odredjuju kom intevalu pripadaju odgovarajući elementi uzorka. Dakle, <span class="math inline">\(x_i\in(u_i,v_i),\ \forall i=1,\dots,n.\)</span></p>
+<p>Srećom, na osnovu znanja o intervalu kom pripada <span class="math inline">\(x_i\)</span> možemo oceniti vrednost elementa <span class="math inline">\(x_i\)</span> uzimanjem uslovnog očekivanja, tačnije:
+<span class="math display">\[\hat{x_i} = E\left(x_i\mid x_i\in(u_i,v_i)\right)=\frac1\lambda + \frac{u_ie^{-\lambda u_i} - v_ie^{-\lambda v_i}}{e^{-\lambda u_i} - e^{-\lambda v_i}}.\]</span> Izvodjenje ovog uslovnog očekivanja ostavljamo čitaocu kao dobru vežbu za utvrdjivanje znanja iz Teorije verovatnoće.</p>
+<p>Ovde opet imamo problem, sada nam nije poznato <span class="math inline">\(\lambda\)</span>, pa ne možemo da odredimo tačnu ocenu elemenata uzorka. Vidimo da imamo “cirkularnu” zavisnost izmedju <span class="math inline">\(\lambda\)</span> i <span class="math inline">\(x_i\)</span>, ako ne znamo jedno, ne možemo oceniti drugo.</p>
+<p>Zato ćemo pribeći iterativnom algortmu.</p>
+<ol style="list-style-type: decimal">
+<li>Počećemo od neke proizvoljne ocene <span class="math inline">\(\hat{\lambda}\)</span>.</li>
+<li>(korak E) Iskoristićemo ovu ocenu da odredimo očekivanje <span class="math display">\[\hat{x_i} = \frac{1}{\hat{\lambda}} + \frac{u_ie^{-\hat{\lambda} u_i} - v_ie^{-\hat{\lambda} v_i}}{e^{-\hat{\lambda} u_i} - e^{-\hat{\lambda} v_i}},\ i=1,\dots,n.\]</span></li>
+<li>(korak M) Na osnovu ocena elemenata <span class="math inline">\(x_i\)</span>, poboljšaćemo ocenu <span class="math inline">\(\lambda\)</span> maksimizovanjem funkcije verodostojnosi, tj. uzimamo <span class="math display">\[\hat{\lambda} = \underset{\lambda}{\mathrm{argmax}}\log L(\lambda; \mathbf{\hat{x}})=\frac{n}{\sum_{i=1}^n\hat{x_i}}.\]</span></li>
+<li>Ponavljamo korake E i M iterativno dok ne konvergiramo nekoj oceni nepoznatog parametra <span class="math inline">\(\lambda\)</span>.</li>
+</ol>
+<p>Vidimo odakle potiče ime EM algoritma – smenjujemo korake E i M dok ne dobijemo dobru ocenu (ne maksimizujemo neko očekivanje).</p>
+<p>Primenimo konačno ovaj algoritam da dobijemo ocenu za naš uzorak. Prvo ćemo implementirati algoritam i potrebne korake.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># korak E - ocekivanja x-eva na osnovu neke cene lambda</span>
+expected_xs &lt;-<span class="st"> </span><span class="cf">function</span>(lambda, u, v) {
+  <span class="dv">1</span><span class="op">/</span>lambda <span class="op">+</span>
+<span class="st">    </span>(u<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>lambda<span class="op">*</span>u) <span class="op">-</span><span class="st"> </span>v<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>lambda<span class="op">*</span>v))<span class="op">/</span>
+<span class="st">    </span>(<span class="kw">exp</span>(<span class="op">-</span>lambda<span class="op">*</span>u) <span class="op">-</span><span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span>lambda<span class="op">*</span>v))
+}
+
+<span class="co"># korak M - na osnovu ocenjenog uzorka, dati MMV ocenu lambda</span>
+maximize_logL &lt;-<span class="st"> </span><span class="cf">function</span>(xs) {
+  <span class="dv">1</span><span class="op">/</span><span class="kw">mean</span>(xs)
+}
+
+
+<span class="co"># funkcija koja trazi ocenu EM algoritmom za datu pocetnu vrednost</span>
+<span class="co"># lambda i vektor levih (u) i desnih (v) granica intervala za x_i</span>
+EM_estimate &lt;-<span class="st"> </span><span class="cf">function</span>(lambda_<span class="dv">0</span>, u, v, <span class="dt">tol =</span> <span class="fl">1e-8</span>, <span class="dt">maxiter =</span> <span class="dv">1000</span>) {
+  xs &lt;-<span class="st"> </span><span class="kw">expected_xs</span>(lambda_<span class="dv">0</span>, u, v)
+  lambda &lt;-<span class="st"> </span><span class="kw">maximize_logL</span>(xs)
+  <span class="kw">print</span>(lambda)
+  iter &lt;-<span class="st"> </span><span class="dv">1</span>
+  
+  <span class="cf">while</span>((<span class="kw">abs</span>(lambda <span class="op">-</span><span class="st"> </span>lambda_<span class="dv">0</span>) <span class="op">&gt;</span><span class="st"> </span>tol) <span class="op">&amp;&amp;</span>
+<span class="st">        </span>iter <span class="op">&lt;</span><span class="st"> </span>maxiter) {
+    iter &lt;-<span class="st"> </span>iter <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+    lambda_<span class="dv">0</span> &lt;-<span class="st"> </span>lambda
+    
+    xs &lt;-<span class="st"> </span><span class="kw">expected_xs</span>(lambda_<span class="dv">0</span>, u, v)
+    lambda &lt;-<span class="st"> </span><span class="kw">maximize_logL</span>(xs)
+    <span class="kw">print</span>(lambda)
+  }
+  lambda
+}</code></pre>
+<p>Ostaje jos da odredimo na osnovu histograma vrednosti <span class="math inline">\(u_i\)</span> i <span class="math inline">\(v_i\)</span>. Nije bitno uredjenje uzorka, pa možemo pretpostaviti da imamo sortiran uzorak <span class="math inline">\(x_i\)</span>. Odatle, ukoliko imamo 100 elemenata u prvom stupcu histograma, nekom intervalu <span class="math inline">\((a,b)\)</span>, onda možemo zaključiti da je <span class="math inline">\(\forall i=1,\dots,100,\ x_i\in(u_i, v_i)=(a,b)\)</span>, odnosno da je <span class="math inline">\(u_1=\dots=u_{100}=a\)</span> i <span class="math inline">\(v_1=\dots=v_{100}=b\)</span>. Slično važi i za ostale stupce. U R-u niz parova <span class="math inline">\((u_1,v_1),\dots,(u_n, v_n)\)</span> možemo kreirati na sledeći način</p>
+<pre class="sourceCode r"><code class="sourceCode r">u &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">head</span>(h<span class="op">$</span>breaks, <span class="dv">-1</span>), h<span class="op">$</span>counts)
+v &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">tail</span>(h<span class="op">$</span>breaks, <span class="dv">-1</span>), h<span class="op">$</span>counts)</code></pre>
+<p>Odavde sada možemo da odredimo ocenu <span class="math inline">\(\lambda\)</span> EM algoritmom:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">EM_estimate</span>(<span class="dv">1</span>, u, v)</code></pre>
+<pre><code>## [1] 7.129271
+## [1] 7.395976
+## [1] 7.407838
+## [1] 7.408366
+## [1] 7.408389
+## [1] 7.40839
+## [1] 7.40839
+## [1] 7.40839</code></pre>
+<pre><code>## [1] 7.40839</code></pre>
+<p>Zaključili smo da je ocena <span class="math inline">\(\hat{\lambda] = 7.41\)</span>. Pošto ne znamo da li je ova ocena tačna, na neki način treba proveriti kako se ova ocena uklapa u podatke.</p>
+<p>Najjednostavniji način je da preko histograma nacrtamo gustinu eksponencijalne raspodele sa ocenjenim parametrom.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(h)
+<span class="co"># mnozenje sa 100 je da bismo sa gustine presli na skalu frekvencija</span>
+<span class="co"># jer je density = counts / (sum(counts) * bin_width), sto je u nasem</span>
+<span class="co"># slucaju density = counts / (1000 * 0.1) = counts / 100</span>
+<span class="kw">curve</span>(<span class="dv">100</span><span class="op">*</span><span class="kw">dexp</span>(x, <span class="dt">rate =</span> <span class="fl">7.41</span>), <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">&quot;steelblue&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-139-1.png" width="672" /></p>
+<p>Kriva vrlo dobro odgovara histogramu, pa možemo biti zadovljni ocenom.</p>
+
 </div>
 </div>
 </div>
