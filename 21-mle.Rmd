@@ -111,7 +111,7 @@ d2logL <- function(teta, x) {
 
 Ostaje još samo da implementiramo funkciju koja nalazi nulu funkcije Njutnovom metodom
 
-```{r}
+```{r, include=FALSE}
 newton <- function(t0, f, df, tol=1e-6, maxiter=100, trace=FALSE, ...) {
   if (trace) print(t0)
   t <- t0 - f(t0, ...) / df(t0, ...)
