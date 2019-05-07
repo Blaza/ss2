@@ -326,21 +326,6 @@ vec_logL &lt;-<span class="st"> </span><span class="cf">function</span>(teta_vec
   <span class="dv">-2</span><span class="op">*</span><span class="kw">sum</span>((<span class="dv">1</span><span class="op">-</span>(x<span class="op">-</span>teta)<span class="op">^</span><span class="dv">2</span>) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span><span class="op">+</span>(x<span class="op">-</span>teta)<span class="op">^</span><span class="dv">2</span>)<span class="op">^</span><span class="dv">2</span>)
 }</code></pre>
 <p>Ostaje još samo da implementiramo funkciju koja nalazi nulu funkcije Njutnovom metodom</p>
-<pre class="sourceCode r"><code class="sourceCode r">newton &lt;-<span class="st"> </span><span class="cf">function</span>(t0, f, df, <span class="dt">tol=</span><span class="fl">1e-6</span>, <span class="dt">maxiter=</span><span class="dv">100</span>, <span class="dt">trace=</span><span class="ot">FALSE</span>, ...) {
-  <span class="cf">if</span> (trace) <span class="kw">print</span>(t0)
-  t &lt;-<span class="st"> </span>t0 <span class="op">-</span><span class="st"> </span><span class="kw">f</span>(t0, ...) <span class="op">/</span><span class="st"> </span><span class="kw">df</span>(t0, ...)
-  <span class="cf">if</span> (trace) <span class="kw">print</span>(t)
-  iter &lt;-<span class="st"> </span><span class="dv">1</span>
-  <span class="cf">while</span> (<span class="kw">abs</span>(t <span class="op">-</span><span class="st"> </span>t0) <span class="op">&gt;</span><span class="st"> </span>tol) {
-    <span class="cf">if</span>(iter <span class="op">==</span><span class="st"> </span>maxiter)
-      <span class="kw">stop</span>(<span class="st">&quot;Max iterations exceeded!&quot;</span>)
-    t0 &lt;-<span class="st"> </span>t
-    t &lt;-<span class="st"> </span>t0 <span class="op">-</span><span class="st"> </span><span class="kw">f</span>(t0, ...) <span class="op">/</span><span class="st"> </span><span class="kw">df</span>(t0, ...)
-    <span class="cf">if</span> (trace) <span class="kw">print</span>(t)
-    iter &lt;-<span class="st"> </span>iter <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
-  }
-  <span class="kw">return</span>(t)
-}</code></pre>
 <p>Na kraju, možemo odrediti ocenu metodom maksimalne verodostojnosti primenom Njutnove metode na izvod logaritma funkcije verodostojnosti</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">newton</span>(<span class="dv">0</span>, dlogL, d2logL, <span class="dt">x =</span> xs, <span class="dt">maxiter=</span><span class="dv">100</span>)</code></pre>
 <pre><code>## Error in newton(0, dlogL, d2logL, x = xs, maxiter = 100): Max iterations exceeded!</code></pre>

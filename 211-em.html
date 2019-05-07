@@ -399,12 +399,14 @@ z &lt;-<span class="st"> </span><span class="kw">outer</span>(mi1, mi2, <span cl
 <p>Nakon kraćeg izvodjenja koje ostavljamo za vežbu iz Teorije verovatnoće dobijamo ocenu
 <span class="math display">\[\hat{w_i}=P(W_i=1|X_i=x_i)=\frac{pf_{\mu_2}(x_i)}{(1-p)f_{\mu_1}(x_i)+pf_{\mu_2}(x_i)}.\]</span></p>
 <p>Dakle korak E se implementira sledećom funkcijom</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># za p smo uzeli 0.7</span>
-expectation &lt;-<span class="st"> </span><span class="cf">function</span>(mi1, mi2, xs) {
-  <span class="fl">0.7</span><span class="op">*</span><span class="kw">dnorm</span>(xs, mi2) <span class="op">/</span>
-<span class="st">    </span>(<span class="fl">0.3</span><span class="op">*</span><span class="kw">dnorm</span>(xs, mi1) <span class="op">+</span>
-<span class="st">       </span><span class="fl">0.7</span><span class="op">*</span><span class="kw">dnorm</span>(xs, mi2))
-}</code></pre>
+<!-- ```{r} -->
+<!-- # za p smo uzeli 0.7 -->
+<!-- expectation <- function(mi1, mi2, xs) { -->
+<!--   0.7*dnorm(xs, mi2) / -->
+<!--     (0.3*dnorm(xs, mi1) + -->
+<!--        0.7*dnorm(xs, mi2)) -->
+<!-- } -->
+<!-- ``` -->
 <p>Ova funkcija zavisi od nepoznatih parametara <span class="math inline">\(\mu_1\)</span> i <span class="math inline">\(\mu_2\)</span>, tako da nam je potreban način da njih ocenimo u M koraku EM algoritma.</p>
 <p>Pošto je uslovna gustina <span class="math display">\[f_{X|W=w_i}(x_i)=\begin{cases}f_{\mu_1}(x_i),&amp; w_i=0\\ f_{\mu_2}(x_i),&amp; w_i=1\end{cases},\]</span> logaritamska funkcija verodostojnosti, kada imamo znanje o skrivenoj promenljivoj <span class="math inline">\(W\)</span> (a imačemo ocenu iz koraka E), će biti
 <span class="math display">\[\begin{align}
@@ -414,58 +416,38 @@ expectation &lt;-<span class="st"> </span><span class="cf">function</span>(mi1, 
 \end{align}\]</span></p>
 <p>gde je <span class="math inline">\(\mathbf{\mu}=(\mu_1,\mu_2)^\top\)</span>. Odavde vidimo da je ocena metodom maksimalne verodostojnosti za <span class="math inline">\(\mu\)</span> jednaka <span class="math display">\[\hat{\mathbf{\mu}} = \underset{\mu}{\mathrm{argmax}}\log L(\mathbf{\mu}; \mathbf{x}, \mathbf{w}).\]</span></p>
 <p>Sad možemo da implementiramo korak M algoritma</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># logaritam verodostojnosti</span>
-logLxw &lt;-<span class="st"> </span><span class="cf">function</span>(mi1, mi2, xs, ws) {
-  <span class="kw">sum</span>((<span class="dv">1</span><span class="op">-</span>ws)<span class="op">*</span><span class="kw">log</span>(<span class="kw">dnorm</span>(xs, mi1)) <span class="op">+</span>
-<span class="st">        </span>ws<span class="op">*</span><span class="kw">log</span>(<span class="kw">dnorm</span>(xs, mi2)))
-}
-
-<span class="co"># trazimo argmax(L) tako sto nadjemo argmin(-L) pomocu funkcije nlm</span>
+<!-- ```{r} -->
+<!-- # logaritam verodostojnosti -->
+<!-- logLxw <- function(mi1, mi2, xs, ws) { -->
+<!--   sum((1-ws)*log(dnorm(xs, mi1)) + -->
+<!--         ws*log(dnorm(xs, mi2))) -->
+<!-- } -->
+<!-- ``` -->
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># trazimo argmax(L) tako sto nadjemo argmin(-L) pomocu funkcije nlm</span>
 maximization &lt;-<span class="st"> </span><span class="cf">function</span>(Ew, xs, mi_<span class="dv">0</span>) {
   <span class="kw">nlm</span>(<span class="cf">function</span>(mi) <span class="op">-</span><span class="kw">logLxw</span>(mi[<span class="dv">1</span>], mi[<span class="dv">2</span>], xs, Ew), mi_<span class="dv">0</span>)<span class="op">$</span>estimate
 }</code></pre>
 <p>Kada imamo sve korake implementirane, ostaje samo da implementiramo sam algoritam koji iterira ove korake</p>
-<pre class="sourceCode r"><code class="sourceCode r">EM_estimate_mix &lt;-<span class="st"> </span><span class="cf">function</span>(mi_<span class="dv">0</span>, xs, <span class="dt">tol=</span><span class="fl">1e-6</span>, <span class="dt">maxiter=</span><span class="dv">100</span>) {
-  iter &lt;-<span class="st"> </span><span class="dv">0</span>
-  Ew &lt;-<span class="st"> </span><span class="kw">expectation</span>(mi_<span class="dv">0</span>[<span class="dv">1</span>], mi_<span class="dv">0</span>[<span class="dv">2</span>], xs)
-  mi &lt;-<span class="st"> </span><span class="kw">maximization</span>(Ew, xs, mi_<span class="dv">0</span>)
-  <span class="kw">print</span>(mi)
-  
-  <span class="cf">while</span>(<span class="kw">any</span>(<span class="kw">abs</span>(mi <span class="op">-</span><span class="st"> </span>mi_<span class="dv">0</span>) <span class="op">&gt;</span><span class="st"> </span>tol)){
-    <span class="cf">if</span>(iter <span class="op">==</span><span class="st"> </span>maxiter)
-      <span class="cf">break</span>
-    
-    mi_<span class="dv">0</span> &lt;-<span class="st"> </span>mi
-    
-    Ew &lt;-<span class="st"> </span><span class="kw">expectation</span>(mi_<span class="dv">0</span>[<span class="dv">1</span>], mi_<span class="dv">0</span>[<span class="dv">2</span>], xs)
-    mi &lt;-<span class="st"> </span><span class="kw">maximization</span>(Ew, xs, mi_<span class="dv">0</span>)
-    
-    <span class="kw">print</span>(mi)
-    iter &lt;-<span class="st"> </span>iter <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
-  }
-  mi
-}</code></pre>
+<!-- ```{r} -->
+<!-- EM_estimate_mix <- function(mi_0, xs, tol=1e-6, maxiter=100) { -->
+<!--   iter <- 0 -->
+<!--   Ew <- expectation(mi_0[1], mi_0[2], xs) -->
+<!--   mi <- maximization(Ew, xs, mi_0) -->
+<!--   print(mi) -->
+<!--   while(any(abs(mi - mi_0) > tol)){ -->
+<!--     if(iter == maxiter) -->
+<!--       break -->
+<!--     mi_0 <- mi -->
+<!--     Ew <- expectation(mi_0[1], mi_0[2], xs) -->
+<!--     mi <- maximization(Ew, xs, mi_0) -->
+<!--     print(mi) -->
+<!--     iter <- iter + 1 -->
+<!--   } -->
+<!--   mi -->
+<!-- } -->
+<!-- ``` -->
 <p>Primenimo algoritam za početnu vrednost <span class="math inline">\(\mathbf{\mu}=(0,1)^\top\)</span>.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">EM_estimate_mix</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), uzorak)</code></pre>
-<pre><code>## Warning in nlm(function(mi) -logLxw(mi[1], mi[2], xs, Ew), mi_0): NA/Inf
-## replaced by maximum positive value
-
-## Warning in nlm(function(mi) -logLxw(mi[1], mi[2], xs, Ew), mi_0): NA/Inf
-## replaced by maximum positive value</code></pre>
-<pre><code>## [1] -0.8442056  2.5452301</code></pre>
-<pre><code>## Warning in nlm(function(mi) -logLxw(mi[1], mi[2], xs, Ew), mi_0): NA/Inf
-## replaced by maximum positive value</code></pre>
-<pre><code>## [1] -1.132248  2.965951
-## [1] -1.113066  2.990345
-## [1] -1.106408  2.993856
-## [1] -1.104836  2.994616
-## [1] -1.104475  2.994789
-## [1] -1.104392  2.994828
-## [1] -1.104373  2.994837
-## [1] -1.104368  2.994841
-## [1] -1.104367  2.994842
-## [1] -1.104367  2.994842</code></pre>
-<pre><code>## [1] -1.104367  2.994842</code></pre>
 <p>Vidimo da je algoritam konvergirao ka <span class="math inline">\(\hat{\mathbf{\mu}}=(-0.97, 2.96)^\top\)</span> približno pravoj vrednosti <span class="math inline">\(\mathbf{\mu}=(-1, 3)^\top\)</span>.</p>
 
 </div>
