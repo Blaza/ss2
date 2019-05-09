@@ -167,14 +167,14 @@ $$\hat{w_i}=P(W_i=1|X_i=x_i)=\frac{pf_{\mu_2}(x_i)}{(1-p)f_{\mu_1}(x_i)+pf_{\mu_
 
 Dakle korak E se implementira sledećom funkcijom
 
-<!-- ```{r} -->
-<!-- # za p smo uzeli 0.7 -->
-<!-- expectation <- function(mi1, mi2, xs) { -->
-<!--   0.7*dnorm(xs, mi2) / -->
-<!--     (0.3*dnorm(xs, mi1) + -->
-<!--        0.7*dnorm(xs, mi2)) -->
-<!-- } -->
-<!-- ``` -->
+```{r}
+# za p smo uzeli 0.7
+expectation <- function(mi1, mi2, xs) {
+  0.7*dnorm(xs, mi2) /
+    (0.3*dnorm(xs, mi1) +
+       0.7*dnorm(xs, mi2))
+}
+```
 
 Ova funkcija zavisi od nepoznatih parametara $\mu_1$ i $\mu_2$, tako da nam je potreban način da njih ocenimo u M koraku EM algoritma.
 
@@ -189,15 +189,13 @@ gde je $\mathbf{\mu}=(\mu_1,\mu_2)^\top$. Odavde vidimo da je ocena metodom maks
 
 Sad možemo da implementiramo korak M algoritma
 
-<!-- ```{r} -->
-<!-- # logaritam verodostojnosti -->
-<!-- logLxw <- function(mi1, mi2, xs, ws) { -->
-<!--   sum((1-ws)*log(dnorm(xs, mi1)) + -->
-<!--         ws*log(dnorm(xs, mi2))) -->
-<!-- } -->
-<!-- ``` -->
-
 ```{r}
+# logaritam verodostojnosti
+logLxw <- function(mi1, mi2, xs, ws) {
+  sum((1-ws)*log(dnorm(xs, mi1)) +
+        ws*log(dnorm(xs, mi2)))
+}
+
 # trazimo argmax(L) tako sto nadjemo argmin(-L) pomocu funkcije nlm
 maximization <- function(Ew, xs, mi_0) {
   nlm(function(mi) -logLxw(mi[1], mi[2], xs, Ew), mi_0)$estimate
@@ -206,34 +204,32 @@ maximization <- function(Ew, xs, mi_0) {
 
 Kada imamo sve korake implementirane, ostaje samo da implementiramo sam algoritam koji iterira ove korake
 
-<!-- ```{r} -->
-<!-- EM_estimate_mix <- function(mi_0, xs, tol=1e-6, maxiter=100) { -->
-<!--   iter <- 0 -->
-<!--   Ew <- expectation(mi_0[1], mi_0[2], xs) -->
-<!--   mi <- maximization(Ew, xs, mi_0) -->
-<!--   print(mi) -->
-
-<!--   while(any(abs(mi - mi_0) > tol)){ -->
-<!--     if(iter == maxiter) -->
-<!--       break -->
-
-<!--     mi_0 <- mi -->
-
-<!--     Ew <- expectation(mi_0[1], mi_0[2], xs) -->
-<!--     mi <- maximization(Ew, xs, mi_0) -->
-
-<!--     print(mi) -->
-<!--     iter <- iter + 1 -->
-<!--   } -->
-<!--   mi -->
-<!-- } -->
-<!-- ``` -->
-
-Primenimo algoritam za početnu vrednost $\mathbf{\mu}=(0,1)^\top$.
-
-```{r,eval=FALSE}
-EM_estimate_mix(c(0,1), uzorak)
+```{r}
+EM_estimate_mix <- function(mi_0, xs, tol=1e-6, maxiter=100) {
+  iter <- 0
+  Ew <- expectation(mi_0[1], mi_0[2], xs)
+  mi <- maximization(Ew, xs, mi_0)
+  print(mi)
+  
+  while(any(abs(mi - mi_0) > tol)){
+    if(iter == maxiter)
+      break
+    
+    mi_0 <- mi
+    
+    Ew <- expectation(mi_0[1], mi_0[2], xs)
+    mi <- maximization(Ew, xs, mi_0)
+    
+    print(mi)
+    iter <- iter + 1
+  }
+  mi
+}
 ```
 
+Primenimo algoritam za početnu vrednost $\mathbf{\mu}=(0,1)^\top$.
+```{r}
+EM_estimate_mix(c(0,1), uzorak)
+```
 Vidimo da je algoritam konvergirao ka $\hat{\mathbf{\mu}}=(-0.97, 2.96)^\top$ približno pravoj vrednosti $\mathbf{\mu}=(-1, 3)^\top$.
 
