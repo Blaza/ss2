@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>3 Rad sa podacima | Statistički softver 2</title>
   <meta name="description" content="3 Rad sa podacima | Statistički softver 2" />
-  <meta name="generator" content="bookdown  and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.9.15 and GitBook 2.6.7" />
 
   <meta property="og:title" content="3 Rad sa podacima | Statistički softver 2" />
   <meta property="og:type" content="book" />
@@ -408,86 +408,86 @@ df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">selec
 <p>Kada preuzmemo podatke, učitavamo ih funkcijom <code>read.csv</code>:</p>
 <pre class="sourceCode r"><code class="sourceCode r">who_data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;Life Expectancy Data.csv&quot;</span>)
 who_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample_n</span>(<span class="dv">15</span>) <span class="co"># stampamo 15 slucajno izabranih</span></code></pre>
-<pre><code>##                             Country Year     Status Life.expectancy
-## 1                            Serbia 2006 Developing            73.6
-## 2                           Vanuatu 2006 Developing            71.0
-## 3                             Egypt 2014 Developing            78.0
-## 4                           Comoros 2015 Developing            63.5
-## 5                         Guatemala 2013 Developing            71.4
-## 6                         Singapore 2005  Developed            82.0
-## 7  Democratic Republic of the Congo 2007 Developing            55.7
-## 8                             Spain 2001  Developed            79.4
-## 9                      Burkina Faso 2002 Developing            51.0
-## 10            Sao Tome and Principe 2007 Developing            65.1
-## 11                         Paraguay 2010 Developing            73.2
-## 12                         Honduras 2011 Developing            73.9
-## 13                         Ethiopia 2005 Developing            56.0
-## 14                       Costa Rica 2012 Developing            79.2
-## 15                           Bhutan 2014 Developing            69.4
-##    Adult.Mortality infant.deaths Alcohol percentage.expenditure
-## 1              133             1    8.58             541.824347
-## 2              161             0    1.00              43.197808
-## 3              161            53    0.21               0.000000
-## 4              227             1      NA               0.000000
-## 5              189            11    1.93             582.146958
-## 6               69             0    1.49            2356.731479
-## 7              299           236    1.52               0.000000
-## 8               84             2    9.86            2044.169761
-## 9              338            49    4.53               3.195567
-## 10             217             0    4.14              49.936982
-## 11             152             3    5.65             359.976040
-## 12             153             4    3.10              32.164080
-## 13             343           206    0.99              18.037531
-## 14              97             1    3.34            2568.237059
-## 15             216             0    0.01             209.392134
-##    Hepatitis.B Measles  BMI under.five.deaths Polio Total.expenditure
-## 1           93       2 54.5                 1    97              8.99
-## 2           59       0 45.7                 0    67              3.96
-## 3           94    1314  6.2                62    94              5.64
-## 4           91       0 24.2                 2    92                NA
-## 5           85       0 49.3                13    84              6.30
-## 6           96      33  3.2                 0    96              3.74
-## 7            7   55577 17.8               326    72              3.61
-## 8           83       0 58.2                 2    95              7.24
-## 9           NA    1744 12.9                93    69              5.26
-## 10          87       0 24.7                 0    98              7.44
-## 11          89       0 46.4                 3    85              9.10
-## 12          97       0 47.6                 5    97              8.57
-## 13          NA     357 13.8               323    56              4.20
-## 14          91       0 57.5                 1     9              9.56
-## 15          99       0 23.6                 1    98              3.57
-##    Diphtheria HIV.AIDS         GDP Population thinness..1.19.years
-## 1          92      0.1  4129.75874    7411569                  2.5
-## 2          68      0.1   247.97823     214634                  1.6
-## 3          94      0.1          NA         NA                  2.8
-## 4          91      0.8   727.64639     777424                  6.7
-## 5          85      0.4  3452.82893   15596214                  1.2
-## 6          96      0.1 29869.85398         NA                  2.1
-## 7           7      1.9          NA         NA                 11.1
-## 8          96      0.1 15323.61140     485412                  0.6
-## 9          69      3.2    26.76354     122931                 11.0
-## 10         97      1.2   894.92799      16311                  6.7
-## 11         89      0.1  3225.59175     629877                  2.1
-## 12         97      0.4   212.58480      83516                  2.2
-## 13         44      3.7   161.62662    7672783                 11.5
-## 14         91      0.1  9985.36959    4654122                  1.8
-## 15         99      0.5  2522.79680     776448                 15.7
-##    thinness.5.9.years Income.composition.of.resources Schooling
-## 1                 2.5                           0.739      13.4
-## 2                 1.5                           0.572      10.6
-## 3                 2.8                           0.686      13.1
-## 4                 6.5                           0.498      11.1
-## 5                 1.2                           0.611      10.7
-## 6                 2.0                           0.821      12.6
-## 7                 1.9                              NA        NA
-## 8                 0.5                           0.825      15.7
-## 9                 1.6                           0.000       3.6
-## 10                6.6                           0.527      10.3
-## 11                2.0                           0.664      12.4
-## 12                2.2                           0.611      11.7
-## 13               11.2                           0.325       5.8
-## 14                1.7                           0.758      13.6
-## 15               16.2                           0.596      12.5</code></pre>
+<pre><code>##              Country Year     Status Life.expectancy Adult.Mortality
+## 1              Gabon 2010 Developing            62.3             294
+## 2             Angola 2008 Developing            48.7             371
+## 3         Madagascar 2012 Developing            64.3             235
+## 4             Sweden 2005  Developed            85.0              66
+## 5               Oman 2005 Developing            74.3             118
+## 6           Bulgaria 2011  Developed            73.7             144
+## 7              Spain 2015  Developed            82.8              56
+## 8              China 2015 Developing            76.1              85
+## 9         Costa Rica 2003 Developing            78.0               1
+## 10       Netherlands 2015  Developed            81.9              57
+## 11          Djibouti 2000 Developing            57.4             325
+## 12           Lesotho 2009 Developing            49.4             566
+## 13            Gambia 2001 Developing            56.3               3
+## 14 Equatorial Guinea 2008 Developing            55.4             338
+## 15           Ireland 2015  Developed            81.4              64
+##    infant.deaths Alcohol percentage.expenditure Hepatitis.B Measles  BMI
+## 1              2    8.85              145.31828          67       1 33.5
+## 2             84    7.07              249.91020          69     265 19.3
+## 3             30    0.87               59.97914           7       2 19.0
+## 4              0    6.50              599.03924          NA      13 55.3
+## 5              1    0.63              854.01158          99      25 49.5
+## 6              1   10.67              875.14952          96     157 63.3
+## 7              1      NA                0.00000          97     115 66.6
+## 8            157      NA                0.00000          99   42361 32.9
+## 9              1    4.04             1070.26900          86       1 48.3
+## 10             1      NA                0.00000          94       7 62.1
+## 11             2    1.34               91.95076          NA     183 28.2
+## 12             4    2.75              104.31447          91       0 29.2
+## 13             3    2.25                0.00000          91      99 18.5
+## 14             3    8.34             1705.67862          NA     436 21.3
+## 15             0      NA                0.00000          95       4 62.8
+##    under.five.deaths Polio Total.expenditure Diphtheria HIV.AIDS
+## 1                  3    68              3.41         67      7.0
+## 2                133    65              3.84         69      2.6
+## 3                 42    71              3.46          7      0.4
+## 4                  0    98              9.60         98      0.1
+## 5                  1    99              2.59         99      0.1
+## 6                  1    95              6.88         95      0.1
+## 7                  1    97                NA         97      0.1
+## 8                183    99                NA         99      0.1
+## 9                  1    88              8.45         88      0.1
+## 10                 1    95                NA         95      0.1
+## 11                 2    46              5.75         46      4.1
+## 12                 6    89              9.80         91     18.2
+## 13                 6    85              3.71         87      2.3
+## 14                 4    55              2.31         42      6.3
+## 15                 0    95                NA         95      0.1
+##           GDP Population thinness..1.19.years thinness.5.9.years
+## 1   8754.1134      16421                  6.5                6.4
+## 2   3868.5789    2175942                  9.5                9.4
+## 3    443.9611   22346573                  7.4                7.3
+## 4   4385.3531     929572                  1.3                1.3
+## 5  12376.9794         NA                  7.0                6.8
+## 6   7813.8350    7348328                  2.0                2.0
+## 7  25683.8456   46447697                  0.6                0.5
+## 8    869.2119     137122                  3.6                2.9
+## 9   4167.7142    4125971                  2.2                2.1
+## 10 44292.8847   16939923                  1.0                0.9
+## 11   768.1768     717584                  6.4                6.1
+## 12   923.1369      21929                  7.6                7.4
+## 13         NA         NA                  1.0                1.0
+## 14 22742.3816     868418                  9.3                9.3
+## 15  6664.1440    4676835                  0.3                0.2
+##    Income.composition.of.resources Schooling
+## 1                            0.660      12.5
+## 2                            0.468       8.1
+## 3                            0.506      10.2
+## 4                            0.890      16.0
+## 5                            0.742      11.5
+## 6                            0.775      14.2
+## 7                            0.882      17.7
+## 8                            0.734      13.5
+## 9                            0.715      12.1
+## 10                           0.923      18.1
+## 11                           0.361       2.9
+## 12                           0.453      10.8
+## 13                           0.384       6.8
+## 14                           0.592       9.1
+## 15                           0.920      18.6</code></pre>
 <p>Paket <code>dplyr</code> koristi malo bogatiju strukturu umesto dataframe-a za tabelarne podatke, a to je tibble. Podatke pretvaramo u taj format na sledeći način:</p>
 <pre class="sourceCode r"><code class="sourceCode r">who_data &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(who_data)
 who_data</code></pre>
