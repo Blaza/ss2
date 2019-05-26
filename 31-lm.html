@@ -238,9 +238,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2" data-path="31-lm.html"><a href="31-lm.html#linearna-regresija"><i class="fa fa-check"></i><b>5.2</b> Linearna regresija</a><ul>
 <li class="chapter" data-level="5.2.1" data-path="31-lm.html"><a href="31-lm.html#sta-znaci-najbolje"><i class="fa fa-check"></i><b>5.2.1</b> Šta znači najbolje?</a></li>
 <li class="chapter" data-level="5.2.2" data-path="31-lm.html"><a href="31-lm.html#nalazenje-optimalne-prave"><i class="fa fa-check"></i><b>5.2.2</b> Nalaženje optimalne prave</a></li>
+<li class="chapter" data-level="5.2.3" data-path="31-lm.html"><a href="31-lm.html#visestruka-linearna-regresija"><i class="fa fa-check"></i><b>5.2.3</b> Višestruka linearna regresija</a></li>
 </ul></li>
 <li class="chapter" data-level="5.3" data-path="31-lm.html"><a href="31-lm.html#linearni-modeli-u-r-u"><i class="fa fa-check"></i><b>5.3</b> Linearni modeli u R-u</a><ul>
 <li class="chapter" data-level="" data-path="31-lm.html"><a href="31-lm.html#testiranje-znacajnosti-koeficijenata"><i class="fa fa-check"></i>Testiranje značajnosti koeficijenata</a></li>
+<li class="chapter" data-level="5.3.1" data-path="31-lm.html"><a href="31-lm.html#koeficijent-determinacije"><i class="fa fa-check"></i><b>5.3.1</b> Koeficijent determinacije</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -318,6 +320,13 @@ beta_hat &lt;-<span class="st"> </span><span class="kw">nlm</span>(mse, <span cl
 <p><img src="_main_files/figure-html/unnamed-chunk-150-1.png" width="672" /></p>
 <p>Vidimo da smo pogodili pravu. Uradite isto i za apsolutnu grešku i funkciju <code>rq</code>.</p>
 </div>
+<div id="visestruka-linearna-regresija" class="section level3">
+<h3><span class="header-section-number">5.2.3</span> Višestruka linearna regresija</h3>
+<p>Korišćenje samo jednog prediktora je često nedovoljno, pa se može uvesti i više prediktora u model, koji postaje
+<span class="math display">\[Y = \beta_0+\beta_1X_1+\dots+\beta_pX_p+\varepsilon,\]</span> a kada pravu treba oceniti na osnovu uzorka <span class="math inline">\((x_{1i},x_{2i},\dots,x_{pi}, y_i),\ i=1,\dots,n\)</span>, za uzorak pretpostavljamo da važi <span class="math display">\[y_i = \beta_0+\beta_1x_{1i}+\dots+\beta_px_{pi} + \varepsilon_i,\]</span> gde za <span class="math inline">\(\varepsilon_i\)</span> pretpostavljamo da su nezavisni i <span class="math inline">\(\varepsilon_i\sim\mathcal{N}(0,1)\)</span>.</p>
+<p>Optimalne koeficijente ocenjujemo na isti način kao pre, samo imamo više koeficijenata:</p>
+<p><span class="math display">\[(\hat{\beta}_0,\hat\beta_1,\dots,\hat\beta_p) = \underset{\beta_0,\beta_1,\dots,\beta_p}{\mathrm{argmin}}\frac1n \sum_{i=1}^n(y_i-\hat\beta_0 - \hat\beta_1x_{1i} -\ldots- \hat\beta_px_{pi})^2.\]</span></p>
+</div>
 </div>
 <div id="linearni-modeli-u-r-u" class="section level2">
 <h2><span class="header-section-number">5.3</span> Linearni modeli u R-u</h2>
@@ -366,6 +375,34 @@ model</code></pre>
 <div id="testiranje-znacajnosti-koeficijenata" class="section level3 unnumbered">
 <h3>Testiranje značajnosti koeficijenata</h3>
 <p>U tabeli koeficijenata dobijamo neke rezultate testiranja značajnosti koeficijenata. Pri tom testiranju testiramo da li je koeficijent <span class="math inline">\(\beta_j\)</span> statistički značajan, odnosno, da li se može izbaciji iz modela, a da to ne utiče na kvalitet. Formalno, testiramo <span class="math display">\[H_0: \beta_j=0\quad H_1:\beta_j\neq0,\]</span> dok je test statistika koja se koristi <span class="math display">\[t = \frac{\hat\beta_j}{se(\hat\beta_j)} \sim t_{n-p-1},\]</span> gde je <span class="math inline">\(p\)</span> broj prediktora (u slučaju proste regresije, sa 1 prediktorom, <span class="math inline">\(p=1\)</span>).</p>
+</div>
+<div id="koeficijent-determinacije" class="section level3">
+<h3><span class="header-section-number">5.3.1</span> Koeficijent determinacije</h3>
+<p>Za proveru kvaliteta našeg modela, možemo koristiti koeficijent determinacije <span class="math display">\[R^2 = 1-\frac{\sum_{i=1}^n(y_i - \hat y_i)^2}{\sum_{i=1}^n(y_i-\bar{y})^2},\]</span> gde je <span class="math inline">\(\hat y_i = \hat\beta_0 + \hat\beta_1x_{1i} +\ldots+ \hat\beta_px_{pi}\)</span>, a <span class="math inline">\(\bar y=\frac1n\sum_{i=1}^ny_i\)</span>. Što je veči koeficijent determinacije, to je model bolji. Najveća moguća vrednost je 1.</p>
+<p>Intuitivno, vidimo da poredimo srednjekvadratnu grešku našeg modela (<span class="math inline">\(\hat y\)</span>) i srednjekvadratnu grešku konstantnog modela koji <span class="math inline">\(y\)</span> uvek ocenjuje sa prosekom <span class="math inline">\(\bar y\)</span>. Očekivano je, ako je naš model dobar i ako postoji zavisnost izmedju prediktora i zavisne promenljive, da će prava (hiperravan) koju mi dobijemo bolje opisivati podatke od horizontalne linije (hiperravni) odredjene prosekom.</p>
+<p>Koeficijent determinacije <span class="math inline">\(R^2\)</span> je ime dobio, jer zaista jeste kvadrat korelacije <span class="math inline">\(y\)</span> i <span class="math inline">\(\hat y\)</span>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -29.069  -9.525  -2.272   9.215  43.201 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -17.5791     6.7584  -2.601   0.0123 *  
+## speed         3.9324     0.4155   9.464 1.49e-12 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 15.38 on 48 degrees of freedom
+## Multiple R-squared:  0.6511, Adjusted R-squared:  0.6438 
+## F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(cars<span class="op">$</span>dist, <span class="kw">fitted</span>(model))<span class="op">^</span><span class="dv">2</span></code></pre>
+<pre><code>## [1] 0.6510794</code></pre>
+<p>Vidimo da su <code>Multiple R-squared</code> iz sažetka modela i kvadrat korelacije oba jednaka <code>0.65</code>.</p>
 
 </div>
 </div>
