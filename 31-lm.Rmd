@@ -69,6 +69,15 @@ geom_abline(intercept = beta_hat[1], slope = beta_hat[2])
 
 Vidimo da smo pogodili pravu. Uradite isto i za apsolutnu grešku i funkciju `rq`.
  
+### Višestruka linearna regresija
+
+Korišćenje samo jednog prediktora je često nedovoljno, pa se može uvesti i više prediktora u model, koji postaje
+$$Y = \beta_0+\beta_1X_1+\dots+\beta_pX_p+\varepsilon,$$ a kada pravu treba oceniti na osnovu uzorka $(x_{1i},x_{2i},\dots,x_{pi}, y_i),\ i=1,\dots,n$, za uzorak pretpostavljamo da važi $$y_i = \beta_0+\beta_1x_{1i}+\dots+\beta_px_{pi} + \varepsilon_i,$$ gde za $\varepsilon_i$ pretpostavljamo da su nezavisni i $\varepsilon_i\sim\mathcal{N}(0,1)$.
+
+Optimalne koeficijente ocenjujemo na isti način kao pre, samo imamo više koeficijenata:
+
+$$(\hat{\beta}_0,\hat\beta_1,\dots,\hat\beta_p) = \underset{\beta_0,\beta_1,\dots,\beta_p}{\mathrm{argmin}}\frac1n \sum_{i=1}^n(y_i-\hat\beta_0 - \hat\beta_1x_{1i} -\ldots- \hat\beta_px_{pi})^2.$$
+
 ## Linearni modeli u R-u
 
 Glavna funkcija za pravljenje i analiziranje linearnih modela u R-u je funkcija `lm`. Ona prima kao prvi argument formulu u obliku `y ~ x1 + x2 + x3`, gde je sa leve strane `~`, ovde `y`, zavisna promenljiva, a sa desne prediktori, gde znak `+` označava da se prediktor treba uključiti.
@@ -104,7 +113,19 @@ Najviše pažnje ćemo posvetiti tabeli sa naslovom "Coefficients". Ona sadrži 
 
 U tabeli koeficijenata dobijamo neke rezultate testiranja značajnosti koeficijenata. Pri tom testiranju testiramo da li je koeficijent $\beta_j$ statistički značajan, odnosno, da li se može izbaciji iz modela, a da to ne utiče na kvalitet. Formalno, testiramo $$H_0: \beta_j=0\quad H_1:\beta_j\neq0,$$ dok je test statistika koja se koristi $$t = \frac{\hat\beta_j}{se(\hat\beta_j)} \sim t_{n-p-1},$$ gde je $p$ broj prediktora (u slučaju proste regresije, sa 1 prediktorom, $p=1$).
 
+### Koeficijent determinacije
 
+Za proveru kvaliteta našeg modela, možemo koristiti koeficijent determinacije $$R^2 = 1-\frac{\sum_{i=1}^n(y_i - \hat y_i)^2}{\sum_{i=1}^n(y_i-\bar{y})^2},$$ gde je $\hat y_i = \hat\beta_0 + \hat\beta_1x_{1i} +\ldots+ \hat\beta_px_{pi}$, a $\bar y=\frac1n\sum_{i=1}^ny_i$. Što je veči koeficijent determinacije, to je model bolji. Najveća moguća vrednost je 1.
 
+Intuitivno, vidimo da poredimo srednjekvadratnu grešku našeg modela ($\hat y$) i srednjekvadratnu grešku konstantnog modela koji $y$ uvek ocenjuje sa prosekom $\bar y$. Očekivano je, ako je naš model dobar i ako postoji zavisnost izmedju prediktora i zavisne promenljive, da će prava (hiperravan) koju mi dobijemo bolje opisivati podatke od horizontalne linije (hiperravni) odredjene prosekom.
+
+Koeficijent determinacije $R^2$ je ime dobio, jer zaista jeste kvadrat korelacije $y$ i $\hat y$.
+
+```{r}
+summary(model)
+cor(cars$dist, fitted(model))^2
+```
+
+Vidimo da su `Multiple R-squared` iz sažetka modela i kvadrat korelacije oba jednaka `0.65`.
 
 
