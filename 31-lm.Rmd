@@ -82,7 +82,7 @@ $$(\hat{\beta}_0,\hat\beta_1,\dots,\hat\beta_p) = \underset{\beta_0,\beta_1,\dot
 
 Glavna funkcija za pravljenje i analiziranje linearnih modela u R-u je funkcija `lm`. Ona prima kao prvi argument formulu u obliku `y ~ x1 + x2 + x3`, gde je sa leve strane `~`, ovde `y`, zavisna promenljiva, a sa desne prediktori, gde znak `+` označava da se prediktor treba uključiti.
 
-Specijalna oznaka za prediktore je `.` (npr. `y ~ .`) koja označava da se za prediktore uzmu sve kolone iz tabele, izuzimajući zavisnu promenljivu. Dakle, u suštini `.` znači "sve ostale promenljive iz podataka".
+Specijalna oznaka za prediktore je `.` (npr. `y ~ .`) koja označava da se za prediktore uzmu sve kolone iz tabele, izuzimajući zavisnu promenljivu. Dakle, u suštini `.` znači "sve ostale promenljive iz podataka". Uz `.`  se često koristi i `-` koji označava koje prediktore zanemariti. Na primer, ako imamo kolone `x1, x2, x3, y`, formula `y ~ . - x2` je ekvivalentna `y ~ x1 + x3`, i znači da treba modelovati `y` preko `x1` i `x3`.
 
 Drugi argument funkciji `lm` je data.frame koji sadrži podatke.
 
