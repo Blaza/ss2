@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4.2 EM algoritam | Statistički softver 2</title>
+  <meta name="description" content="4.2 EM algoritam | Statistički softver 2" />
+  <meta name="generator" content="bookdown 0.10.2 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4.2 EM algoritam | Statistički softver 2" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4.2 EM algoritam | Statistički softver 2" />
+  
+  
+  
+
+<meta name="author" content="Blagoje Ivanović" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="21-mle.html">
+<link rel="next" href="31-lm.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<script src="libs/plotly-binding-4.9.0/plotly.js"></script>
+<script src="libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<link href="libs/plotly-htmlwidgets-css-1.46.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="libs/plotly-main-1.46.1/plotly-latest.min.js"></script>
+<script src="libs/proj4js-2.3.15/proj4.js"></script>
+<link href="libs/highcharts-7.0.1/css/motion.css" rel="stylesheet" />
+<link href="libs/highcharts-7.0.1/css/htmlwdgtgrid.css" rel="stylesheet" />
+<script src="libs/highcharts-7.0.1/highcharts.js"></script>
+<script src="libs/highcharts-7.0.1/highcharts-3d.js"></script>
+<script src="libs/highcharts-7.0.1/highcharts-more.js"></script>
+<script src="libs/highcharts-7.0.1/modules/stock.js"></script>
+<script src="libs/highcharts-7.0.1/modules/map.js"></script>
+<script src="libs/highcharts-7.0.1/modules/annotations.js"></script>
+<script src="libs/highcharts-7.0.1/modules/boost.js"></script>
+<script src="libs/highcharts-7.0.1/modules/data.js"></script>
+<script src="libs/highcharts-7.0.1/modules/drag-panes.js"></script>
+<script src="libs/highcharts-7.0.1/modules/drilldown.js"></script>
+<script src="libs/highcharts-7.0.1/modules/item-series.js"></script>
+<script src="libs/highcharts-7.0.1/modules/offline-exporting.js"></script>
+<script src="libs/highcharts-7.0.1/modules/overlapping-datalabels.js"></script>
+<script src="libs/highcharts-7.0.1/modules/exporting.js"></script>
+<script src="libs/highcharts-7.0.1/modules/export-data.js"></script>
+<script src="libs/highcharts-7.0.1/modules/funnel.js"></script>
+<script src="libs/highcharts-7.0.1/modules/heatmap.js"></script>
+<script src="libs/highcharts-7.0.1/modules/treemap.js"></script>
+<script src="libs/highcharts-7.0.1/modules/sankey.js"></script>
+<script src="libs/highcharts-7.0.1/modules/solid-gauge.js"></script>
+<script src="libs/highcharts-7.0.1/modules/streamgraph.js"></script>
+<script src="libs/highcharts-7.0.1/modules/sunburst.js"></script>
+<script src="libs/highcharts-7.0.1/modules/vector.js"></script>
+<script src="libs/highcharts-7.0.1/modules/wordcloud.js"></script>
+<script src="libs/highcharts-7.0.1/modules/xrange.js"></script>
+<script src="libs/highcharts-7.0.1/modules/tilemap.js"></script>
+<script src="libs/highcharts-7.0.1/modules/venn.js"></script>
+<script src="libs/highcharts-7.0.1/modules/gantt.js"></script>
+<script src="libs/highcharts-7.0.1/modules/timeline.js"></script>
+<script src="libs/highcharts-7.0.1/modules/parallel-coordinates.js"></script>
+<script src="libs/highcharts-7.0.1/plugins/grouped-categories.js"></script>
+<script src="libs/highcharts-7.0.1/plugins/motion.js"></script>
+<script src="libs/highcharts-7.0.1/plugins/multicolor_series.js"></script>
+<script src="libs/highcharts-7.0.1/custom/reset.js"></script>
+<script src="libs/highcharts-7.0.1/custom/symbols-extra.js"></script>
+<script src="libs/highcharts-7.0.1/custom/text-symbols.js"></script>
+<script src="libs/highchart-binding-0.7.0/highchart.js"></script>
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Predgovor</a></li>
+<li class="chapter" data-level="1" data-path="11-ggplot.html"><a href="11-ggplot.html"><i class="fa fa-check"></i><b>1</b> Grafički prikaz podataka</a><ul>
+<li class="chapter" data-level="1.1" data-path="11-ggplot.html"><a href="11-ggplot.html#uvodni-primeri-i-napomene"><i class="fa fa-check"></i><b>1.1</b> Uvodni primeri i napomene</a></li>
+<li class="chapter" data-level="1.2" data-path="11-ggplot.html"><a href="11-ggplot.html#razni-primeri-grafika"><i class="fa fa-check"></i><b>1.2</b> Razni primeri grafika</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="11-ggplot.html"><a href="11-ggplot.html#scatterplotovi"><i class="fa fa-check"></i><b>1.2.1</b> Scatterplotovi</a></li>
+<li class="chapter" data-level="1.2.2" data-path="11-ggplot.html"><a href="11-ggplot.html#linijski-grafici"><i class="fa fa-check"></i><b>1.2.2</b> Linijski grafici</a></li>
+<li class="chapter" data-level="1.2.3" data-path="11-ggplot.html"><a href="11-ggplot.html#histogrami"><i class="fa fa-check"></i><b>1.2.3</b> Histogrami</a></li>
+<li class="chapter" data-level="1.2.4" data-path="11-ggplot.html"><a href="11-ggplot.html#crtanje-vise-grafika-odjednom"><i class="fa fa-check"></i><b>1.2.4</b> Crtanje više grafika odjednom</a></li>
+<li class="chapter" data-level="1.2.5" data-path="11-ggplot.html"><a href="11-ggplot.html#boks-plotovi"><i class="fa fa-check"></i><b>1.2.5</b> Boks plotovi</a></li>
+<li class="chapter" data-level="1.2.6" data-path="11-ggplot.html"><a href="11-ggplot.html#bar-plotovi"><i class="fa fa-check"></i><b>1.2.6</b> Bar plotovi</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="115-galerija.html"><a href="115-galerija.html"><i class="fa fa-check"></i><b>2</b> Galerija grafika</a><ul>
+<li class="chapter" data-level="" data-path="115-galerija.html"><a href="115-galerija.html#uvod"><i class="fa fa-check"></i>Uvod</a></li>
+<li class="chapter" data-level="2.1" data-path="115-galerija.html"><a href="115-galerija.html#ggplot2"><i class="fa fa-check"></i><b>2.1</b> Ggplot2</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="115-galerija.html"><a href="115-galerija.html#linijski-grafici-1"><i class="fa fa-check"></i><b>2.1.1</b> Linijski grafici</a></li>
+<li class="chapter" data-level="2.1.2" data-path="115-galerija.html"><a href="115-galerija.html#stacked-area-chart"><i class="fa fa-check"></i><b>2.1.2</b> Stacked area chart</a></li>
+<li class="chapter" data-level="2.1.3" data-path="115-galerija.html"><a href="115-galerija.html#sezonski-grafik"><i class="fa fa-check"></i><b>2.1.3</b> Sezonski grafik</a></li>
+<li class="chapter" data-level="2.1.4" data-path="115-galerija.html"><a href="115-galerija.html#bar-plotovi-1"><i class="fa fa-check"></i><b>2.1.4</b> Bar plotovi</a></li>
+<li class="chapter" data-level="2.1.5" data-path="115-galerija.html"><a href="115-galerija.html#lollipop-grafik"><i class="fa fa-check"></i><b>2.1.5</b> Lollipop grafik</a></li>
+<li class="chapter" data-level="2.1.6" data-path="115-galerija.html"><a href="115-galerija.html#dumbbell-plot"><i class="fa fa-check"></i><b>2.1.6</b> Dumbbell plot</a></li>
+<li class="chapter" data-level="2.1.7" data-path="115-galerija.html"><a href="115-galerija.html#histogram"><i class="fa fa-check"></i><b>2.1.7</b> Histogram</a></li>
+<li class="chapter" data-level="2.1.8" data-path="115-galerija.html"><a href="115-galerija.html#grafik-gustine"><i class="fa fa-check"></i><b>2.1.8</b> Grafik gustine</a></li>
+<li class="chapter" data-level="2.1.9" data-path="115-galerija.html"><a href="115-galerija.html#boks-plot"><i class="fa fa-check"></i><b>2.1.9</b> Boks plot</a></li>
+<li class="chapter" data-level="2.1.10" data-path="115-galerija.html"><a href="115-galerija.html#violinski-grafik"><i class="fa fa-check"></i><b>2.1.10</b> Violinski grafik</a></li>
+<li class="chapter" data-level="2.1.11" data-path="115-galerija.html"><a href="115-galerija.html#populaciona-piramida"><i class="fa fa-check"></i><b>2.1.11</b> Populaciona piramida</a></li>
+<li class="chapter" data-level="2.1.12" data-path="115-galerija.html"><a href="115-galerija.html#pitica"><i class="fa fa-check"></i><b>2.1.12</b> Pitica</a></li>
+<li class="chapter" data-level="2.1.13" data-path="115-galerija.html"><a href="115-galerija.html#hijerarhijski-dendrogram"><i class="fa fa-check"></i><b>2.1.13</b> Hijerarhijski dendrogram</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="1152-plotly.html"><a href="1152-plotly.html"><i class="fa fa-check"></i><b>2.2</b> Plotly</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="1152-plotly.html"><a href="1152-plotly.html#scatterplot"><i class="fa fa-check"></i><b>2.2.1</b> Scatterplot</a></li>
+<li class="chapter" data-level="2.2.2" data-path="1152-plotly.html"><a href="1152-plotly.html#histogram-i-bar-plot"><i class="fa fa-check"></i><b>2.2.2</b> Histogram i Bar plot</a></li>
+<li class="chapter" data-level="2.2.3" data-path="1152-plotly.html"><a href="1152-plotly.html#box-plot"><i class="fa fa-check"></i><b>2.2.3</b> Box plot</a></li>
+<li class="chapter" data-level="2.2.4" data-path="1152-plotly.html"><a href="1152-plotly.html#pravougaono-naslaganje"><i class="fa fa-check"></i><b>2.2.4</b> Pravougaono naslaganje</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="1153-highcharter.html"><a href="1153-highcharter.html"><i class="fa fa-check"></i><b>2.3</b> Highcharter</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="12-dplyr.html"><a href="12-dplyr.html"><i class="fa fa-check"></i><b>3</b> Rad sa podacima</a><ul>
+<li class="chapter" data-level="3.1" data-path="12-dplyr.html"><a href="12-dplyr.html#dataframe"><i class="fa fa-check"></i><b>3.1</b> Dataframe</a></li>
+<li class="chapter" data-level="3.2" data-path="12-dplyr.html"><a href="12-dplyr.html#obrada-podataka---dplyr-paket"><i class="fa fa-check"></i><b>3.2</b> Obrada podataka - <code>dplyr</code> paket</a></li>
+<li class="chapter" data-level="3.3" data-path="12-dplyr.html"><a href="12-dplyr.html#ucitavanje-eksternih-podataka"><i class="fa fa-check"></i><b>3.3</b> Učitavanje eksternih podataka</a></li>
+<li class="chapter" data-level="3.4" data-path="12-dplyr.html"><a href="12-dplyr.html#osnovne-funkcije-paketa-dplyr"><i class="fa fa-check"></i><b>3.4</b> Osnovne funkcije paketa <code>dplyr</code></a><ul>
+<li class="chapter" data-level="3.4.1" data-path="12-dplyr.html"><a href="12-dplyr.html#select---odabir-kolona"><i class="fa fa-check"></i><b>3.4.1</b> <code>select</code> - odabir kolona</a></li>
+<li class="chapter" data-level="3.4.2" data-path="12-dplyr.html"><a href="12-dplyr.html#filter---filtriranje-redova"><i class="fa fa-check"></i><b>3.4.2</b> <code>filter</code> - Filtriranje redova</a></li>
+<li class="chapter" data-level="3.4.3" data-path="12-dplyr.html"><a href="12-dplyr.html#arrange---sortiranje-redova"><i class="fa fa-check"></i><b>3.4.3</b> <code>arrange</code> - sortiranje redova</a></li>
+<li class="chapter" data-level="3.4.4" data-path="12-dplyr.html"><a href="12-dplyr.html#mutate---dodavanje-nove-kolone"><i class="fa fa-check"></i><b>3.4.4</b> <code>mutate</code> - dodavanje nove kolone</a></li>
+<li class="chapter" data-level="3.4.5" data-path="12-dplyr.html"><a href="12-dplyr.html#summarise---sumarne-statistike"><i class="fa fa-check"></i><b>3.4.5</b> <code>summarise</code> - sumarne statistike</a></li>
+<li class="chapter" data-level="3.4.6" data-path="12-dplyr.html"><a href="12-dplyr.html#group_by---grupisanje-opservacija"><i class="fa fa-check"></i><b>3.4.6</b> <code>group_by</code> - grupisanje opservacija</a></li>
+<li class="chapter" data-level="3.4.7" data-path="12-dplyr.html"><a href="12-dplyr.html#join---spajanje-tabela"><i class="fa fa-check"></i><b>3.4.7</b> <code>join</code> - spajanje tabela</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="21-mle.html"><a href="21-mle.html"><i class="fa fa-check"></i><b>4</b> Ocenjivanje metodom maksimalne verodostojnosti</a><ul>
+<li class="chapter" data-level="4.1" data-path="21-mle.html"><a href="21-mle.html#njutnova-metoda"><i class="fa fa-check"></i><b>4.1</b> Njutnova metoda</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="21-mle.html"><a href="21-mle.html#primer-kosijeve-raspodele"><i class="fa fa-check"></i><b>4.1.1</b> Primer Košijeve raspodele</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="211-em.html"><a href="211-em.html"><i class="fa fa-check"></i><b>4.2</b> EM algoritam</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="211-em.html"><a href="211-em.html#ocena-parametra-sa-histograma"><i class="fa fa-check"></i><b>4.2.1</b> Ocena parametra sa histograma</a></li>
+<li class="chapter" data-level="4.2.2" data-path="211-em.html"><a href="211-em.html#ocenjivanje-mesavine-normalnih-raspodela"><i class="fa fa-check"></i><b>4.2.2</b> Ocenjivanje mešavine normalnih raspodela</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="31-lm.html"><a href="31-lm.html"><i class="fa fa-check"></i><b>5</b> Osnove linearnih modela</a><ul>
+<li class="chapter" data-level="5.1" data-path="31-lm.html"><a href="31-lm.html#regresija"><i class="fa fa-check"></i><b>5.1</b> Regresija</a></li>
+<li class="chapter" data-level="5.2" data-path="31-lm.html"><a href="31-lm.html#linearna-regresija"><i class="fa fa-check"></i><b>5.2</b> Linearna regresija</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="31-lm.html"><a href="31-lm.html#sta-znaci-najbolje"><i class="fa fa-check"></i><b>5.2.1</b> Šta znači najbolje?</a></li>
+<li class="chapter" data-level="5.2.2" data-path="31-lm.html"><a href="31-lm.html#nalazenje-optimalne-prave"><i class="fa fa-check"></i><b>5.2.2</b> Nalaženje optimalne prave</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Statistički softver 2</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="em-algoritam" class="section level2">
+<h2><span class="header-section-number">4.2</span> EM algoritam</h2>
+<p>EM algoritam (Expectation-Maximization) je algoritam za nalaženje ocena maksimalne verodostojnosti, koji nalazi veoma široku upotrebu u statistici, posebno Bajesovskoj. Glavna ideja je da nam omogući da nadjemo ocene maksimalne verodostojnosti u prisustvu nedostajućih podataka ili skrivenih parametara.</p>
+<p>Ilustrovaćemo postupak kroz dva primera.</p>
+<div id="ocena-parametra-sa-histograma" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> Ocena parametra sa histograma</h3>
+<p>Pretpostavimo da smo, umesto konkretnog uzorka, dobili samo histogram odredjenog uzorka iz eksponencijalne raspodele sa nepoznatim parametrom <span class="math inline">\(\lambda\)</span> koji želimo da ocenimo na osnovu tog histograma.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>)
+<span class="co"># napravicemo histogram uzorka iz iz nepoznate eksponencijalne raspodele</span>
+h &lt;-<span class="st"> </span><span class="kw">hist</span>(<span class="kw">rexp</span>(<span class="dv">1000</span>, <span class="dt">rate =</span> <span class="kw">rexp</span>(<span class="dv">1</span>, <span class="fl">0.1</span>)))</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-135-1.png" width="672" /></p>
+<pre class="sourceCode r"><code class="sourceCode r">h</code></pre>
+<pre><code>## $breaks
+##  [1] 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9
+## 
+## $counts
+## [1] 509 266 121  58  22  11   8   2   3
+## 
+## $density
+## [1] 5.09 2.66 1.21 0.58 0.22 0.11 0.08 0.02 0.03
+## 
+## $mids
+## [1] 0.05 0.15 0.25 0.35 0.45 0.55 0.65 0.75 0.85
+## 
+## $xname
+## [1] &quot;rexp(1000, rate = rexp(1, 0.1))&quot;
+## 
+## $equidist
+## [1] TRUE
+## 
+## attr(,&quot;class&quot;)
+## [1] &quot;histogram&quot;</code></pre>
+<p>Budući da je logaritamska verodostojnost jednaka <span class="math display">\[\log L(\lambda; \mathbf{x})=n\log\lambda - \lambda\sum_{i=1}^nx_i,\]</span>
+klasičnim postupkom možemo zaključiti da je ocena maksimalne verodostojnosti <span class="math display">\[\hat{\lambda} = \frac{n}{\sum_{i=1}^nx_i}=\frac1{\overline{X}_n}.\]</span> Medjutim, naš problem je sada što mi nemamo uzorak <span class="math inline">\(x_1,\dots,x_n\)</span>, pa ovako ne možemo odrediti ocenu. Ono što imamo je niz parova <span class="math inline">\((u_1,v_1),\dots,(u_n, v_n)\)</span> koji odredjuju kom intevalu pripadaju odgovarajući elementi uzorka. Dakle, <span class="math inline">\(x_i\in(u_i,v_i),\ \forall i=1,\dots,n.\)</span></p>
+<p>Srećom, na osnovu znanja o intervalu kom pripada <span class="math inline">\(x_i\)</span> možemo oceniti vrednost elementa <span class="math inline">\(x_i\)</span> uzimanjem uslovnog očekivanja, tačnije:
+<span class="math display">\[\hat{x_i} = E\left(X_i\mid X_i\in(u_i,v_i)\right)=\frac1\lambda + \frac{u_ie^{-\lambda u_i} - v_ie^{-\lambda v_i}}{e^{-\lambda u_i} - e^{-\lambda v_i}}.\]</span> Izvodjenje ovog uslovnog očekivanja ostavljamo čitaocu kao dobru vežbu za utvrdjivanje znanja iz Teorije verovatnoće.</p>
+<p>Ovde opet imamo problem, sada nam nije poznato <span class="math inline">\(\lambda\)</span>, pa ne možemo da odredimo tačnu ocenu elemenata uzorka. Vidimo da imamo “cirkularnu” zavisnost izmedju <span class="math inline">\(\lambda\)</span> i <span class="math inline">\(x_i\)</span>, ako ne znamo jedno, ne možemo oceniti drugo.</p>
+<p>Zato ćemo pribeći iterativnom algortmu.</p>
+<ol style="list-style-type: decimal">
+<li>Počećemo od neke proizvoljne ocene <span class="math inline">\(\hat{\lambda}\)</span>.</li>
+<li>(korak E) Iskoristićemo ovu ocenu da odredimo očekivanje <span class="math display">\[\hat{x_i} = \frac{1}{\hat{\lambda}} + \frac{u_ie^{-\hat{\lambda} u_i} - v_ie^{-\hat{\lambda} v_i}}{e^{-\hat{\lambda} u_i} - e^{-\hat{\lambda} v_i}},\ i=1,\dots,n.\]</span></li>
+<li>(korak M) Na osnovu ocena elemenata <span class="math inline">\(x_i\)</span>, poboljšaćemo ocenu <span class="math inline">\(\lambda\)</span> maksimizovanjem funkcije verodostojnosi, tj. uzimamo <span class="math display">\[\hat{\lambda} = \underset{\lambda}{\mathrm{argmax}}\log L(\lambda; \mathbf{\hat{x}})=\frac{n}{\sum_{i=1}^n\hat{x_i}}.\]</span></li>
+<li>Ponavljamo korake E i M iterativno dok ne konvergiramo nekoj oceni nepoznatog parametra <span class="math inline">\(\lambda\)</span>.</li>
+</ol>
+<p>Vidimo odakle potiče ime EM algoritma – smenjujemo korake E i M dok ne dobijemo dobru ocenu (ne maksimizujemo neko očekivanje).</p>
+<p>Primenimo konačno ovaj algoritam da dobijemo ocenu za naš uzorak. Prvo ćemo implementirati algoritam i potrebne korake.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># korak E - ocekivanja x-eva na osnovu neke cene lambda</span>
+expected_xs &lt;-<span class="st"> </span><span class="cf">function</span>(lambda, u, v) {
+  <span class="dv">1</span><span class="op">/</span>lambda <span class="op">+</span>
+<span class="st">    </span>(u<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>lambda<span class="op">*</span>u) <span class="op">-</span><span class="st"> </span>v<span class="op">*</span><span class="kw">exp</span>(<span class="op">-</span>lambda<span class="op">*</span>v))<span class="op">/</span>
+<span class="st">    </span>(<span class="kw">exp</span>(<span class="op">-</span>lambda<span class="op">*</span>u) <span class="op">-</span><span class="st"> </span><span class="kw">exp</span>(<span class="op">-</span>lambda<span class="op">*</span>v))
+}
+
+<span class="co"># korak M - na osnovu ocenjenog uzorka, dati MMV ocenu lambda</span>
+maximize_logL &lt;-<span class="st"> </span><span class="cf">function</span>(xs) {
+  <span class="dv">1</span><span class="op">/</span><span class="kw">mean</span>(xs)
+}
+
+
+<span class="co"># funkcija koja trazi ocenu EM algoritmom za datu pocetnu vrednost</span>
+<span class="co"># lambda i vektor levih (u) i desnih (v) granica intervala za x_i</span>
+EM_estimate &lt;-<span class="st"> </span><span class="cf">function</span>(lambda_<span class="dv">0</span>, u, v, <span class="dt">tol =</span> <span class="fl">1e-8</span>, <span class="dt">maxiter =</span> <span class="dv">1000</span>) {
+  xs &lt;-<span class="st"> </span><span class="kw">expected_xs</span>(lambda_<span class="dv">0</span>, u, v)
+  lambda &lt;-<span class="st"> </span><span class="kw">maximize_logL</span>(xs)
+  <span class="kw">print</span>(lambda)
+  iter &lt;-<span class="st"> </span><span class="dv">1</span>
+  
+  <span class="cf">while</span>((<span class="kw">abs</span>(lambda <span class="op">-</span><span class="st"> </span>lambda_<span class="dv">0</span>) <span class="op">&gt;</span><span class="st"> </span>tol) <span class="op">&amp;&amp;</span>
+<span class="st">        </span>iter <span class="op">&lt;</span><span class="st"> </span>maxiter) {
+    iter &lt;-<span class="st"> </span>iter <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+    lambda_<span class="dv">0</span> &lt;-<span class="st"> </span>lambda
+    
+    xs &lt;-<span class="st"> </span><span class="kw">expected_xs</span>(lambda_<span class="dv">0</span>, u, v)
+    lambda &lt;-<span class="st"> </span><span class="kw">maximize_logL</span>(xs)
+    <span class="kw">print</span>(lambda)
+  }
+  lambda
+}</code></pre>
+<p>Ostaje jos da odredimo na osnovu histograma vrednosti <span class="math inline">\(u_i\)</span> i <span class="math inline">\(v_i\)</span>. Nije bitno uredjenje uzorka, pa možemo pretpostaviti da imamo sortiran uzorak <span class="math inline">\(x_i\)</span>. Odatle, ukoliko imamo 100 elemenata u prvom stupcu histograma, nekom intervalu <span class="math inline">\((a,b)\)</span>, onda možemo zaključiti da je <span class="math inline">\(\forall i=1,\dots,100,\ x_i\in(u_i, v_i)=(a,b)\)</span>, odnosno da je <span class="math inline">\(u_1=\dots=u_{100}=a\)</span> i <span class="math inline">\(v_1=\dots=v_{100}=b\)</span>. Slično važi i za ostale stupce. U R-u niz parova <span class="math inline">\((u_1,v_1),\dots,(u_n, v_n)\)</span> možemo kreirati na sledeći način</p>
+<pre class="sourceCode r"><code class="sourceCode r">u &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">head</span>(h<span class="op">$</span>breaks, <span class="dv">-1</span>), h<span class="op">$</span>counts)
+v &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">tail</span>(h<span class="op">$</span>breaks, <span class="dv">-1</span>), h<span class="op">$</span>counts)</code></pre>
+<p>Odavde sada možemo da odredimo ocenu <span class="math inline">\(\lambda\)</span> EM algoritmom:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">EM_estimate</span>(<span class="dv">1</span>, u, v)</code></pre>
+<pre><code>## [1] 7.129271
+## [1] 7.395976
+## [1] 7.407838
+## [1] 7.408366
+## [1] 7.408389
+## [1] 7.40839
+## [1] 7.40839
+## [1] 7.40839</code></pre>
+<pre><code>## [1] 7.40839</code></pre>
+<p>Zaključili smo da je ocena <span class="math inline">\(\hat{\lambda} = 7.41\)</span>. Pošto ne znamo da li je ova ocena tačna, na neki način treba proveriti kako se ova ocena uklapa u podatke.</p>
+<p>Najjednostavniji način je da preko histograma nacrtamo gustinu eksponencijalne raspodele sa ocenjenim parametrom.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(h)
+<span class="co"># mnozenje sa 100 je da bismo sa gustine presli na skalu frekvencija</span>
+<span class="co"># jer je density = counts / (sum(counts) * bin_width), sto je u nasem</span>
+<span class="co"># slucaju density = counts / (1000 * 0.1) = counts / 100</span>
+<span class="kw">curve</span>(<span class="dv">100</span><span class="op">*</span><span class="kw">dexp</span>(x, <span class="dt">rate =</span> <span class="fl">7.41</span>), <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">col=</span><span class="st">&quot;steelblue&quot;</span>, <span class="dt">lwd =</span> <span class="dv">2</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-139-1.png" width="672" /></p>
+<p>Kriva vrlo dobro odgovara histogramu, pa možemo biti zadovljni ocenom.</p>
+</div>
+<div id="ocenjivanje-mesavine-normalnih-raspodela" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> Ocenjivanje mešavine normalnih raspodela</h3>
+<p>Pretpostavimo da imamo uzorak <span class="math inline">\(x_1,\dots,x_n\)</span> iz mešavine dve normalne raspodele, sa gustinom <span class="math display">\[f(x) = (1-p)f_{\mu_1}(x)+p f_{\mu_2}(x),\]</span> gde su <span class="math display">\[f_{\mu_i}(x) = \frac{1}{\sqrt{2\pi}}e^{-\frac{(x-\mu_i)^2}{2}},\quad i=1,2.\]</span> Dakle imamo mešavinu normalnih <span class="math inline">\(\mathcal{N}(\mu_1, 1)\)</span> i <span class="math inline">\(\mathcal{N}(\mu_2, 1)\)</span> raspodela.</p>
+<p>Cilj će nam biti da odredimo, koristeći EM algoritam, ocene za parametre <span class="math inline">\(\mu_1\)</span> i <span class="math inline">\(\mu_2\)</span>.</p>
+<div id="mesavina-normalnih-raspodela" class="section level4 unnumbered">
+<h4>Mešavina normalnih raspodela</h4>
+<p>U našem primeru koristićemo vrednost <span class="math inline">\(p = 0.7\)</span>, radi jednostavnosti.</p>
+<p>Ovako izgleda odgovarajuća gustina</p>
+<pre class="sourceCode r"><code class="sourceCode r">dmix &lt;-<span class="st"> </span><span class="cf">function</span>(x, mi1, mi2) {
+  <span class="fl">0.3</span> <span class="op">*</span><span class="st"> </span><span class="kw">dnorm</span>(x, mi1, <span class="dv">1</span>) <span class="op">+</span>
+<span class="st">    </span><span class="fl">0.7</span> <span class="op">*</span><span class="st"> </span><span class="kw">dnorm</span>(x, mi2, <span class="dv">1</span>)
+}
+<span class="co"># Uzmemo konkretne vrednosti m_1 = -1 i m_2 = 3</span>
+<span class="kw">curve</span>(<span class="kw">dmix</span>(x, <span class="dv">-1</span>, <span class="dv">3</span>), <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>))</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-140-1.png" width="672" /></p>
+<p>Ova raspodela nastaje tako što <span class="math inline">\(X\)</span> uzima vrednost iz jedne normalne raspodele sa verovatnoćom <span class="math inline">\(p\)</span> ili iz druge normalne sa verovatnoćom <span class="math inline">\(1-p\)</span>.</p>
+<p>Dakle imamo dodatnu indikatorsku slučajnu veličinu <span class="math display">\[W\sim\mathcal{Ber}(p),\]</span> a slučajna veličina <span class="math inline">\(X\)</span> je definisana kao <span class="math display">\[X = (1-W)Y_1+W\,Y_2,\]</span> gde je <span class="math inline">\(Y_i\sim\mathcal{N}(\mu_i, 1),\ i=1,2\)</span>.</p>
+<p>Iz ovakve reprezentacije vidimo i način na koji možemo generisati odgovarajući uzorak.</p>
+<pre class="sourceCode r"><code class="sourceCode r">rmix &lt;-<span class="st"> </span><span class="cf">function</span>(n) {
+  u &lt;-<span class="st"> </span><span class="kw">runif</span>(n)
+  (u <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">-1</span>) <span class="op">+</span>
+<span class="st">    </span>(u <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">rnorm</span>(n, <span class="dv">3</span>)
+}</code></pre>
+<p>Testiramo da li odgovara raspodeli…</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">curve</span>(<span class="kw">dmix</span>(x, <span class="dv">-1</span>, <span class="dv">3</span>), <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">10</span>, <span class="dv">10</span>))
+<span class="kw">lines</span>(<span class="kw">density</span>(<span class="kw">rmix</span>(<span class="dv">100000</span>)), <span class="dt">col=</span><span class="st">&quot;green&quot;</span>)</code></pre>
+<p><img src="_main_files/figure-html/unnamed-chunk-142-1.png" width="672" /></p>
+<p>Generišimo stoga uzorak na osnovu kog ćemo ilustrovati metodu. Stvarne vrednosti će biti <span class="math inline">\(\mu_1=-1\)</span> i <span class="math inline">\(\mu_2=3\)</span>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">uzorak &lt;-<span class="st"> </span><span class="kw">rmix</span>(<span class="dv">1000</span>)</code></pre>
+<p>Fun fact: Logaritam funkcije verodostojnosti se može nacrtati u 3 dimenzije koristeći paket <code>rgl</code> sledećim kodom.</p>
+<pre class="sourceCode r"><code class="sourceCode r">mixlogL &lt;-<span class="st"> </span><span class="cf">function</span>(mi1, mi2) {
+  <span class="kw">sum</span>(<span class="kw">log</span>(<span class="kw">dmix</span>(uzorak, mi1, mi2)))
+}
+
+mi1 &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">5</span>,<span class="dv">6</span>,<span class="dt">length.out =</span> <span class="dv">100</span>)
+mi2 &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">3</span>,<span class="dv">8</span>,<span class="dt">length.out =</span> <span class="dv">100</span>)
+z &lt;-<span class="st"> </span><span class="kw">outer</span>(mi1, mi2, <span class="kw">Vectorize</span>(mixlogL))
+<span class="kw">library</span>(rgl)
+<span class="kw">persp3d</span>(mi1, mi2, z, <span class="dt">color =</span> <span class="st">&quot;steelblue&quot;</span>)</code></pre>
+</div>
+<div id="nalazenje-ocene" class="section level4 unnumbered">
+<h4>Nalaženje ocene</h4>
+<p>U ovom slučaju, kada imamo uzorak <span class="math inline">\(x_1,\dots,x_n\)</span> iz mešavine raspodela, skrivena promenljiva nam je pripadnost odredjenog elementa uzorka jednoj od raspodela, odnosno, iz vrednosti <span class="math inline">\(X_i\)</span> ne znamo vrednost indikatora <span class="math inline">\(w_i\)</span>.</p>
+<p>Naravno, možemo oceniti vrednost tog indikatora uslovnim očekivanjem <span class="math display">\[\hat{w_i}=E(W_i|X_i=x_i),\]</span> što nam čini korak E u EM algoritmu.</p>
+<p>Nakon kraćeg izvodjenja koje ostavljamo za vežbu iz Teorije verovatnoće dobijamo ocenu
+<span class="math display">\[\hat{w_i}=P(W_i=1|X_i=x_i)=\frac{pf_{\mu_2}(x_i)}{(1-p)f_{\mu_1}(x_i)+pf_{\mu_2}(x_i)}.\]</span></p>
+<p>Dakle korak E se implementira sledećom funkcijom</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># za p smo uzeli 0.7</span>
+expectation &lt;-<span class="st"> </span><span class="cf">function</span>(mi1, mi2, xs) {
+  <span class="fl">0.7</span><span class="op">*</span><span class="kw">dnorm</span>(xs, mi2) <span class="op">/</span>
+<span class="st">    </span>(<span class="fl">0.3</span><span class="op">*</span><span class="kw">dnorm</span>(xs, mi1) <span class="op">+</span>
+<span class="st">       </span><span class="fl">0.7</span><span class="op">*</span><span class="kw">dnorm</span>(xs, mi2))
+}</code></pre>
+<p>Ova funkcija zavisi od nepoznatih parametara <span class="math inline">\(\mu_1\)</span> i <span class="math inline">\(\mu_2\)</span>, tako da nam je potreban način da njih ocenimo u M koraku EM algoritma.</p>
+<p>Pošto je uslovna gustina <span class="math display">\[f_{X|W=w_i}(x_i)=\begin{cases}f_{\mu_1}(x_i),&amp; w_i=0\\ f_{\mu_2}(x_i),&amp; w_i=1\end{cases},\]</span> logaritamska funkcija verodostojnosti, kada imamo znanje o skrivenoj promenljivoj <span class="math inline">\(W\)</span> (a imačemo ocenu iz koraka E), će biti
+<span class="math display">\[\begin{align}
+  \log L(\mathbf{\mu}; \mathbf{x}, \mathbf{w}) &amp;= \log \left(\prod_{w_i=0}f_{\mu_1}(x_i)\prod_{w_i=1}f_{\mu_2}(x_i)\right)\\
+  &amp;= \sum_{w_i=0}\log f_{\mu_1}(x_i) + \sum_{w_i=1}\log f_{\mu_2}(x_i)\\
+  &amp;= \sum_{i=1}^n ((1-w_i)\log f_{\mu_1}(x_i)+w_i\log f_{\mu_2}(x_i)),
+\end{align}\]</span></p>
+<p>gde je <span class="math inline">\(\mathbf{\mu}=(\mu_1,\mu_2)^\top\)</span>. Odavde vidimo da je ocena metodom maksimalne verodostojnosti za <span class="math inline">\(\mu\)</span> jednaka <span class="math display">\[\hat{\mathbf{\mu}} = \underset{\mu}{\mathrm{argmax}}\log L(\mathbf{\mu}; \mathbf{x}, \mathbf{w}).\]</span></p>
+<p>Sad možemo da implementiramo korak M algoritma</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># logaritam verodostojnosti</span>
+logLxw &lt;-<span class="st"> </span><span class="cf">function</span>(mi1, mi2, xs, ws) {
+  <span class="kw">sum</span>((<span class="dv">1</span><span class="op">-</span>ws)<span class="op">*</span><span class="kw">log</span>(<span class="kw">dnorm</span>(xs, mi1)) <span class="op">+</span>
+<span class="st">        </span>ws<span class="op">*</span><span class="kw">log</span>(<span class="kw">dnorm</span>(xs, mi2)))
+}
+
+<span class="co"># trazimo argmax(L) tako sto nadjemo argmin(-L) pomocu funkcije nlm</span>
+maximization &lt;-<span class="st"> </span><span class="cf">function</span>(Ew, xs, mi_<span class="dv">0</span>) {
+  <span class="kw">nlm</span>(<span class="cf">function</span>(mi) <span class="op">-</span><span class="kw">logLxw</span>(mi[<span class="dv">1</span>], mi[<span class="dv">2</span>], xs, Ew), mi_<span class="dv">0</span>)<span class="op">$</span>estimate
+}</code></pre>
+<p>Kada imamo sve korake implementirane, ostaje samo da implementiramo sam algoritam koji iterira ove korake</p>
+<pre class="sourceCode r"><code class="sourceCode r">EM_estimate_mix &lt;-<span class="st"> </span><span class="cf">function</span>(mi_<span class="dv">0</span>, xs, <span class="dt">tol=</span><span class="fl">1e-6</span>, <span class="dt">maxiter=</span><span class="dv">100</span>) {
+  iter &lt;-<span class="st"> </span><span class="dv">0</span>
+  Ew &lt;-<span class="st"> </span><span class="kw">expectation</span>(mi_<span class="dv">0</span>[<span class="dv">1</span>], mi_<span class="dv">0</span>[<span class="dv">2</span>], xs)
+  mi &lt;-<span class="st"> </span><span class="kw">maximization</span>(Ew, xs, mi_<span class="dv">0</span>)
+  <span class="kw">print</span>(mi)
+  
+  <span class="cf">while</span>(<span class="kw">any</span>(<span class="kw">abs</span>(mi <span class="op">-</span><span class="st"> </span>mi_<span class="dv">0</span>) <span class="op">&gt;</span><span class="st"> </span>tol)){
+    <span class="cf">if</span>(iter <span class="op">==</span><span class="st"> </span>maxiter)
+      <span class="cf">break</span>
+    
+    mi_<span class="dv">0</span> &lt;-<span class="st"> </span>mi
+    
+    Ew &lt;-<span class="st"> </span><span class="kw">expectation</span>(mi_<span class="dv">0</span>[<span class="dv">1</span>], mi_<span class="dv">0</span>[<span class="dv">2</span>], xs)
+    mi &lt;-<span class="st"> </span><span class="kw">maximization</span>(Ew, xs, mi_<span class="dv">0</span>)
+    
+    <span class="kw">print</span>(mi)
+    iter &lt;-<span class="st"> </span>iter <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+  }
+  mi
+}</code></pre>
+<p>Primenimo algoritam za početnu vrednost <span class="math inline">\(\mathbf{\mu}=(0,1)^\top\)</span>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">EM_estimate_mix</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), uzorak)</code></pre>
+<pre><code>## Warning in nlm(function(mi) -logLxw(mi[1], mi[2], xs, Ew), mi_0): NA/Inf
+## replaced by maximum positive value
+
+## Warning in nlm(function(mi) -logLxw(mi[1], mi[2], xs, Ew), mi_0): NA/Inf
+## replaced by maximum positive value</code></pre>
+<pre><code>## [1] -0.8442056  2.5452301</code></pre>
+<pre><code>## Warning in nlm(function(mi) -logLxw(mi[1], mi[2], xs, Ew), mi_0): NA/Inf
+## replaced by maximum positive value</code></pre>
+<pre><code>## [1] -1.132248  2.965951
+## [1] -1.113066  2.990345
+## [1] -1.106408  2.993856
+## [1] -1.104836  2.994616
+## [1] -1.104475  2.994789
+## [1] -1.104392  2.994828
+## [1] -1.104373  2.994837
+## [1] -1.104368  2.994841
+## [1] -1.104367  2.994842
+## [1] -1.104367  2.994842</code></pre>
+<pre><code>## [1] -1.104367  2.994842</code></pre>
+<p>Vidimo da je algoritam konvergirao ka <span class="math inline">\(\hat{\mathbf{\mu}}=(-0.97, 2.96)^\top\)</span> približno pravoj vrednosti <span class="math inline">\(\mathbf{\mu}=(-1, 3)^\top\)</span>.</p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="21-mle.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="31-lm.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
