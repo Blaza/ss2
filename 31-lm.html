@@ -239,6 +239,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.2.1" data-path="31-lm.html"><a href="31-lm.html#sta-znaci-najbolje"><i class="fa fa-check"></i><b>5.2.1</b> Šta znači najbolje?</a></li>
 <li class="chapter" data-level="5.2.2" data-path="31-lm.html"><a href="31-lm.html#nalazenje-optimalne-prave"><i class="fa fa-check"></i><b>5.2.2</b> Nalaženje optimalne prave</a></li>
 </ul></li>
+<li class="chapter" data-level="5.3" data-path="31-lm.html"><a href="31-lm.html#linearni-modeli-u-r-u"><i class="fa fa-check"></i><b>5.3</b> Linearni modeli u R-u</a><ul>
+<li class="chapter" data-level="" data-path="31-lm.html"><a href="31-lm.html#testiranje-znacajnosti-koeficijenata"><i class="fa fa-check"></i>Testiranje značajnosti koeficijenata</a></li>
+</ul></li>
 </ul></li>
 </ul>
 
@@ -263,7 +266,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">5.1</span> Regresija</h2>
 <p>Cilj regresije je da nadje funkcionalnu vezu izmedju obeležja <span class="math inline">\(Y\)</span>, koje nazivamo zavisnom promenljivom i obeležja <span class="math inline">\(X\)</span>, koje nazivamo nezavisnom promenljivom ili prediktorom.</p>
 <p>Ova veza je oblika <span class="math display">\[Y = f(X) + \varepsilon,\]</span> gde je <span class="math inline">\(\varepsilon\)</span> slučajna greška modela, koja je nezavisna od <span class="math inline">\(X\)</span>.</p>
-<p>Prava funkcija <span class="math inline">\(f(x)\)</span> je nepoznata, pa je treba oceniti na osnovu uzorka <span class="math inline">\((x_i, y_i),\ i=1,\dots,n\)</span>. Za uzorak pretpostavljamo da važi <span class="math display">\[y_i = f(x_i) + \varepsilon_i\]</span> i potrebna nam je ocena <span class="math inline">\(\hat{f}(x)\)</span>.</p>
+<p>Prava funkcija <span class="math inline">\(f(x)\)</span> je nepoznata, pa je treba oceniti na osnovu uzorka <span class="math inline">\((x_i, y_i),\ i=1,\dots,n\)</span>. Za uzorak pretpostavljamo da važi <span class="math display">\[y_i = f(x_i) + \varepsilon_i,\]</span> gde za <span class="math inline">\(\varepsilon_i\)</span> pretpostavljamo da su nezavisni i <span class="math inline">\(\varepsilon_i\sim\mathcal{N}(0,1)\)</span>, a potrebna nam je ocena <span class="math inline">\(\hat{f}(x)\)</span>.</p>
 <p>Prostor svih mogućih funkcija <span class="math inline">\(f(x)\)</span> je prevelik i nije ga moguće istražiti u potpunosti, pa stoga uvek pretpostavljamo odredjen (obično parametarski) oblik funkcije <span class="math inline">\(f(x)\)</span>, čime smanjujemo prostor funkcija nad kojim tražimo <span class="math inline">\(f(x)\)</span>.</p>
 </div>
 <div id="linearna-regresija" class="section level2">
@@ -312,9 +315,57 @@ beta_hat &lt;-<span class="st"> </span><span class="kw">nlm</span>(mse, <span cl
 <span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="kw">geom_smooth</span>(<span class="dt">method=</span><span class="st">&quot;lm&quot;</span>, <span class="dt">se =</span> <span class="ot">FALSE</span>, <span class="dt">color=</span><span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
 <span class="kw">geom_abline</span>(<span class="dt">intercept =</span> beta_hat[<span class="dv">1</span>], <span class="dt">slope =</span> beta_hat[<span class="dv">2</span>])</code></pre>
-<p><img src="_main_files/figure-html/unnamed-chunk-150-1.png" width="672" />
-Vidimo da smo pogodili pravu. Uradite isto i za apsolutnu grešku i funkciju <code>rq</code>.</p>
-<p>to be continued…</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-150-1.png" width="672" /></p>
+<p>Vidimo da smo pogodili pravu. Uradite isto i za apsolutnu grešku i funkciju <code>rq</code>.</p>
+</div>
+</div>
+<div id="linearni-modeli-u-r-u" class="section level2">
+<h2><span class="header-section-number">5.3</span> Linearni modeli u R-u</h2>
+<p>Glavna funkcija za pravljenje i analiziranje linearnih modela u R-u je funkcija <code>lm</code>. Ona prima kao prvi argument formulu u obliku <code>y ~ x1 + x2 + x3</code>, gde je sa leve strane <code>~</code>, ovde <code>y</code>, zavisna promenljiva, a sa desne prediktori, gde znak <code>+</code> označava da se prediktor treba uključiti.</p>
+<p>Specijalna oznaka za prediktore je <code>.</code> (npr. <code>y ~ .</code>) koja označava da se za prediktore uzmu sve kolone iz tabele, izuzimajući zavisnu promenljivu. Dakle, u suštini <code>.</code> znači “sve ostale promenljive iz podataka”.</p>
+<p>Drugi argument funkciji <code>lm</code> je data.frame koji sadrži podatke.</p>
+<p>Model koji smo posmatrali za skup podataka <code>cars</code> se dobija kao:</p>
+<pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="kw">lm</span>(dist <span class="op">~</span><span class="st"> </span>speed, cars)
+model</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Coefficients:
+## (Intercept)        speed  
+##     -17.579        3.932</code></pre>
+<p>Kada pozovemo <code>geom_smooth(method = &quot;lm&quot;)</code>, ggplot u poozadini napravi model <code>lm(y~x, data)</code> i njega nacrta.</p>
+<p>Najčešće korišćena funkcija uz <code>lm</code> (koja pravi model), je funkcija <code>summary</code> koja prikazuje osnovne rezultate modelovanja</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = dist ~ speed, data = cars)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -29.069  -9.525  -2.272   9.215  43.201 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) -17.5791     6.7584  -2.601   0.0123 *  
+## speed         3.9324     0.4155   9.464 1.49e-12 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 15.38 on 48 degrees of freedom
+## Multiple R-squared:  0.6511, Adjusted R-squared:  0.6438 
+## F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12</code></pre>
+<p>Najviše pažnje ćemo posvetiti tabeli sa naslovom “Coefficients”. Ona sadrži 4 kolone, gde se svaki red odnosi na odgovarajući prediktor (u ovom slučaju imamo slobodan član – <span class="math inline">\(\beta_0\)</span> i koeficijent uz prediktor <code>speed</code> – <span class="math inline">\(\beta_1\)</span>). Kolone su sledeće:</p>
+<ol style="list-style-type: decimal">
+<li><code>Estimate</code>: Ocenjena vrednost koeficijenta uz prediktor</li>
+<li><code>Std. Error</code>: Standardna greška ocene koeficijenta (<span class="math inline">\(se(\hat\beta_j)\)</span>)</li>
+<li><code>t value</code>: Vrednost t statistike, koja se koristi za testiranje značajnosti koeficijenata</li>
+<li><code>Pr(&gt;|t|)</code>: p vrednost t testa značajnosti odgovarajućeg koeficijenta</li>
+<li>zvezdice pored p vrednosti označavaju sa kojim nivoom značajnosti bi dobili statistički značajan rezultat (3 zvezdice predstavljaju p vrednost koja je manja od 1 promila).</li>
+</ol>
+<div id="testiranje-znacajnosti-koeficijenata" class="section level3 unnumbered">
+<h3>Testiranje značajnosti koeficijenata</h3>
+<p>U tabeli koeficijenata dobijamo neke rezultate testiranja značajnosti koeficijenata. Pri tom testiranju testiramo da li je koeficijent <span class="math inline">\(\beta_j\)</span> statistički značajan, odnosno, da li se može izbaciji iz modela, a da to ne utiče na kvalitet. Formalno, testiramo <span class="math display">\[H_0: \beta_j=0\quad H_1:\beta_j\neq0,\]</span> dok je test statistika koja se koristi <span class="math display">\[t = \frac{\hat\beta_j}{se(\hat\beta_j)} \sim t_{n-p-1},\]</span> gde je <span class="math inline">\(p\)</span> broj prediktora (u slučaju proste regresije, sa 1 prediktorom, <span class="math inline">\(p=1\)</span>).</p>
 
 </div>
 </div>
