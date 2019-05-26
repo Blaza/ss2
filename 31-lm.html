@@ -331,7 +331,7 @@ beta_hat &lt;-<span class="st"> </span><span class="kw">nlm</span>(mse, <span cl
 <div id="linearni-modeli-u-r-u" class="section level2">
 <h2><span class="header-section-number">5.3</span> Linearni modeli u R-u</h2>
 <p>Glavna funkcija za pravljenje i analiziranje linearnih modela u R-u je funkcija <code>lm</code>. Ona prima kao prvi argument formulu u obliku <code>y ~ x1 + x2 + x3</code>, gde je sa leve strane <code>~</code>, ovde <code>y</code>, zavisna promenljiva, a sa desne prediktori, gde znak <code>+</code> označava da se prediktor treba uključiti.</p>
-<p>Specijalna oznaka za prediktore je <code>.</code> (npr. <code>y ~ .</code>) koja označava da se za prediktore uzmu sve kolone iz tabele, izuzimajući zavisnu promenljivu. Dakle, u suštini <code>.</code> znači “sve ostale promenljive iz podataka”.</p>
+<p>Specijalna oznaka za prediktore je <code>.</code> (npr. <code>y ~ .</code>) koja označava da se za prediktore uzmu sve kolone iz tabele, izuzimajući zavisnu promenljivu. Dakle, u suštini <code>.</code> znači “sve ostale promenljive iz podataka”. Uz <code>.</code> se često koristi i <code>-</code> koji označava koje prediktore zanemariti. Na primer, ako imamo kolone <code>x1, x2, x3, y</code>, formula <code>y ~ . - x2</code> je ekvivalentna <code>y ~ x1 + x3</code>, i znači da treba modelovati <code>y</code> preko <code>x1</code> i <code>x3</code>.</p>
 <p>Drugi argument funkciji <code>lm</code> je data.frame koji sadrži podatke.</p>
 <p>Model koji smo posmatrali za skup podataka <code>cars</code> se dobija kao:</p>
 <pre class="sourceCode r"><code class="sourceCode r">model &lt;-<span class="st"> </span><span class="kw">lm</span>(dist <span class="op">~</span><span class="st"> </span>speed, cars)
