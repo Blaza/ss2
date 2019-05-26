@@ -6,7 +6,7 @@ Cilj regresije je da nadje funkcionalnu vezu izmedju obeležja $Y$, koje nazivam
 
 Ova veza je oblika $$Y = f(X) + \varepsilon,$$ gde je $\varepsilon$ slučajna greška modela, koja je nezavisna od $X$.
 
-Prava funkcija $f(x)$ je nepoznata, pa je treba oceniti na osnovu uzorka $(x_i, y_i),\ i=1,\dots,n$. Za uzorak pretpostavljamo da važi $$y_i = f(x_i) + \varepsilon_i$$ i potrebna nam je ocena $\hat{f}(x)$.
+Prava funkcija $f(x)$ je nepoznata, pa je treba oceniti na osnovu uzorka $(x_i, y_i),\ i=1,\dots,n$. Za uzorak pretpostavljamo da važi $$y_i = f(x_i) + \varepsilon_i,$$ gde za $\varepsilon_i$ pretpostavljamo da su nezavisni i $\varepsilon_i\sim\mathcal{N}(0,1)$, a potrebna nam je ocena $\hat{f}(x)$.
 
 Prostor svih mogućih funkcija $f(x)$ je prevelik i nije ga moguće istražiti u potpunosti, pa stoga uvek pretpostavljamo odredjen (obično parametarski) oblik funkcije $f(x)$, čime smanjujemo prostor funkcija nad kojim tražimo $f(x)$.
 
@@ -66,6 +66,45 @@ geom_point() +
 geom_smooth(method="lm", se = FALSE, color="blue") +
 geom_abline(intercept = beta_hat[1], slope = beta_hat[2])
 ```
- Vidimo da smo pogodili pravu. Uradite isto i za apsolutnu grešku i funkciju `rq`.
+
+Vidimo da smo pogodili pravu. Uradite isto i za apsolutnu grešku i funkciju `rq`.
  
-to be continued...
+## Linearni modeli u R-u
+
+Glavna funkcija za pravljenje i analiziranje linearnih modela u R-u je funkcija `lm`. Ona prima kao prvi argument formulu u obliku `y ~ x1 + x2 + x3`, gde je sa leve strane `~`, ovde `y`, zavisna promenljiva, a sa desne prediktori, gde znak `+` označava da se prediktor treba uključiti.
+
+Specijalna oznaka za prediktore je `.` (npr. `y ~ .`) koja označava da se za prediktore uzmu sve kolone iz tabele, izuzimajući zavisnu promenljivu. Dakle, u suštini `.` znači "sve ostale promenljive iz podataka".
+
+Drugi argument funkciji `lm` je data.frame koji sadrži podatke.
+
+Model koji smo posmatrali za skup podataka `cars` se dobija kao:
+
+```{r}
+model <- lm(dist ~ speed, cars)
+model
+```
+
+Kada pozovemo `geom_smooth(method = "lm")`, ggplot u poozadini napravi model `lm(y~x, data)` i njega nacrta.
+
+Najčešće korišćena funkcija uz `lm` (koja pravi model), je funkcija `summary` koja prikazuje osnovne rezultate modelovanja
+
+```{r}
+summary(model)
+```
+
+Najviše pažnje ćemo posvetiti tabeli sa naslovom "Coefficients". Ona sadrži 4 kolone, gde se svaki red odnosi na odgovarajući prediktor (u ovom slučaju imamo slobodan član -- $\beta_0$ i koeficijent uz prediktor `speed` -- $\beta_1$). Kolone su sledeće:
+
+1. `Estimate`: Ocenjena vrednost koeficijenta uz prediktor
+2. `Std. Error`: Standardna greška ocene koeficijenta ($se(\hat\beta_j)$)
+3. `t value`: Vrednost t statistike, koja se koristi za testiranje značajnosti koeficijenata
+4. `Pr(>|t|)`: p vrednost t testa značajnosti odgovarajućeg koeficijenta
+5. zvezdice pored p vrednosti označavaju sa kojim nivoom značajnosti bi dobili statistički značajan rezultat (3 zvezdice predstavljaju p vrednost koja je manja od 1 promila).
+
+### Testiranje značajnosti koeficijenata {-}
+
+U tabeli koeficijenata dobijamo neke rezultate testiranja značajnosti koeficijenata. Pri tom testiranju testiramo da li je koeficijent $\beta_j$ statistički značajan, odnosno, da li se može izbaciji iz modela, a da to ne utiče na kvalitet. Formalno, testiramo $$H_0: \beta_j=0\quad H_1:\beta_j\neq0,$$ dok je test statistika koja se koristi $$t = \frac{\hat\beta_j}{se(\hat\beta_j)} \sim t_{n-p-1},$$ gde je $p$ broj prediktora (u slučaju proste regresije, sa 1 prediktorom, $p=1$).
+
+
+
+
+
